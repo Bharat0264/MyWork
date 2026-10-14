@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Garuda eagle icon">
+  <g stroke="#0B2E83" stroke-width="14" stroke-linejoin="round" stroke-linecap="round">
+    <path fill="#1E6BFF" d="M255 301C171 265 76 176 0 0c96 45 190 114 256 210V301Z"/>
+    <path fill="#3DA5FF" d="M246 298C159 253 68 141 9 0c99 61 178 146 238 248v50Z"/>
+    <path fill="#FFF" d="M235 316C145 307 59 251 0 151c108 43 184 104 244 147l-9 18Z"/>
+    <path fill="#3DA5FF" d="M240 350C151 385 62 366 0 300c112 2 190 24 252 25l-12 25Z"/>
+    <path fill="#1E6BFF" d="M257 301c84-36 179-125 255-301-96 45-190 114-256 210v91Z"/>
+    <path fill="#3DA5FF" d="M266 298c87-45 178-157 237-298-99 61-178 146-238 248v50Z"/>
+    <path fill="#FFF" d="M277 316c90-9 176-65 235-165-108 43-184 104-244 147l9 18Z"/>
+    <path fill="#3DA5FF" d="M272 350c89 35 178 16 240-50-112 2-190 24-252 25l12 25Z"/>
+    <path fill="#1E6BFF" d="M157 334c19-86 76-144 99-164 23 20 80 78 99 164 9 42-7 107-38 178H195c-31-71-47-136-38-178Z"/>
+    <path fill="#FFF" d="M256 191c-58 0-94 43-88 104 4 48 36 91 88 109 52-18 84-61 88-109 6-61-30-104-88-104Z"/>
+    <path fill="#1E6BFF" d="m194 266 53-19-19 39-35-4 1-16Zm124 0-53-19 19 39 35-4-1-16Z"/>
+    <ellipse fill="#FFF" stroke="#0B2E83" stroke-width="8" cx="220" cy="277" rx="13" ry="11"/>
+    <ellipse fill="#FFF" stroke="#0B2E83" stroke-width="8" cx="292" cy="277" rx="13" ry="11"/>
+    <circle fill="#0B2E83" stroke="none" cx="221" cy="278" r="6"/>
+    <circle fill="#0B2E83" stroke="none" cx="291" cy="278" r="6"/>
+    <path fill="#3DA5FF" d="m256 296-30 47 30 43 30-43-30-47Z"/>
+  </g>
+</svg>

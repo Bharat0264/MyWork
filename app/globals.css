@@ -1,5 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 @import "tailwindcss";
-@theme { --font-display: "Arial", sans-serif; }
+@theme { --font-display: "Arial", sans-serif; --font-poppins: "Poppins", sans-serif; }
 :root { --bg:#050505; --surface:#101014; --fg:#f7f7f8; --muted:#a1a1aa; }
 .navbar-logo { -webkit-tap-highlight-color: transparent; }
 .navbar-logo:focus:not(:focus-visible) { outline: none; }

@@ -2,70 +2,32 @@
 import Image from "next/image"; import Link from "next/link"; import { ArrowUpRight, Menu, X, Mail, Phone } from "lucide-react"; import { motion } from "framer-motion"; import { useState } from "react"; import { siteConfig } from "@/config/site";
 const links = [["Work","/work"],["Services","/services"],["About","/about"],["Contact","/contact"]] as const;
 export function Navbar(){const [open,setOpen]=useState(false);return <motion.header initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050505cc] backdrop-blur-md"><nav className="wrap flex h-24 items-center justify-between"><Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0"><picture className="hidden sm:block"><source srcSet="/logo-full.webp" type="image/webp" /><img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={191} height={64} loading="eager" draggable={false} className="h-[52px] w-auto max-w-[280px] object-contain min-[900px]:h-[64px]" /></picture><picture className="block sm:hidden"><img src="/logo-eagle.png" srcSet="/logo-eagle.png 1x, /logo-eagle.png 2x" alt="Garuda Web Designer and Developer" width={44} height={44} loading="eager" draggable={false} className="h-[44px] w-auto object-contain" /></picture><span className="sr-only">Garuda Web Designer and Developer</span></Link><div className="hidden items-center gap-7 md:flex">{links.map(([label,href])=><Link className="nav-link" href={href} key={href}>{label}</Link>)}<Link href="/contact" className="button button-small">Start a project <ArrowUpRight size={15}/></Link></div><button aria-label="Toggle menu" className="md:hidden" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></nav>{open&&<div className="wrap flex flex-col gap-5 border-t border-white/10 py-7 md:hidden">{links.map(([label,href])=><Link onClick={()=>setOpen(false)} className="text-2xl font-semibold" href={href} key={href}>{label}</Link>)}<Link onClick={()=>setOpen(false)} href="/contact" className="button w-fit">Start a project</Link></div>}</motion.header>}
-export function Footer(){const currentYear=new Date().getFullYear();return <motion.footer initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-50px"}} transition={{duration:0.6,ease:"easeOut"}} className="relative w-full overflow-hidden bg-[#02040a] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(10,24,50,0.85)_0%,#02040a_100%)] pt-16 pb-12"><div className="mx-auto max-w-[1300px] px-6 sm:px-12">{/* TOP ROW: Desktop */}
-<div className="hidden min-[900px]:flex items-center justify-between gap-6">
-  <Link href="/" aria-label="Garuda Web Designer and Developer" className="shrink-0 group">
+export function Footer(){const currentYear=new Date().getFullYear();return <motion.footer initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-50px"}} transition={{duration:0.6,ease:"easeOut"}} className="relative w-full overflow-hidden bg-[#02040a] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(10,24,50,0.85)_0%,#02040a_100%)] pt-16 pb-12"><div className="mx-auto max-w-[1300px] px-6 sm:px-12">
+{/* TOP ROW: Single semantic markup for all viewports */}
+<div className="footer-top">
+  <Link href="/" aria-label="Garuda Web Designer and Developer" className="footer-logo shrink-0">
     <picture>
       <source srcSet="/logo-full.webp" type="image/webp" />
-      <img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={300} height={100} loading="lazy" className="h-auto w-[300px] object-contain drop-shadow-[0_0_14px_rgba(30,107,255,0.45)] transition-[filter] duration-300 group-hover:drop-shadow-[0_0_20px_rgba(30,107,255,0.7)]" />
+      <img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={300} height={100} loading="lazy" className="footer-logo-img" />
     </picture>
   </Link>
-  <nav aria-label="Footer Navigation" className="flex items-center font-['Poppins',sans-serif] text-[17px] text-[#e8eefc]">
+  <nav aria-label="Footer Navigation" className="footer-nav">
     {links.map(([label,href],index)=>(
-      <div key={href} className="flex items-center">
-        {index>0&&<span className="mx-8 h-[38px] w-px bg-[rgba(120,160,255,0.35)] shrink-0 min-[1100px]:mx-12" aria-hidden="true"/>}
-        <Link href={href} className="transition-colors duration-300 hover:text-[#2f8bff]">{label}</Link>
+      <div key={href} className="footer-nav-item">
+        {index>0&&<span className="footer-nav-divider" aria-hidden="true"/>}
+        <Link href={href} className="footer-nav-link">{label}</Link>
       </div>
     ))}
   </nav>
-  <div className="flex flex-col gap-4 text-[18px] text-white shrink-0">
-    <a href={`mailto:${siteConfig.email}`} className="group flex items-center gap-4 transition-colors duration-300 hover:text-[#2f8bff]">
-      <Mail className="shrink-0 text-[#1E90FF]" size={26} strokeWidth={2}/>
+  <div className="footer-contact shrink-0">
+    <a href={`mailto:${siteConfig.email}`} className="footer-contact-row">
+      <Mail className="footer-contact-icon" size={26} strokeWidth={2}/>
       <span>{siteConfig.email}</span>
     </a>
-    <a href={`tel:${siteConfig.phone.replace(/\s/g,"")}`} className="group flex items-center gap-4 transition-colors duration-300 hover:text-[#2f8bff]">
-      <Phone className="shrink-0 text-[#1E90FF]" size={26} strokeWidth={2}/>
+    <a href={`tel:${siteConfig.phone.replace(/\s/g,"")}`} className="footer-contact-row">
+      <Phone className="footer-contact-icon" size={26} strokeWidth={2}/>
       <span>{siteConfig.phone}</span>
     </a>
-  </div>
-</div>
-{/* TOP ROW: Tablet */}
-<div className="hidden sm:flex min-[900px]:hidden flex-col gap-8">
-  <div className="flex items-center justify-between w-full">
-    <Link href="/" aria-label="Garuda Web Designer and Developer" className="shrink-0">
-      <picture>
-        <source srcSet="/logo-full.webp" type="image/webp" />
-        <img src="/logo-full.png" alt="Garuda Web Designer and Developer" width={260} height={87} loading="lazy" className="h-auto w-[260px] object-contain drop-shadow-[0_0_14px_rgba(30,107,255,0.45)]" />
-      </picture>
-    </Link>
-    <div className="flex flex-col gap-3 text-[17px] text-white">
-      <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-3 transition-colors duration-300 hover:text-[#2f8bff]"><Mail className="shrink-0 text-[#1E90FF]" size={24} strokeWidth={2}/><span>{siteConfig.email}</span></a>
-      <a href={`tel:${siteConfig.phone.replace(/\s/g,"")}`} className="flex items-center gap-3 transition-colors duration-300 hover:text-[#2f8bff]"><Phone className="shrink-0 text-[#1E90FF]" size={24} strokeWidth={2}/><span>{siteConfig.phone}</span></a>
-    </div>
-  </div>
-  <nav aria-label="Footer Navigation Tablet" className="flex items-center justify-center font-['Poppins',sans-serif] text-[17px] text-[#e8eefc]">
-    {links.map(([label,href],index)=>(
-      <div key={href} className="flex items-center">
-        {index>0&&<span className="mx-6 sm:mx-8 h-[34px] w-px bg-[rgba(120,160,255,0.35)] shrink-0" aria-hidden="true"/>}
-        <Link href={href} className="transition-colors duration-300 hover:text-[#2f8bff]">{label}</Link>
-      </div>
-    ))}
-  </nav>
-</div>
-{/* TOP ROW: Mobile */}
-<div className="flex sm:hidden flex-col items-center text-center gap-7">
-  <Link href="/" aria-label="Garuda Web Designer and Developer">
-    <picture>
-      <source srcSet="/logo-full.webp" type="image/webp" />
-      <img src="/logo-full.png" alt="Garuda Web Designer and Developer" width={240} height={80} loading="lazy" className="h-auto w-[240px] object-contain drop-shadow-[0_0_14px_rgba(30,107,255,0.45)]" />
-    </picture>
-  </Link>
-  <nav aria-label="Footer Navigation Mobile" className="grid grid-cols-2 gap-x-8 gap-y-3 font-['Poppins',sans-serif] text-[17px] text-[#e8eefc]">
-    {links.map(([label,href])=>(<Link key={href} href={href} className="transition-colors duration-300 hover:text-[#2f8bff]">{label}</Link>))}
-  </nav>
-  <div className="flex flex-col items-center gap-3 text-[16px] text-white">
-    <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2.5 transition-colors duration-300 hover:text-[#2f8bff]"><Mail className="shrink-0 text-[#1E90FF]" size={22} strokeWidth={2}/><span>{siteConfig.email}</span></a>
-    <a href={`tel:${siteConfig.phone.replace(/\s/g,"")}`} className="flex items-center gap-2.5 transition-colors duration-300 hover:text-[#2f8bff]"><Phone className="shrink-0 text-[#1E90FF]" size={22} strokeWidth={2}/><span>{siteConfig.phone}</span></a>
   </div>
 </div>
 {/* DIVIDER */}

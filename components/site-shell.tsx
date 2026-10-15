@@ -1,7 +1,448 @@
 "use client";
-import Image from "next/image"; import Link from "next/link"; import { ArrowUpRight, Menu, X, Mail, Phone, ArrowUp } from "lucide-react"; import { motion } from "framer-motion"; import { useState } from "react"; import { siteConfig } from "@/config/site";
-const links = [["Work","/work"],["Services","/services"],["About","/about"],["Contact","/contact"]] as const;
-export function Navbar(){const [open,setOpen]=useState(false);return <motion.header initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050505cc] backdrop-blur-md"><nav className="wrap flex h-24 items-center justify-between"><Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0"><picture className="hidden sm:block"><source srcSet="/logo-full.webp" type="image/webp" /><img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={191} height={64} loading="eager" draggable={false} className="h-[52px] w-auto max-w-[280px] object-contain min-[900px]:h-[64px]" /></picture><picture className="block sm:hidden"><img src="/logo-eagle.png" srcSet="/logo-eagle.png 1x, /logo-eagle.png 2x" alt="Garuda Web Designer and Developer" width={44} height={44} loading="eager" draggable={false} className="h-[44px] w-auto object-contain" /></picture><span className="sr-only">Garuda Web Designer and Developer</span></Link><div className="hidden items-center gap-7 md:flex">{links.map(([label,href])=><Link className="nav-link" href={href} key={href}>{label}</Link>)}<Link href="/contact" className="button button-small">Start a project <ArrowUpRight size={15}/></Link></div><button aria-label="Toggle menu" className="md:hidden" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></nav>{open&&<div className="wrap flex flex-col gap-5 border-t border-white/10 py-7 md:hidden">{links.map(([label,href])=><Link onClick={()=>setOpen(false)} className="text-2xl font-semibold" href={href} key={href}>{label}</Link>)}<Link onClick={()=>setOpen(false)} href="/contact" className="button w-fit">Start a project</Link></div>}</motion.header>}
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ArrowUpRight, Mail, Phone, ArrowUp } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { siteConfig } from "@/config/site";
+
+const navItems = [
+  { label: "Work", href: "/work", id: "work" },
+  { label: "Services", href: "/services", id: "services" },
+  { label: "About", href: "/about", id: "about" },
+  { label: "Contact", href: "/contact", id: "contact" },
+] as const;
+
+function renderMobileIcon(id: string) {
+  switch (id) {
+    case "work":
+      return (
+        <svg
+          className="h-[20px] w-[20px] shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+        </svg>
+      );
+    case "services":
+      return (
+        <svg
+          className="h-[20px] w-[20px] shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="7" height="7" x="3" y="3" rx="1" />
+          <rect width="7" height="7" x="14" y="3" rx="1" />
+          <rect width="7" height="7" x="14" y="14" rx="1" />
+          <rect width="7" height="7" x="3" y="14" rx="1" />
+        </svg>
+      );
+    case "about":
+      return (
+        <svg
+          className="h-[20px] w-[20px] shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      );
+    case "contact":
+      return (
+        <svg
+          className="h-[20px] w-[20px] shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+export function Navbar() {
+  const pathname = usePathname();
+
+  const [activeSection, setActiveSection] = useState<number>(0);
+  const [hoverSection, setHoverSection] = useState<number | null>(null);
+
+  // Stretch & press animation states
+  const [isMoving, setIsMoving] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+  const [mobileIsMoving, setMobileIsMoving] = useState<boolean>(false);
+  const [mobileIsPressed, setMobileIsPressed] = useState<boolean>(false);
+
+  // Measurement references
+  const desktopNavRef = useRef<HTMLDivElement>(null);
+  const desktopItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const mobileBarRef = useRef<HTMLDivElement>(null);
+  const mobileItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  const [desktopBubble, setDesktopBubble] = useState<{ left: number; width: number; ready: boolean }>({
+    left: 0,
+    width: 0,
+    ready: false,
+  });
+  const [mobileBubble, setMobileBubble] = useState<{ left: number; width: number; ready: boolean }>({
+    left: 0,
+    width: 0,
+    ready: false,
+  });
+
+  const prevTargetRef = useRef<number>(0);
+  const moveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const mobilePrevTargetRef = useRef<number>(0);
+  const mobileMoveTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync route and observe page sections
+  useEffect(() => {
+    if (pathname === "/work" || pathname.startsWith("/work/")) {
+      setActiveSection(0);
+      return;
+    }
+    if (pathname === "/services" || pathname.startsWith("/services/")) {
+      setActiveSection(1);
+      return;
+    }
+    if (pathname === "/about" || pathname.startsWith("/about/")) {
+      setActiveSection(2);
+      return;
+    }
+    if (pathname === "/contact" || pathname.startsWith("/contact/")) {
+      setActiveSection(3);
+      return;
+    }
+
+    if (pathname === "/") {
+      const handleScroll = () => {
+        if (window.scrollY < 200) {
+          setActiveSection(0);
+        }
+      };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+
+      const sectionEls = [
+        document.getElementById("work") || document.querySelector("main > section:nth-of-type(3)"),
+        document.querySelector("main > section:nth-of-type(4)"), // Services
+        document.querySelector("main > section:nth-of-type(6)"), // About
+        document.querySelector("main > section:last-of-type"),  // Contact / CTA
+      ];
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (window.scrollY < 200) {
+            setActiveSection(0);
+            return;
+          }
+          const visible = entries.filter((e) => e.isIntersecting);
+          if (visible.length > 0) {
+            const topVisible = visible.reduce((best, curr) =>
+              curr.intersectionRatio > best.intersectionRatio ? curr : best
+            );
+            const index = sectionEls.indexOf(topVisible.target);
+            if (index !== -1) {
+              setActiveSection(index);
+            }
+          }
+        },
+        {
+          threshold: [0.15, 0.4, 0.7],
+          rootMargin: "-15% 0px -40% 0px",
+        }
+      );
+
+      sectionEls.forEach((el) => {
+        if (el) observer.observe(el);
+      });
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+        observer.disconnect();
+      };
+    }
+  }, [pathname]);
+
+  // Desktop bubble measurement & stretch movement
+  const targetDesktopIndex = hoverSection !== null ? hoverSection : activeSection;
+
+  useEffect(() => {
+    const updateDesktopBubble = () => {
+      const el = desktopItemsRef.current[targetDesktopIndex];
+      if (el) {
+        setDesktopBubble({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          ready: true,
+        });
+
+        if (prevTargetRef.current !== targetDesktopIndex) {
+          setIsMoving(true);
+          if (moveTimerRef.current) clearTimeout(moveTimerRef.current);
+          moveTimerRef.current = setTimeout(() => {
+            setIsMoving(false);
+          }, 380);
+          prevTargetRef.current = targetDesktopIndex;
+        }
+      }
+    };
+
+    updateDesktopBubble();
+    window.addEventListener("resize", updateDesktopBubble);
+    return () => {
+      window.removeEventListener("resize", updateDesktopBubble);
+      if (moveTimerRef.current) clearTimeout(moveTimerRef.current);
+    };
+  }, [targetDesktopIndex]);
+
+  // Mobile bubble measurement & movement
+  useEffect(() => {
+    const updateMobileBubble = () => {
+      const el = mobileItemsRef.current[activeSection];
+      if (el) {
+        setMobileBubble({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          ready: true,
+        });
+
+        if (mobilePrevTargetRef.current !== activeSection) {
+          setMobileIsMoving(true);
+          if (mobileMoveTimerRef.current) clearTimeout(mobileMoveTimerRef.current);
+          mobileMoveTimerRef.current = setTimeout(() => {
+            setMobileIsMoving(false);
+          }, 380);
+          mobilePrevTargetRef.current = activeSection;
+        }
+      }
+    };
+
+    updateMobileBubble();
+    window.addEventListener("resize", updateMobileBubble);
+    return () => {
+      window.removeEventListener("resize", updateMobileBubble);
+      if (mobileMoveTimerRef.current) clearTimeout(mobileMoveTimerRef.current);
+    };
+  }, [activeSection]);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof navItems)[number], idx: number) => {
+    setIsPressed(true);
+    setMobileIsPressed(true);
+    setTimeout(() => {
+      setIsPressed(false);
+      setMobileIsPressed(false);
+    }, 200);
+
+    if (pathname === item.href) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (pathname === "/" && item.id === "work") {
+      const el = document.getElementById("work");
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", "#work");
+        setActiveSection(idx);
+        return;
+      }
+    }
+
+    setActiveSection(idx);
+  };
+
+  return (
+    <>
+      {/* SVG Displacement Map for Optional Optical Lens Refraction */}
+      <svg
+        className="sr-only"
+        aria-hidden="true"
+        style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", pointerEvents: "none" }}
+      >
+        <defs>
+          <filter id="lens-distortion">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* FIXED TOP HEADER */}
+      <motion.header
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.04] bg-[#050505]/80 backdrop-blur-md"
+      >
+        {/* DESKTOP (900px and above) */}
+        <div className="mx-auto hidden h-[84px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
+          {/* Left: Garuda Logo Lockup */}
+          <div className="flex items-center min-w-[200px]">
+            <Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0">
+              <picture>
+                <source srcSet="/logo-full.webp" type="image/webp" />
+                <img
+                  src="/logo-full.png"
+                  srcSet="/logo-full.png 1x, /logo-full.png 2x"
+                  alt="Garuda Web Designer and Developer"
+                  width={191}
+                  height={64}
+                  loading="eager"
+                  draggable={false}
+                  className="h-[52px] w-auto max-w-[280px] object-contain min-[900px]:h-[64px]"
+                />
+              </picture>
+              <span className="sr-only">Garuda Web Designer and Developer</span>
+            </Link>
+          </div>
+
+          {/* Center: Floating Glass Pill Nav */}
+          <nav
+            ref={desktopNavRef}
+            onMouseLeave={() => setHoverSection(null)}
+            aria-label="Main Navigation"
+            className="liquid-glass-pill"
+          >
+            {/* Sliding Glass Bubble Lens */}
+            <div
+              className="liquid-glass-bubble"
+              style={{
+                left: `${desktopBubble.left}px`,
+                width: `${desktopBubble.width}px`,
+                opacity: desktopBubble.ready ? 1 : 0,
+                transform: isPressed ? "scale(0.96)" : isMoving ? "scaleX(1.12)" : "scale(1)",
+              }}
+              aria-hidden="true"
+            />
+            {navItems.map((item, idx) => {
+              const isActive = activeSection === idx;
+              const isHovered = hoverSection === idx;
+              return (
+                <Link
+                  key={item.label}
+                  ref={(el) => {
+                    desktopItemsRef.current[idx] = el;
+                  }}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  data-active={isActive || isHovered}
+                  onMouseEnter={() => setHoverSection(idx)}
+                  onMouseDown={() => setIsPressed(true)}
+                  onMouseUp={() => setIsPressed(false)}
+                  onTouchStart={() => setIsPressed(true)}
+                  onTouchEnd={() => setIsPressed(false)}
+                  onClick={(e) => handleLinkClick(e, item, idx)}
+                  className="liquid-nav-link"
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right: CTA Button */}
+          <div className="flex items-center justify-end min-w-[200px]">
+            <Link href="/contact" className="button button-small">
+              Start a project <ArrowUpRight size={15} />
+            </Link>
+          </div>
+        </div>
+
+        {/* MOBILE TOP BAR (below 900px) */}
+        <div className="flex h-[72px] items-center justify-between px-5 sm:px-8 min-[900px]:hidden">
+          <Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0">
+            <picture>
+              <source srcSet="/logo-full.webp" type="image/webp" />
+              <img
+                src="/logo-full.png"
+                srcSet="/logo-full.png 1x, /logo-full.png 2x"
+                alt="Garuda Web Designer and Developer"
+                width={191}
+                height={64}
+                loading="eager"
+                draggable={false}
+                className="h-[44px] w-auto max-w-[200px] object-contain"
+              />
+            </picture>
+            <span className="sr-only">Garuda Web Designer and Developer</span>
+          </Link>
+          <Link href="/contact" className="button button-small !py-2 !px-3.5 !text-xs font-semibold">
+            Start a project <ArrowUpRight size={14} />
+          </Link>
+        </div>
+      </motion.header>
+
+      {/* MOBILE BOTTOM FLOATING TAB BAR (below 900px) */}
+      <nav
+        ref={mobileBarRef}
+        aria-label="Mobile Navigation"
+        className="liquid-mobile-tab-bar min-[900px]:hidden"
+      >
+        {/* Sliding Glass Bubble Lens */}
+        <div
+          className="liquid-mobile-bubble"
+          style={{
+            left: `${mobileBubble.left}px`,
+            width: `${mobileBubble.width}px`,
+            opacity: mobileBubble.ready ? 1 : 0,
+            transform: mobileIsPressed ? "scale(0.96)" : mobileIsMoving ? "scaleX(1.12)" : "scale(1)",
+          }}
+          aria-hidden="true"
+        />
+        {navItems.map((item, idx) => {
+          const isActive = activeSection === idx;
+          return (
+            <Link
+              key={item.label}
+              ref={(el) => {
+                mobileItemsRef.current[idx] = el;
+              }}
+              href={item.href}
+              aria-current={isActive ? "page" : undefined}
+              data-active={isActive}
+              onTouchStart={() => setMobileIsPressed(true)}
+              onTouchEnd={() => setMobileIsPressed(false)}
+              onMouseDown={() => setMobileIsPressed(true)}
+              onMouseUp={() => setMobileIsPressed(false)}
+              onClick={(e) => handleLinkClick(e, item, idx)}
+              className="liquid-mobile-tab-item"
+            >
+              {renderMobileIcon(item.id)}
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </>
+  );
+}
 const quickLinks = [
   ["Work", "/work"],
   ["Services", "/services"],

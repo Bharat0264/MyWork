@@ -3,7 +3,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
+import {
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUpRight,
+  ExternalLink,
+  Sparkles,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, Project } from "@/data/projects";
 
@@ -11,31 +19,68 @@ const categories = [
   "All",
   "Website Creation",
   "Website Redesign",
-  "Web Development",
+  "Full-stack Development",
   "E-commerce",
-  "Business Websites",
-  "Web Applications",
+  "SEO & Performance",
+  "Digital Marketing",
 ] as const;
+
+function matchesCategory(project: Project, category: string): boolean {
+  if (category === "All") return true;
+  if (category === "Full-stack Development") {
+    return (
+      project.categories.includes("Web Development") ||
+      project.categories.includes("Full-stack Development") ||
+      project.services.some(
+        (s) => s.toLowerCase().includes("full-stack") || s.toLowerCase().includes("development")
+      )
+    );
+  }
+  if (category === "SEO & Performance") {
+    return (
+      project.technologies.some((t) => t.toLowerCase().includes("seo") || t.toLowerCase().includes("performance")) ||
+      project.services.some((s) => s.toLowerCase().includes("performance") || s.toLowerCase().includes("seo")) ||
+      project.categories.includes("Business Websites")
+    );
+  }
+  if (category === "Digital Marketing") {
+    return (
+      project.categories.includes("Web Applications") ||
+      project.services.some((s) => s.toLowerCase().includes("marketing"))
+    );
+  }
+  return project.categories.includes(category);
+}
 
 export function WorkPortfolioShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [railScrollOffset, setRailScrollOffset] = useState<number>(0);
+  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  const touchStartXRef = useRef<number | null>(null);
 
   // Filter projects by category
   const filteredProjects = activeCategory === "All"
     ? projects
-    : projects.filter((p) => p.categories.includes(activeCategory));
+    : projects.filter((p) => matchesCategory(p, activeCategory));
 
-  // Current active project
-  const currentProject: Project = filteredProjects[currentIndex] || filteredProjects[0] || projects[0];
   const totalCount = filteredProjects.length;
+  const safeIndex = Math.min(currentIndex, Math.max(0, totalCount - 1));
+  const currentProject: Project = filteredProjects[safeIndex] || projects[0];
 
-  // Reset index when category changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setIsReducedMotion(mediaQuery.matches);
+    const handler = () => setIsReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  // Reset index and rail offset when category changes
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
     setCurrentIndex(0);
+    setRailScrollOffset(0);
   };
 
   const handleNext = useCallback(() => {
@@ -48,12 +93,39 @@ export function WorkPortfolioShowcase() {
     setCurrentIndex((prev) => (prev - 1 + totalCount) % totalCount);
   }, [totalCount]);
 
+  // Keep rail scroll window centered on active project
+  useEffect(() => {
+    if (safeIndex < railScrollOffset) {
+      setRailScrollOffset(safeIndex);
+    } else if (safeIndex >= railScrollOffset + 3) {
+      setRailScrollOffset(safeIndex - 2);
+    }
+  }, [safeIndex, railScrollOffset]);
+
+  const scrollRailUp = () => {
+    if (railScrollOffset > 0) {
+      setRailScrollOffset((prev) => Math.max(0, prev - 1));
+    } else if (totalCount > 3) {
+      setRailScrollOffset(totalCount - 3);
+    }
+    handlePrev();
+  };
+
+  const scrollRailDown = () => {
+    if (railScrollOffset < Math.max(0, totalCount - 3)) {
+      setRailScrollOffset((prev) => prev + 1);
+    } else {
+      setRailScrollOffset(0);
+    }
+    handleNext();
+  };
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         handlePrev();
-      } else if (e.key === "ArrowRight") {
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         handleNext();
       }
     };
@@ -63,336 +135,457 @@ export function WorkPortfolioShowcase() {
 
   // Touch swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    touchStartXRef.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStart) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) {
+    if (touchStartXRef.current === null) return;
+    const diff = touchStartXRef.current - e.changedTouches[0].clientX;
+    touchStartXRef.current = null;
+    if (diff > 45) {
       handleNext();
-    } else if (diff < -50) {
+    } else if (diff < -45) {
       handlePrev();
     }
-    setTouchStart(null);
   };
 
-  // Side preview items (surrounding items)
-  const getSideItems = () => {
-    if (filteredProjects.length <= 1) return { left: [], right: [] };
-    const leftIndex = (currentIndex - 1 + totalCount) % totalCount;
-    const rightIndex = (currentIndex + 1) % totalCount;
-    const secondLeft = (currentIndex - 2 + totalCount) % totalCount;
-    const secondRight = (currentIndex + 2) % totalCount;
-
-    return {
-      left: [filteredProjects[secondLeft], filteredProjects[leftIndex]],
-      right: [filteredProjects[rightIndex], filteredProjects[secondRight]],
-    };
-  };
-
-  const sideItems = getSideItems();
-
-  const formattedIndex = String(currentIndex + 1).padStart(2, "0");
+  const formattedIndex = String(safeIndex + 1).padStart(2, "0");
   const formattedTotal = String(totalCount).padStart(2, "0");
-  const progressPercent = totalCount > 0 ? ((currentIndex + 1) / totalCount) * 100 : 0;
+
+  // Ghost word: rotated 90deg bottom-to-top
+  const ghostWord =
+    currentProject.titleSuffix ||
+    currentProject.titlePrefix ||
+    currentProject.title.toUpperCase();
+
+  // Rail visible window (3 items on desktop)
+  const visibleRailProjects = filteredProjects.slice(railScrollOffset, railScrollOffset + 3);
+  if (visibleRailProjects.length < 3 && filteredProjects.length >= 3) {
+    const needed = 3 - visibleRailProjects.length;
+    visibleRailProjects.push(...filteredProjects.slice(0, needed));
+  }
 
   return (
-    <section
-      id="work"
-      aria-label="Garuda Portfolio Showcase"
-      className="relative w-full overflow-hidden bg-transparent py-24 sm:py-32 text-[var(--text)]"
-    >
-      {/* ATMOSPHERIC BACKGROUND LIGHTING & SUBTLE HORIZON */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {/* Subtle technical grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(143,176,214,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(143,176,214,0.04)_1px,transparent_1px)] bg-[size:64px_64px]" />
-
-        {/* Ambient steel and navy radial glow */}
-        <div className="absolute -top-40 right-1/4 h-[550px] w-[550px] rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.18)_0%,transparent_70%)] blur-[120px]" />
-        <div className="absolute top-1/3 left-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(95,134,176,0.12)_0%,transparent_70%)] blur-[100px]" />
-        <div className="absolute bottom-10 right-10 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.14)_0%,transparent_70%)] blur-[130px]" />
-
-        {/* Subtle horizon curve */}
-        <div
-          className="absolute -bottom-1/2 left-1/2 h-[900px] w-[1800px] -translate-x-1/2 rounded-[50%] border-t border-[var(--border)] opacity-60"
-          style={{
-            background: "radial-gradient(ellipse at 50% 0%, rgba(20,30,48,0.4) 0%, transparent 70%)",
-          }}
-        />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-[1480px] px-6 sm:px-10 lg:px-14">
-        {/* SECTION INTRODUCTION & SIGNATURE GARUDA ARTWORK */}
-        <div className="relative mb-14 sm:mb-16 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+    <section id="work" className="wrap py-16 sm:py-20 lg:py-24">
+      {/* 0. INTRO HEADING WITH EAGLE GRAPHIC */}
+      <div className="mb-10 sm:mb-14">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="eyebrow flex items-center gap-2.5 text-[var(--mist)]">
-              <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
+            <p className="eyebrow flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--steel-light)]" />
               OUR WORK
             </p>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-[var(--text)] sm:text-6xl lg:text-7xl leading-[1.08]">
+            <h2 className="section-heading mt-4 font-semibold tracking-[-0.02em] text-[var(--text)] text-3xl sm:text-5xl lg:text-6xl">
               Work with a reason <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-[#5F86B0] via-[#8FB0D6] to-[#E8EEF7] bg-clip-text text-transparent">
-                to exist.
-              </span>
+              <span className="text-[var(--mist)]">to exist.</span>
             </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">
+            <p className="mt-4 max-w-xl text-[15px] sm:text-[16px] leading-relaxed text-[var(--text-muted)]">
               A selection of websites, products and digital experiences shaped around real business goals and user needs.
             </p>
           </div>
 
-          {/* Garuda Signature Water-Eagle Artwork */}
-          <div className="relative flex shrink-0 items-center justify-center lg:mb-2">
-            {/* Soft radial glow behind eagle */}
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.2)_0%,transparent_70%)] blur-2xl" />
-            <div className="relative garuda-floating-eagle">
-              <Image
-                src="/logo-eagle.png"
-                alt="Garuda Web Designer and Developer Emblem"
-                width={200}
-                height={200}
-                priority
-                className="h-[120px] w-auto sm:h-[150px] lg:h-[185px] object-contain"
-              />
-            </div>
+          {/* Garuda Eagle Emblem */}
+          <div className="shrink-0 select-none hidden md:block">
+            <Image
+              src="/logo-eagle.png"
+              alt="Garuda Web Designer and Developer Emblem"
+              width={160}
+              height={160}
+              priority
+              className="h-[105px] w-auto lg:h-[130px] object-contain"
+            />
           </div>
         </div>
+      </div>
 
-        {/* CATEGORY FILTERS */}
-        <div className="mb-12 sm:mb-16">
-          <div
-            role="tablist"
-            aria-label="Portfolio Category Filters"
-            className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar"
-          >
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat;
+      {/* HORIZONTAL CATEGORY MENU (TABLET & MOBILE <1024px) */}
+      <div className="mb-6 lg:hidden">
+        <div
+          role="tablist"
+          aria-label="Filter projects"
+          className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar"
+        >
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                role="tab"
+                type="button"
+                aria-selected={isActive}
+                onClick={() => handleCategoryChange(cat)}
+                className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
+                  isActive
+                    ? "bg-white text-[#141E30] font-semibold border border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+                    : "border border-white/[0.12] bg-[#141E30]/70 text-[#9FB3CC] hover:border-white/25 hover:text-white"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 1. THE STAGE (MAIN SHOWCASE CONTAINER) */}
+      <div
+        tabIndex={0}
+        role="region"
+        aria-label="Project showcase showcase environment"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[32px] border border-[rgba(143,176,214,0.22)] bg-gradient-to-br from-[#141E30] via-[#1E3250] to-[#35577D] shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[580px] lg:h-[600px] flex flex-col justify-between p-6 sm:p-8 lg:p-0"
+      >
+        {/* Subtle ambient accent glow & grain texture */}
+        <div
+          className="pointer-events-none absolute inset-0 transition-colors duration-700 ease-out"
+          style={{
+            background: `radial-gradient(ellipse at 65% 50%, ${currentProject.accent}14 0%, transparent 65%)`,
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[32px] opacity-[0.04] bg-[radial-gradient(rgba(255,255,255,0.8)_1px,_transparent_1px)] bg-[size:16px_16px]"
+          aria-hidden="true"
+        />
+
+        {/* TOP-RIGHT COUNTER */}
+        <div
+          aria-label={`Project ${formattedIndex} of ${formattedTotal}`}
+          className="lg:absolute lg:top-7 lg:right-16 z-30 font-mono text-[13px] font-bold tracking-[0.14em] text-[#8FB0D6] select-none flex items-center justify-between lg:justify-start"
+        >
+          <span>{formattedIndex} / {formattedTotal}</span>
+          <span className="lg:hidden text-[11px] font-sans font-medium uppercase tracking-wider text-[#9FB3CC]">
+            {currentProject.category}
+          </span>
+        </div>
+
+        {/* GHOST WORD (BEHIND HERO IMAGE) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[56%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none z-0 whitespace-nowrap leading-none transition-opacity duration-500 ease-out text-white/[0.05] font-extrabold tracking-[-0.03em] hidden sm:block"
+          style={{
+            writingMode: "vertical-rl",
+            transform: "rotate(180deg)",
+            fontSize: "clamp(160px, 20vw, 290px)",
+          }}
+        >
+          {ghostWord}
+        </div>
+
+        {/* 4. LEFT RAIL: VERTICAL THUMBNAIL CARDS (DESKTOP >= 1024px) */}
+        <div className="absolute left-6 xl:left-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex items-center gap-3">
+          <div className="flex flex-col items-center gap-2">
+            {/* Scroll Up Button */}
+            <button
+              onClick={scrollRailUp}
+              type="button"
+              aria-label="Previous project thumbnail"
+              className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
+            >
+              <ChevronUp size={18} strokeWidth={2.2} />
+            </button>
+
+            {/* 3 Visible Thumbnails */}
+            <div role="tablist" aria-label="Projects rail" className="flex flex-col gap-2.5">
+              {visibleRailProjects.map((item, idx) => {
+                const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
+                const isActive = origIndex === safeIndex;
+
+                return (
+                  <button
+                    key={`${item.slug}-${idx}`}
+                    role="tab"
+                    type="button"
+                    aria-selected={isActive}
+                    aria-current={isActive ? "true" : undefined}
+                    onClick={() => setCurrentIndex(origIndex)}
+                    className={`group relative h-[94px] w-[184px] rounded-[18px] p-2.5 flex items-center gap-2.5 text-left transition-all duration-300 backdrop-blur-[12px] cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
+                      isActive
+                        ? "border border-white/35 bg-white/[0.12] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2.5px] before:rounded-r before:bg-[#5F86B0]"
+                        : "border border-white/[0.12] bg-white/[0.06] hover:border-white/25 hover:bg-white/[0.09] opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    {/* Small thumbnail screen preview */}
+                    <div className="relative h-[44px] w-[50px] shrink-0 rounded-[10px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
+                      <MiniPreviewScreen project={item} />
+                    </div>
+
+                    {/* Metadata */}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[13px] font-bold text-white leading-snug truncate">
+                        {item.title}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-[#9FB3CC] font-medium truncate">
+                        {item.category}
+                      </p>
+                      <p className="mt-1 text-[10px] text-[#6F86A3] font-mono">
+                        {item.year}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Scroll Down Button */}
+            <button
+              onClick={scrollRailDown}
+              type="button"
+              aria-label="Next project thumbnail"
+              className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
+            >
+              <ChevronDown size={18} strokeWidth={2.2} />
+            </button>
+          </div>
+
+          {/* Vertical position indicator dots */}
+          <div className="flex flex-col items-center gap-1.5 py-2" aria-hidden="true">
+            {filteredProjects.map((p, idx) => {
+              const isActive = idx === safeIndex;
               return (
                 <button
-                  key={cat}
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => handleCategoryChange(cat)}
-                  className={`rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] active:scale-[0.98] ${
+                  key={p.slug}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`rounded-full transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? "bg-[#E8EEF7] text-[#141E30] font-semibold border border-transparent shadow-[var(--shadow-soft)]"
-                      : "border border-[var(--border)] bg-[#141E30]/70 text-[var(--text-muted)] hover:border-[var(--border-strong)] hover:bg-[#1B2B45] hover:text-[var(--text)]"
+                      ? "h-[18px] w-[4px] bg-[#8FB0D6]"
+                      : "h-[4px] w-[4px] bg-white/25 hover:bg-white/50"
                   }`}
-                >
-                  {cat}
-                </button>
+                  aria-label={`Go to ${p.title}`}
+                />
               );
             })}
           </div>
         </div>
 
-        {/* MAIN INTERACTIVE SHOWCASE ENVIRONMENT */}
+        {/* 3. TOP-LEFT TITLE BLOCK (VERTICAL TITLE + TAGLINE + BUTTON) */}
+        <div className="lg:absolute lg:left-[275px] xl:left-[300px] lg:top-1/2 lg:-translate-y-1/2 z-20 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-5 max-w-[270px] xl:max-w-[290px] mt-4 lg:mt-0">
+          {/* Vertical Title (Desktop) / Horizontal Title (Mobile) */}
+          <div
+            className="select-none font-extrabold uppercase tracking-[-0.03em] whitespace-nowrap leading-none text-2xl sm:text-3xl lg:text-[clamp(1.8rem,2.4vw,2.5rem)] text-white"
+            style={{
+              writingMode: "vertical-rl",
+              transform: "rotate(180deg)",
+            }}
+          >
+            <span>{currentProject.titlePrefix}</span>{" "}
+            <span className="text-[#8FB0D6]">{currentProject.titleSuffix || ""}</span>
+          </div>
+
+          {/* Mobile title fallback (horizontal) */}
+          <div className="lg:hidden">
+            <h3 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
+              {currentProject.titlePrefix}{" "}
+              <span className="text-[#8FB0D6]">{currentProject.titleSuffix || ""}</span>
+            </h3>
+          </div>
+
+          {/* Tagline, Chips & View Project Button */}
+          <div className="flex flex-col gap-3">
+            <p className="text-[13px] leading-relaxed text-[#9FB3CC] line-clamp-3">
+              {currentProject.shortDescription}
+            </p>
+
+            {/* Tags (at most 4 chips) */}
+            <div className="flex flex-wrap gap-1.5">
+              {currentProject.services.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-md border border-white/[0.12] bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-[#E8EEF7]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* View Project Button (Frosted Pill Style with Blue Circle and Arrow) */}
+            <div className="pt-1">
+              <Link
+                href={currentProject.liveUrl || `/work/${currentProject.slug}`}
+                target={currentProject.liveUrl ? "_blank" : undefined}
+                rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
+                aria-label={`View ${currentProject.title} project`}
+                className="group inline-flex items-center gap-2 rounded-full border border-[rgba(53,87,125,0.22)] bg-gradient-to-b from-white to-[#EEF3FB] px-2.5 py-1.5 text-[12px] font-semibold text-[#141E30] shadow-[0_4px_12px_rgba(4,9,18,0.25)] transition-all duration-200 hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+              >
+                <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#2F8BFF] to-[#1B5FD6] text-white">
+                  <svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                  </svg>
+                </span>
+                <span className="font-semibold text-[#141E30]">View project</span>
+                <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full border border-[rgba(53,87,125,0.15)] bg-gradient-to-b from-white to-[#DFE7F2] text-[#141E30]">
+                  <ArrowUpRight size={13} strokeWidth={2.5} />
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. HERO VISUAL (CENTER-RIGHT TABLET SHOWCASE WITH TILT & FLOOR SHADOW) */}
+        <div className="lg:absolute lg:right-[60px] xl:right-[80px] lg:top-1/2 lg:-translate-y-1/2 z-10 w-full lg:w-[50%] xl:w-[54%] max-w-[580px] xl:max-w-[620px] my-6 lg:my-0 flex flex-col items-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentProject.slug}
+              initial={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: 45, rotate: -3 }}
+              animate={isReducedMotion ? { opacity: 1 } : { opacity: 1, x: 0, rotate: -6 }}
+              exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: -45, rotate: -8 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className={`relative w-full rounded-[26px] sm:rounded-[32px] border border-white/20 bg-[#0B1322] p-2.5 sm:p-3.5 shadow-[0_24px_50px_rgba(4,9,18,0.65)] hero-float-anim ${
+                isReducedMotion ? "" : "animate-[heroFloat_6s_ease-in-out_infinite]"
+              }`}
+            >
+              {/* Device Bezel camera dot */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-white/25 border border-white/10" />
+
+              {/* Tablet Display Screen */}
+              <div className="relative aspect-[16/10.2] w-full overflow-hidden rounded-[18px] sm:rounded-[22px] bg-[#0A0F1D] shadow-inner">
+                <ProjectTabletScreen project={currentProject} />
+              </div>
+
+              {/* Specular glass reflection */}
+              <div className="pointer-events-none absolute inset-0 rounded-[26px] sm:rounded-[32px] border-t border-white/25" />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Floor Shadow Ellipse */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none w-[80%] h-[20px] mx-auto rounded-[100%] bg-[rgba(4,9,18,0.6)] blur-[18px] translate-y-2"
+          />
+        </div>
+
+        {/* 5. RIGHT SIDE (VERTICAL CATEGORY MENU ON DESKTOP) */}
         <div
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="relative min-h-[580px] lg:min-h-[660px] rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45]/70 to-[#141E30]/80 p-6 sm:p-10 lg:p-12 shadow-[var(--shadow-soft)] backdrop-blur-xl overflow-hidden"
+          role="tablist"
+          aria-label="Category navigation"
+          className="absolute right-5 xl:right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-7 select-none"
         >
-          {/* Left Arrow Button */}
-          {totalCount > 1 && (
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                role="tab"
+                type="button"
+                aria-selected={isActive}
+                onClick={() => handleCategoryChange(cat)}
+                className={`text-[12.5px] tracking-[0.14em] font-medium uppercase transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
+                  isActive
+                    ? "text-white font-semibold relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-[2px] after:h-4 after:bg-[#5F86B0]"
+                    : "text-[#9FB3CC] hover:text-white"
+                }`}
+                style={{
+                  writingMode: "vertical-rl",
+                }}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 5b. BOTTOM-RIGHT 4 GLASS BUTTONS (PREV, NEXT, LIVE SITE, GITHUB) */}
+        <div className="lg:absolute lg:bottom-6 lg:right-8 z-30 flex items-center justify-between sm:justify-end gap-2.5 mt-4 lg:mt-0">
+          <div className="flex items-center gap-2">
+            {/* Prev Button */}
             <button
               onClick={handlePrev}
               type="button"
               aria-label="Previous project"
-              className="absolute left-4 sm:left-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--mist)] hover:bg-[#1B2B45] active:scale-[0.98] shadow-[var(--shadow-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] cursor-pointer"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
             >
-              <ChevronLeft size={22} strokeWidth={2.2} />
+              <ChevronLeft size={17} strokeWidth={2.2} />
             </button>
-          )}
 
-          {/* Right Arrow Button */}
-          {totalCount > 1 && (
+            {/* Next Button */}
             <button
               onClick={handleNext}
               type="button"
               aria-label="Next project"
-              className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--mist)] hover:bg-[#1B2B45] active:scale-[0.98] shadow-[var(--shadow-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] cursor-pointer"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
             >
-              <ChevronRight size={22} strokeWidth={2.2} />
+              <ChevronRight size={17} strokeWidth={2.2} />
             </button>
-          )}
 
-          {/* CORE SHOWCASE CONTENT GRID */}
-          <div className="grid grid-cols-1 items-center gap-10 xl:grid-cols-[140px_1fr_1.45fr_140px] lg:grid-cols-[1fr_1.35fr]">
-            {/* 1. LEFT PERSPECTIVE PREVIEWS TRAY (DESKTOP) */}
-            <div className="hidden xl:flex flex-col gap-4 perspective-[1000px] z-20">
-              {sideItems.left.map((item, idx) => {
-                if (!item) return null;
-                const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
-                return (
-                  <button
-                    key={`${item.slug}-left-${idx}`}
-                    onClick={() => setCurrentIndex(origIndex)}
-                    type="button"
-                    title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[var(--border)] bg-[#141E30] p-1.5 transition-colors duration-200 hover:border-[var(--border-strong)] active:scale-[0.98] shadow-[var(--shadow-soft)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
-                    style={{
-                      transform: "rotateY(16deg) rotateX(2deg)",
-                      transformStyle: "preserve-3d",
-                    }}
-                  >
-                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0B1322]">
-                      <MiniPreviewScreen project={item} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B1322]/90 via-transparent to-transparent flex items-end p-1.5">
-                        <span className="text-[10px] font-semibold text-[var(--text)] truncate">{item.title}</span>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 2. PROJECT DETAILS & METADATA (LEFT COLUMN) */}
-            <div className="flex flex-col justify-center z-20 pl-2 sm:pl-6 xl:pl-4">
-              {/* Counter and Animated Progress Line */}
-              <div className="flex items-center gap-4">
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--mist)]">
-                  {formattedIndex}
-                </span>
-                <span className="text-sm font-semibold text-[var(--text-faint)]">
-                  / {formattedTotal}
-                </span>
-                <div className="h-[2.5px] w-24 sm:w-32 rounded-full bg-[rgba(143,176,214,0.16)] overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-[#35577D] to-[#8FB0D6]"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                  />
-                </div>
-              </div>
-
-              {/* Category Pill Tag */}
-              <div className="mt-5">
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border-strong)] bg-[#1B2B45] px-3 py-1 text-[11px] font-bold tracking-[0.16em] uppercase text-[var(--mist)]">
-                  <Sparkles size={11} />
-                  {currentProject.category}
-                </span>
-              </div>
-
-              {/* Huge Display Heading with Gradient Second Half */}
-              <div className="mt-5">
-                <h3 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text)] leading-[1.05]">
-                  {currentProject.titlePrefix} <br />
-                  <span className="bg-gradient-to-r from-[#5F86B0] via-[#8FB0D6] to-[#E8EEF7] bg-clip-text text-transparent">
-                    {currentProject.titleSuffix}
-                  </span>
-                </h3>
-              </div>
-
-              {/* Short Description */}
-              <p className="mt-5 max-w-md text-[15px] sm:text-[16px] leading-relaxed text-[var(--text-muted)]">
-                {currentProject.shortDescription}
-              </p>
-
-              {/* Interactive Action Buttons */}
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                {currentProject.liveUrl && (
-                  <a
-                    href={currentProject.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#141E30] to-[#35577D] px-6 py-3.5 text-sm font-semibold text-white border border-[var(--border-strong)] shadow-[var(--shadow-soft)] transition-all duration-200 hover:border-[var(--mist)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
-                  >
-                    <span>View Project</span>
-                    <ArrowUpRight size={17} />
-                  </a>
-                )}
-
-                <Link
-                  href={`/work/${currentProject.slug}`}
-                  aria-label={`Read case study for ${currentProject.title}`}
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--border-strong)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
-                >
-                  <ExternalLink size={18} />
-                </Link>
-              </div>
-            </div>
-
-            {/* 3. CENTRAL 3D ANGLED TABLET SHOWCASE */}
-            <div className="perspective-[1400px] z-20 flex justify-center py-4">
-              <motion.div
-                key={currentProject.slug}
-                initial={{ opacity: 0, scale: 0.94, rotateY: -16 }}
-                animate={{ opacity: 1, scale: 1, rotateY: isHovered ? -5 : -10 }}
-                transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
-                className="relative w-full max-w-[680px] rounded-[28px] sm:rounded-[36px] border border-[var(--border-strong)] bg-[#0B1322] p-2.5 sm:p-3.5 shadow-[var(--shadow-soft)] transition-transform duration-500"
-                style={{
-                  transformStyle: "preserve-3d",
-                }}
+            {/* Live Link Button */}
+            {currentProject.liveUrl && (
+              <a
+                href={currentProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open live website for ${currentProject.title}`}
+                className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
               >
-                {/* Device Camera Bezel Dot */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-white/20 border border-white/10" />
+                <ExternalLink size={15} strokeWidth={2.2} />
+              </a>
+            )}
 
-                {/* Tablet Display Screen */}
-                <div className="relative aspect-[16/10.5] w-full overflow-hidden rounded-[20px] sm:rounded-[26px] bg-[#0A0F1D] shadow-inner">
-                  <ProjectTabletScreen project={currentProject} />
-                </div>
-
-                {/* Glass specular rim reflection */}
-                <div className="pointer-events-none absolute inset-0 rounded-[28px] sm:rounded-[36px] border-t border-white/20" />
-              </motion.div>
-            </div>
-
-            {/* 4. RIGHT PERSPECTIVE PREVIEWS TRAY (DESKTOP) */}
-            <div className="hidden xl:flex flex-col gap-4 perspective-[1000px] z-20">
-              {sideItems.right.map((item, idx) => {
-                if (!item) return null;
-                const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
-                return (
-                  <button
-                    key={`${item.slug}-right-${idx}`}
-                    onClick={() => setCurrentIndex(origIndex)}
-                    type="button"
-                    title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[var(--border)] bg-[#141E30] p-1.5 transition-colors duration-200 hover:border-[var(--border-strong)] active:scale-[0.98] shadow-[var(--shadow-soft)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
-                    style={{
-                      transform: "rotateY(-16deg) rotateX(2deg)",
-                      transformStyle: "preserve-3d",
-                    }}
-                  >
-                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0B1322]">
-                      <MiniPreviewScreen project={item} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B1322]/90 via-transparent to-transparent flex items-end p-1.5">
-                        <span className="text-[10px] font-semibold text-[var(--text)] truncate">{item.title}</span>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 5. BOTTOM METADATA ROW */}
-          <div className="mt-12 sm:mt-16 border-t border-[var(--border)] pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 z-20 relative">
-            <div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--mist)]">
-                Project Overview
-              </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2 text-[14px] text-[var(--text-muted)]">
-                {currentProject.services.map((service, i) => (
-                  <span key={service} className="flex items-center gap-2">
-                    {i > 0 && <span className="h-1 w-1 rounded-full bg-[var(--steel)]" />}
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="max-w-xl">
-              <p className="text-[14px] leading-relaxed text-[var(--text-muted)]">
-                {currentProject.overviewNarrative}
-              </p>
-            </div>
+            {/* GitHub Repo Button */}
+            {currentProject.githubUrl && (
+              <a
+                href={currentProject.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View GitHub source code for ${currentProject.title}`}
+                className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+              >
+                <svg className="h-[15px] w-[15px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+            )}
           </div>
         </div>
+
+        {/* 4b. MOBILE HORIZONTAL RAIL (CARDS ROW AT BOTTOM) */}
+        <div className="lg:hidden mt-6 pt-4 border-t border-white/10">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-[#9FB3CC] mb-2.5">
+            More Projects
+          </p>
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+            {filteredProjects.map((p, idx) => {
+              const isActive = idx === safeIndex;
+              return (
+                <button
+                  key={p.slug}
+                  type="button"
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`flex h-[76px] w-[150px] shrink-0 items-center gap-2 rounded-xl p-2 text-left transition-all ${
+                    isActive
+                      ? "border border-white/35 bg-white/[0.12]"
+                      : "border border-white/10 bg-white/[0.05] opacity-75"
+                  }`}
+                >
+                  <div className="relative h-[36px] w-[42px] shrink-0 rounded-lg overflow-hidden bg-[#0B1322]">
+                    <MiniPreviewScreen project={p} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-white truncate">{p.title}</p>
+                    <p className="text-[10px] text-[#9FB3CC] truncate">{p.category}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Complete Accessible SEO Fallback for all projects */}
+      <div className="sr-only">
+        <h2>All Portfolio Projects</h2>
+        <ul>
+          {projects.map((p) => (
+            <li key={p.slug}>
+              <h3>{p.title}</h3>
+              <p>{p.fullDescription}</p>
+              <p>Category: {p.category}</p>
+              <p>Services: {p.services.join(", ")}</p>
+              <p>Technologies: {p.technologies.join(", ")}</p>
+              {p.liveUrl && <a href={p.liveUrl}>Visit {p.title} live</a>}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -406,74 +599,60 @@ function ProjectTabletScreen({ project }: { project: Project }) {
     return (
       <div className="relative h-full w-full select-none bg-[#F7F2E7] text-[#1E293B] font-sans flex flex-col justify-between overflow-hidden">
         {/* Top Navbar */}
-        <div className="flex h-10 sm:h-12 items-center justify-between border-b border-[#E2D8C3] bg-[#FAF6EE]/95 px-3 sm:px-5">
-          <div className="flex items-center gap-2">
-            {/* Rainbow Arc Logo */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-lg">🌈</span>
-              <div className="flex flex-col">
-                <span className="text-[11px] sm:text-[13px] font-black text-[#D92D3A] tracking-tight leading-none">Rainbow</span>
-                <span className="text-[8px] sm:text-[9px] font-bold text-[#1E40AF] tracking-widest uppercase leading-none">DIGI SCHOOL</span>
-              </div>
+        <div className="flex h-10 sm:h-11 items-center justify-between border-b border-[#E2D8C3] bg-[#FAF6EE]/95 px-3 sm:px-4">
+          <div className="flex items-center gap-1.5">
+            <span className="text-base sm:text-lg">🌈</span>
+            <div className="flex flex-col">
+              <span className="text-[11px] sm:text-[12px] font-black text-[#D92D3A] tracking-tight leading-none">Rainbow</span>
+              <span className="text-[8px] font-bold text-[#1E40AF] tracking-widest uppercase leading-none">DIGI SCHOOL</span>
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-4 text-[10px] sm:text-[11px] font-semibold text-[#475569]">
+          <div className="hidden sm:flex items-center gap-3 text-[10px] font-semibold text-[#475569]">
             <span className="text-[#1E40AF]">Home</span>
             <span>About</span>
             <span>Programs</span>
-            <span>Activities</span>
             <span>Admissions</span>
-            <span>Contact</span>
           </div>
 
           <div className="flex items-center">
-            <span className="rounded-full bg-[#E11D48] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+            <span className="rounded-full bg-[#E11D48] px-2 py-0.5 text-[9px] font-bold text-white shadow-sm">
               Enquiry
             </span>
           </div>
         </div>
 
         {/* Hero Section */}
-        <div className="relative flex-1 grid grid-cols-1 sm:grid-cols-2 p-3 sm:p-6 items-center overflow-hidden">
-          {/* Left Text */}
+        <div className="relative flex-1 grid grid-cols-1 sm:grid-cols-2 p-3 sm:p-5 items-center overflow-hidden">
           <div className="z-10 flex flex-col justify-center">
-            <span className="text-[11px] sm:text-[13px] font-bold text-[#475569]">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[#475569]">
               Welcome to
             </span>
-            <h4 className="text-lg sm:text-2xl lg:text-3xl font-black text-[#1E40AF] leading-tight">
+            <h4 className="text-base sm:text-2xl font-black text-[#1E40AF] leading-tight">
               Rainbow <span className="text-[#10B981]">Digi</span> <span className="text-[#F59E0B]">School</span>
             </h4>
-            <p className="mt-1 text-[10px] sm:text-[12px] text-[#64748B] leading-snug max-w-[240px]">
+            <p className="mt-1 text-[9px] sm:text-[11px] text-[#64748B] leading-snug max-w-[220px]">
               A joyful place to learn, grow and build a brighter future.
             </p>
 
-            <div className="mt-3 flex items-center gap-2">
-              <span className="rounded-full bg-[#E11D48] px-3 py-1 text-[9px] sm:text-[10px] font-bold text-white shadow">
+            <div className="mt-2.5 flex items-center gap-2">
+              <span className="rounded-full bg-[#E11D48] px-2.5 py-1 text-[8px] sm:text-[9px] font-bold text-white shadow">
                 Explore Programs
               </span>
-              <span className="rounded-full border border-[#CBD5E1] bg-white px-3 py-1 text-[9px] sm:text-[10px] font-semibold text-[#334155]">
+              <span className="rounded-full border border-[#CBD5E1] bg-white px-2.5 py-1 text-[8px] sm:text-[9px] font-semibold text-[#334155]">
                 Get in Touch
               </span>
             </div>
           </div>
 
-          {/* Right Hero Illustration with Monkey & Treehouse */}
           <div className="relative h-full w-full flex items-center justify-center">
-            {/* Hillside & Tree artwork */}
-            <div className="relative w-full h-[120px] sm:h-[180px] rounded-2xl overflow-hidden bg-gradient-to-b from-[#BAE6FD] via-[#D1FAE5] to-[#86EFAC] p-3 flex items-center justify-center shadow-inner">
-              {/* Sun & Clouds */}
-              <div className="absolute top-2 left-4 h-6 w-6 rounded-full bg-[#FDE047]" />
-              <div className="absolute top-3 left-14 h-3 w-8 rounded-full bg-white/80" />
-              <div className="absolute top-2 right-8 h-4 w-12 rounded-full bg-white/70" />
-
-              {/* Treehouse in the back */}
-              <div className="absolute right-4 bottom-2 text-2xl sm:text-4xl">🏡</div>
-
-              {/* Monkey hanging from branch */}
-              <div className="relative z-10 flex flex-col items-center animate-bounce duration-1000">
-                <span className="text-3xl sm:text-5xl">🐒</span>
-                <span className="text-[9px] sm:text-[10px] font-bold text-[#1E3A8A] bg-white/85 px-2 py-0.5 rounded-full shadow-sm">
+            <div className="relative w-full h-[100px] sm:h-[140px] rounded-2xl overflow-hidden bg-gradient-to-b from-[#BAE6FD] via-[#D1FAE5] to-[#86EFAC] p-2 flex items-center justify-center shadow-inner">
+              <div className="absolute top-1.5 left-3 h-5 w-5 rounded-full bg-[#FDE047]" />
+              <div className="absolute top-2 left-10 h-2.5 w-6 rounded-full bg-white/80" />
+              <div className="absolute right-3 bottom-1.5 text-xl sm:text-3xl">🏡</div>
+              <div className="relative z-10 flex flex-col items-center">
+                <span className="text-2xl sm:text-4xl animate-bounce">🐒</span>
+                <span className="text-[8px] font-bold text-[#1E3A8A] bg-white/85 px-1.5 py-0.5 rounded-full shadow-sm">
                   Kandlakoya Campus
                 </span>
               </div>
@@ -481,17 +660,17 @@ function ProjectTabletScreen({ project }: { project: Project }) {
           </div>
         </div>
 
-        {/* 4 Bottom Feature Cards */}
-        <div className="grid grid-cols-4 gap-1.5 sm:gap-3 border-t border-[#E2D8C3] bg-[#FAF6EE] px-3 sm:px-5 py-2 sm:py-3">
+        {/* 4 Bottom Cards */}
+        <div className="grid grid-cols-4 gap-1 sm:gap-2 border-t border-[#E2D8C3] bg-[#FAF6EE] px-2 sm:px-4 py-1.5 sm:py-2">
           {[
             { icon: "🦁", title: "Play" },
             { icon: "📖", title: "Learn" },
             { icon: "🌱", title: "Grow" },
             { icon: "⭐", title: "Explore" },
           ].map((c) => (
-            <div key={c.title} className="flex flex-col items-center justify-center rounded-xl bg-white p-1.5 sm:p-2 shadow-sm border border-[#E2D8C3]/50">
-              <span className="text-sm sm:text-lg">{c.icon}</span>
-              <span className="text-[9px] sm:text-[11px] font-bold text-[#334155]">{c.title}</span>
+            <div key={c.title} className="flex flex-col items-center justify-center rounded-lg bg-white p-1 shadow-sm border border-[#E2D8C3]/50">
+              <span className="text-xs sm:text-sm">{c.icon}</span>
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#334155]">{c.title}</span>
             </div>
           ))}
         </div>
@@ -499,26 +678,26 @@ function ProjectTabletScreen({ project }: { project: Project }) {
     );
   }
 
-  // Generic High-Fidelity Themed Preview for other projects
+  // Generic Themed Screen for other projects
   return (
     <div
-      className="relative h-full w-full select-none font-sans flex flex-col justify-between p-4 sm:p-6 overflow-hidden"
+      className="relative h-full w-full select-none font-sans flex flex-col justify-between p-3.5 sm:p-5 overflow-hidden"
       style={{
         background: `radial-gradient(circle at 80% 20%, ${project.accent}25 0%, #080D1A 70%)`,
       }}
     >
       {/* Top Browser Bar */}
-      <div className="flex h-8 items-center justify-between border-b border-white/10 pb-3">
+      <div className="flex h-7 items-center justify-between border-b border-white/10 pb-2">
         <div className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-red-400" />
           <span className="h-2 w-2 rounded-full bg-amber-400" />
           <span className="h-2 w-2 rounded-full bg-emerald-400" />
-          <span className="ml-2 text-[10px] sm:text-[11px] font-mono text-white/50 truncate max-w-[200px]">
+          <span className="ml-2 text-[10px] font-mono text-white/50 truncate max-w-[180px]">
             {project.liveUrl?.replace(/^https?:\/\//, "") || `${project.slug}.com`}
           </span>
         </div>
         <span
-          className="text-[10px] font-semibold px-2 py-0.5 rounded-full border border-white/15"
+          className="text-[9px] font-semibold px-2 py-0.5 rounded-full border border-white/15"
           style={{ color: project.accent, borderColor: `${project.accent}40` }}
         >
           {project.category}
@@ -529,23 +708,23 @@ function ProjectTabletScreen({ project }: { project: Project }) {
       <div className="my-auto py-2">
         <div className="max-w-md">
           <span
-            className="text-[11px] font-bold tracking-widest uppercase"
+            className="text-[10px] font-bold tracking-widest uppercase"
             style={{ color: project.accent }}
           >
             {project.client}
           </span>
-          <h4 className="mt-1 text-xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h4 className="mt-1 text-lg sm:text-2xl font-extrabold text-white tracking-tight">
             {project.title}
           </h4>
-          <p className="mt-2 text-[12px] sm:text-[13px] text-white/70 leading-relaxed line-clamp-3">
+          <p className="mt-1.5 text-[11px] sm:text-[12px] text-white/70 leading-relaxed line-clamp-2 sm:line-clamp-3">
             {project.fullDescription}
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-1.5">
+          <div className="mt-3 flex flex-wrap gap-1.5">
             {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-medium text-white/80"
+                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-white/80"
               >
                 {tech}
               </span>
@@ -555,7 +734,7 @@ function ProjectTabletScreen({ project }: { project: Project }) {
       </div>
 
       {/* Bottom Status Row */}
-      <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px] sm:text-[11px] text-white/50">
+      <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[9px] sm:text-[10px] text-white/50">
         <span>Year: {project.year}</span>
         <span className="flex items-center gap-1 text-white/80">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Live Project
@@ -566,18 +745,29 @@ function ProjectTabletScreen({ project }: { project: Project }) {
 }
 
 // ==========================================
-// MINI PREVIEW SCREEN (SIDE TRAYS)
+// MINI PREVIEW SCREEN (RAIL THUMBNAILS)
 // ==========================================
 function MiniPreviewScreen({ project }: { project: Project }) {
+  if (project.previewImage) {
+    return (
+      <img
+        src={project.previewImage}
+        alt={project.title}
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+    );
+  }
+
   if (project.slug === "rainbow-digi-school") {
     return (
-      <div className="h-full w-full bg-[#FAF6EE] p-1.5 flex flex-col justify-between text-[#1E293B]">
+      <div className="h-full w-full bg-[#FAF6EE] p-1 flex flex-col justify-between text-[#1E293B]">
         <div className="flex items-center gap-1">
-          <span className="text-[10px]">🌈</span>
-          <span className="text-[8px] font-bold text-[#1E40AF]">Rainbow</span>
+          <span className="text-[9px]">🌈</span>
+          <span className="text-[7px] font-bold text-[#1E40AF]">Rainbow</span>
         </div>
         <div className="flex items-center justify-center">
-          <span className="text-xl">🐒</span>
+          <span className="text-base">🐒</span>
         </div>
       </div>
     );
@@ -585,13 +775,13 @@ function MiniPreviewScreen({ project }: { project: Project }) {
 
   return (
     <div
-      className="h-full w-full p-2 flex flex-col justify-between text-white"
+      className="h-full w-full p-1.5 flex flex-col justify-between text-white"
       style={{
-        background: `linear-gradient(135deg, ${project.accent}30 0%, #070D18 100%)`,
+        background: `linear-gradient(135deg, ${project.accent}35 0%, #070D18 100%)`,
       }}
     >
-      <div className="h-1.5 w-8 rounded-full bg-white/20" />
-      <div className="text-[10px] font-bold text-white/90 truncate">{project.title}</div>
+      <div className="h-1 w-6 rounded-full bg-white/20" />
+      <div className="text-[8px] font-bold text-white/90 truncate">{project.title}</div>
     </div>
   );
 }

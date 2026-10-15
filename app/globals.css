@@ -685,6 +685,27 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* --- HERO VISUAL FLOAT ANIMATION --- */
+@keyframes heroFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-6deg);
+  }
+}
+
+@media (max-width: 700px) {
+  @keyframes heroFloat {
+    0%, 100% {
+      transform: translateY(0) rotate(-3deg);
+    }
+    50% {
+      transform: translateY(-6px) rotate(-3deg);
+    }
+  }
+}
+
 /* --- PREFERS-REDUCED-MOTION --- */
 @media (prefers-reduced-motion: reduce) {
   .floating-plane,
@@ -692,7 +713,8 @@ h1, h2, h3, h4, h5, h6 {
   .live-frame,
   .live-sheen,
   .garuda-floating-eagle,
-  .contact-eagle-floating {
+  .contact-eagle-floating,
+  .hero-float-anim {
     animation: none !important;
   }
   .liquid-glass-bubble {

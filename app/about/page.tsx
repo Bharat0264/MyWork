@@ -1,4 +1,4 @@
-import { Navbar, Footer, CTA } from "@/components/site-shell";
+import { Navbar, Footer } from "@/components/site-shell";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default function About() {
     <>
       <Navbar />
       <main className="pt-36">
-        <section className="wrap pb-24">
+        <section className="wrap pb-14 sm:pb-20">
           <p className="eyebrow">About</p>
           <h1 className="hero-heading mt-5 max-w-4xl font-semibold">
             I build digital experiences that solve real business problems.
@@ -48,7 +48,6 @@ export default function About() {
             ))}
           </div>
         </section>
-        <CTA />
       </main>
       <Footer />
     </>

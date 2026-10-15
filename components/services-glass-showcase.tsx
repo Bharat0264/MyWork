@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
-import { StartProjectButton } from "@/components/cta-button";
 import { services } from "@/data/services";
 import styles from "./services-glass-showcase.module.css";
 
@@ -228,11 +227,6 @@ export function ServicesGlassShowcase() {
             })}
           </div>
         </div>
-
-        <section className={styles.projectCta} aria-label="Start a project">
-          <p>Have an idea? Let&apos;s turn it into something people love using.</p>
-          <StartProjectButton />
-        </section>
       </div>
     </section>
   );

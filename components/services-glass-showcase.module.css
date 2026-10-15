@@ -1,0 +1,583 @@
+.servicesPage {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  min-height: 100%;
+  background: linear-gradient(180deg, #0B1322 0%, #141E30 100%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scene {
+  position: relative;
+  isolation: isolate;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 158px 32px 112px;
+}
+
+.glassSlab,
+.projectCta {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(20, 30, 48, 0.45), rgba(20, 30, 48, 0.45)) padding-box,
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06)) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 60px rgba(4, 9, 18, 0.55);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+}
+
+.glassSlab {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1000px);
+  min-height: 460px;
+  margin: 0 auto;
+  padding: 40px 64px 40px 40px;
+  border-radius: 28px;
+}
+
+.slabContent {
+  display: grid;
+  min-height: 378px;
+  grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+  gap: clamp(36px, 5vw, 64px);
+  align-items: stretch;
+}
+
+.navigationColumn {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #8FB0D6;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.heading {
+  max-width: 390px;
+  margin: 18px 0 0;
+  color: #FFFFFF;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.serviceTabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.serviceTab {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 0 8px 14px;
+  background: transparent;
+  color: #9FB3CC;
+  font: inherit;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.serviceTab::before {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: #5F86B0;
+  content: "";
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.serviceTab[data-active="true"] {
+  color: #FFFFFF;
+}
+
+.serviceTab[data-active="true"]::before {
+  opacity: 1;
+}
+
+.serviceTab:hover .serviceTitle {
+  color: #FFFFFF;
+}
+
+.serviceNumber {
+  flex: 0 0 auto;
+  color: #6F86A3;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.serviceTitle {
+  overflow: hidden;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.detailColumn {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+}
+
+.panelStack {
+  display: grid;
+  width: 100%;
+}
+
+.detailPanel {
+  grid-area: 1 / 1;
+  align-self: center;
+  min-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0s linear 0.35s;
+  visibility: hidden;
+}
+
+.detailPanel[data-active="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+  visibility: visible;
+}
+
+.detailNumber {
+  margin: 0;
+  color: #6F86A3;
+  font-size: clamp(2.9rem, 5.5vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.detailTitle {
+  margin: 22px 0 0;
+  color: #FFFFFF;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+.description {
+  max-width: 520px;
+  margin: 18px 0 0;
+  color: #9FB3CC;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin: 30px 0 22px;
+  background: rgba(159, 179, 204, 0.22);
+}
+
+.whyLabel {
+  margin: 0;
+  color: #8FB0D6;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.whyText {
+  max-width: 530px;
+  margin: 10px 0 0;
+  color: #E8EEF7;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.dotControls {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  transform: translateY(-50%);
+}
+
+.dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(159, 179, 204, 0.42);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dot[data-active="true"] {
+  width: 8px;
+  height: 8px;
+  background: #E8EEF7;
+}
+
+.dot:hover {
+  background: #8FB0D6;
+}
+
+.sphere {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  transform: translate3d(var(--sphere-x, 0), var(--sphere-y, 0), 0);
+  transition: transform 0.55s ease;
+  will-change: transform;
+}
+
+.sphereVisual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #5F86B0 0%, #35577D 35%, #141E30 75%);
+  box-shadow: 0 20px 42px rgba(4, 9, 18, 0.42);
+}
+
+.sphereVisual::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(rgba(232, 238, 247, 0.16) 0.55px, transparent 0.75px),
+    radial-gradient(rgba(4, 9, 18, 0.22) 0.5px, transparent 0.7px);
+  background-position: 0 0, 2px 2px;
+  background-size: 4px 4px, 5px 5px;
+  content: "";
+  mix-blend-mode: soft-light;
+  opacity: 0.38;
+}
+
+.sphereTop {
+  top: 78px;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  margin-left: -90px;
+}
+
+.sphereTop .sphereVisual {
+  filter: blur(6px);
+  animation: floatFar 13s ease-in-out -3s infinite;
+}
+
+.sphereRight {
+  top: 285px;
+  right: -25px;
+  width: 260px;
+  height: 260px;
+}
+
+.sphereRight .sphereVisual {
+  filter: blur(1px);
+  animation: floatNear 9s ease-in-out -1s infinite;
+}
+
+.sphereBottom {
+  bottom: 38px;
+  left: -16px;
+  width: 140px;
+  height: 140px;
+}
+
+.sphereBottom .sphereVisual {
+  filter: blur(3px);
+  animation: floatMiddle 11s ease-in-out -5s infinite;
+}
+
+.projectCta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(100%, 760px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 72px auto 0;
+  padding: 25px 30px 25px 36px;
+  border-radius: 999px;
+}
+
+.projectCta p {
+  max-width: 440px;
+  margin: 0;
+  color: #E8EEF7;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.projectCta :global(.btn-start) {
+  flex: 0 0 auto;
+}
+
+@keyframes floatFar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes floatNear {
+  0%,
+  100% {
+    transform: translateY(7px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatMiddle {
+  0%,
+  100% {
+    transform: translateY(-5px);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glassSlab,
+  .projectCta {
+    background: rgba(27, 43, 69, 0.92);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+@media (max-width: 900px) {
+  .scene {
+    width: min(100%, calc(100% - 32px));
+    padding: 120px 0 84px;
+  }
+
+  .glassSlab {
+    min-height: 0;
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .slabContent {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+  }
+
+  .heading {
+    max-width: 650px;
+  }
+
+  .serviceTabs {
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    margin: 28px -24px 0;
+    padding: 0 24px 5px;
+    scroll-padding-inline: 24px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .serviceTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .serviceTab {
+    flex: 0 0 auto;
+    gap: 8px;
+    scroll-snap-align: start;
+    border: 1px solid rgba(143, 176, 214, 0.2);
+    border-radius: 999px;
+    padding: 9px 13px;
+    background: rgba(11, 19, 34, 0.18);
+  }
+
+  .serviceTab::before {
+    display: none;
+  }
+
+  .serviceTab[data-active="true"] {
+    border-color: rgba(143, 176, 214, 0.5);
+    background: rgba(95, 134, 176, 0.14);
+  }
+
+  .serviceTitle {
+    font-size: 14px;
+  }
+
+  .detailColumn {
+    min-height: 312px;
+  }
+
+  .dotControls {
+    top: 18px;
+    right: 18px;
+    flex-direction: row;
+    gap: 7px;
+    transform: none;
+  }
+
+  .sphereTop {
+    top: 68px;
+    width: 108px;
+    height: 108px;
+    margin-left: -54px;
+  }
+
+  .sphereRight {
+    top: 290px;
+    right: -68px;
+    width: 156px;
+    height: 156px;
+  }
+
+  .sphereBottom {
+    bottom: 90px;
+    left: -48px;
+    width: 84px;
+    height: 84px;
+  }
+
+  .projectCta {
+    width: min(100%, 760px);
+    padding: 28px;
+    border-radius: 28px;
+  }
+}
+
+@media (max-width: 560px) {
+  .scene {
+    width: min(100%, calc(100% - 24px));
+    padding-top: 104px;
+    padding-bottom: 72px;
+  }
+
+  .glassSlab {
+    padding: 24px 20px;
+  }
+
+  .heading {
+    max-width: calc(100% - 62px);
+    font-size: clamp(1.8rem, 8.4vw, 2.35rem);
+  }
+
+  .serviceTabs {
+    margin-right: -20px;
+    margin-left: -20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    scroll-padding-inline: 20px;
+  }
+
+  .detailColumn {
+    min-height: 347px;
+  }
+
+  .detailNumber {
+    font-size: 3.15rem;
+  }
+
+  .detailTitle {
+    margin-top: 18px;
+    font-size: 25px;
+  }
+
+  .description {
+    margin-top: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .divider {
+    margin: 24px 0 18px;
+  }
+
+  .whyText {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .sphereBottom {
+    display: none;
+  }
+
+  .projectCta {
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 56px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .projectCta p {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sphere,
+  .sphereVisual,
+  .detailPanel,
+  .dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+

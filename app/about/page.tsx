@@ -37,33 +37,33 @@ export default function About() {
   return (
     <>
       <Navbar />
-      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
-        <section className="wrap pt-10 sm:pt-14 pb-14 sm:pb-20">
+      <main id="content" className="page-transition bg-transparent">
+        <section className="wrap pt-0 pb-[calc(var(--section-gap)/2)]">
           {/* HEADER */}
           <div className="max-w-[1200px]">
             <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6]">
               About
             </p>
-            <h1 className="mt-5 max-w-[760px] text-white font-semibold text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.12] tracking-[-0.02em]">
+            <h1 className="mt-3 max-w-[760px] text-white font-semibold text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.12] tracking-[-0.02em]">
               I build digital experiences that solve real business problems.
             </h1>
-            <p className="mt-7 max-w-[560px] text-[17px] leading-[1.65] text-[#9FB3CC]">
+            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.65] text-[#9FB3CC]">
               I work across product design, development, business workflows, automation, SEO and digital presence—bringing the pieces together into work that looks clear and works hard.
             </p>
           </div>
 
           {/* THE STAGE: Interactive Stacked Cards */}
-          <div className="mt-14">
+          <div className="mt-[var(--header-gap)]">
             <AboutCardStack />
           </div>
         </section>
 
         {/* WHY WORK TOGETHER: Design thinking with a builder's mindset */}
-        <section className="wrap pb-20 sm:pb-24">
-          <div className="grid gap-10 border-t border-[rgba(143,176,214,0.18)] pt-16 sm:pt-20 md:grid-cols-2 items-center">
+        <section className="wrap pt-[calc(var(--section-gap)/2)] pb-0 border-t border-[rgba(143,176,214,0.18)]">
+          <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
               <p className="eyebrow text-[#8FB0D6]">Why work together</p>
-              <h2 className="section-heading mt-4 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
                 Design thinking with a builder’s mindset.
               </h2>
               <p className="mt-4 text-[#9FB3CC] text-base leading-relaxed max-w-md">

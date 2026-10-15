@@ -174,20 +174,20 @@ export function WorkPortfolioShowcase() {
   const totalCategoriesCount = categoryItems.length - 1;
 
   return (
-    <section id="work" className="wrap pt-24 pb-14 sm:pb-20">
+    <section id="work" className="wrap pt-0 pb-0">
       {/* Preload next project screenshot */}
       <link rel="preload" as="image" href={`/projects/${nextProject.slug}-full.webp`} />
 
       {/* ========================================================
           1. HEADER (LEFT-ALIGNED BLOCK, NO LOGO, REAL STATS ON RIGHT)
-          Spacing: 96px above (pt-24 on wrap), 48px below (mb-12)
+          Spacing: 40px above navbar (via main), var(--header-gap) below
           ======================================================== */}
       <motion.div
         initial={isReducedMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mb-12"
+        className="mb-[var(--header-gap)]"
       >
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           {/* Left Block: Eyebrow, Heading, Paragraph */}
@@ -196,7 +196,7 @@ export function WorkPortfolioShowcase() {
               <span className="inline-block w-6 h-px bg-[#8FB0D6]" aria-hidden="true" />
               <span>SELECTED WORK</span>
             </p>
-            <h1 className="mt-4 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(2.2rem,4.4vw,3.4rem)]">
+            <h1 className="mt-3 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(2.2rem,4.4vw,3.4rem)]">
               Websites and products <span className="text-[#8FB0D6]">built to perform.</span>
             </h1>
             <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-[#9FB3CC]">

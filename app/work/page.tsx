@@ -36,7 +36,7 @@ export default function Work() {
   return (
     <>
       <Navbar />
-      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
+      <main id="content" className="page-transition bg-transparent">
         <WorkPortfolioShowcase />
       </main>
       <Footer />

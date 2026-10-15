@@ -70,27 +70,27 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
+      <main id="content" className="page-transition bg-transparent">
         {/* ========================================================
             1. HERO SECTION
             ======================================================== */}
-        <section className="grid-bg relative overflow-hidden pt-12 sm:pt-20">
+        <section className="grid-bg relative overflow-hidden pb-14">
           <div className="absolute -right-32 top-8 h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none" />
-          <div className="wrap relative grid min-h-[680px] items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr]">
+          <div className="wrap relative grid items-center gap-12 lg:grid-cols-[1.05fr_.95fr]">
             <div>
               <p className="eyebrow flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
                 {siteConfig.availability}
               </p>
-              <h1 className="hero-heading mt-7 max-w-3xl font-semibold text-white">
+              <h1 className="hero-heading mt-3 max-w-3xl font-semibold text-white">
                 Websites built to{" "}
                 <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
                 work smarter, and grow faster.
               </h1>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-[var(--text-muted)]">
+              <p className="mt-4 max-w-xl text-lg leading-8 text-[var(--text-muted)]">
                 I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
               </p>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
+              <div className="mt-[var(--header-gap)] flex flex-wrap items-center gap-3">
                 <Link className="button" href="/work" prefetch={true}>
                   View my work <ArrowUpRight size={16} />
                 </Link>
@@ -118,7 +118,7 @@ export default function Home() {
             <a
               href="#featured-project"
               aria-label="Scroll to featured project"
-              className="absolute bottom-7 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
+              className="hidden lg:flex absolute bottom-2 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
             >
               <ArrowDown size={18} />
             </a>
@@ -141,8 +141,8 @@ export default function Home() {
         {/* ========================================================
             3. FEATURED PROJECT (ONE large spotlight card)
             ======================================================== */}
-        <section id="featured-project" className="wrap py-16 sm:py-24">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-12">
+        <section id="featured-project" className="wrap py-[calc(var(--section-gap)/2)]">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-[var(--header-gap)]">
             <div>
               <p className="eyebrow text-[#8FB0D6]">Featured project</p>
               <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
@@ -243,8 +243,8 @@ export default function Home() {
         {/* ========================================================
             4. AT A GLANCE (3 small stat tiles computed from real data)
             ======================================================== */}
-        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
-          <div className="max-w-2xl mb-10 sm:mb-12">
+        <section className="wrap py-[calc(var(--section-gap)/2)] border-t border-[rgba(143,176,214,0.16)]">
+          <div className="max-w-2xl mb-[var(--header-gap)]">
             <p className="eyebrow text-[#8FB0D6]">At a glance</p>
             <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
               Work and capability in numbers
@@ -307,13 +307,13 @@ export default function Home() {
             (Moved here from other pages - lives ONLY on Home)
             ======================================================== */}
         <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60">
-          <div className="wrap grid gap-12 pt-16 sm:pt-24 pb-14 sm:pb-20 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
+          <div className="wrap grid gap-12 pt-[calc(var(--section-gap)/2)] pb-0 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
             <div>
               <p className="eyebrow text-[#8FB0D6]">Why go digital</p>
-              <h2 className="section-heading mt-4 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
                 Your website is your hardest-working first impression.
               </h2>
-              <p className="mt-5 max-w-md text-base leading-7 text-[#9FB3CC]">
+              <p className="mt-4 max-w-md text-base leading-7 text-[#9FB3CC]">
                 It is where people check whether you are credible, understand what you offer and decide whether to contact or buy from you—often before they speak to anyone.
               </p>
             </div>

@@ -22,10 +22,10 @@ export default async function Case({
   return (
     <>
       <Navbar />
-      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
+      <main id="content" className="page-transition bg-transparent">
         <section className="wrap">
           <p className="eyebrow">Case study · {p.year}</p>
-          <div className="mt-5 flex flex-wrap items-end justify-between gap-8">
+          <div className="mt-3 flex flex-wrap items-end justify-between gap-8">
             <div>
               <h1 className="hero-heading font-semibold text-[var(--text)]">
                 {p.title}
@@ -41,14 +41,14 @@ export default async function Case({
             )}
           </div>
           <div
-            className="project-art mt-12 h-[310px] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-soft)] sm:h-[560px]"
+            className="project-art mt-[var(--header-gap)] h-[310px] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-soft)] sm:h-[560px]"
             style={{ "--accent": p.accent } as React.CSSProperties}
           >
             <LiveProjectPreview project={p} />
           </div>
         </section>
 
-        <section className="wrap grid gap-12 py-24 lg:grid-cols-[.65fr_1.35fr]">
+        <section className="wrap grid gap-12 py-[calc(var(--section-gap)/2)] lg:grid-cols-[.65fr_1.35fr]">
           <aside className="lg:sticky lg:top-28 lg:h-fit">
             <p className="eyebrow">Project details</p>
             <dl className="mt-7 space-y-5 text-sm">

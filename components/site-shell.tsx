@@ -141,9 +141,9 @@ export function Navbar() {
       </svg>
 
       {/* FIXED TOP HEADER */}
-      <header className="fixed inset-x-0 top-0 z-50 h-[72px] min-[900px]:h-[84px] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md">
         {/* DESKTOP (900px and above) */}
-        <div className="mx-auto hidden h-[84px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
+        <div className="mx-auto hidden h-full max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
           {/* Left: Garuda Logo Lockup */}
           <div className="flex items-center min-w-[200px]">
             <Link
@@ -223,7 +223,7 @@ export function Navbar() {
         </div>
 
         {/* MOBILE TOP BAR (below 900px) */}
-        <div className="flex h-[72px] items-center justify-between px-5 sm:px-8 min-[900px]:hidden">
+        <div className="flex h-full items-center justify-between px-5 sm:px-8 min-[900px]:hidden">
           <Link
             href="/"
             onClick={handleLogoClick}

@@ -14,7 +14,7 @@ export default function NotFound() {
       <Navbar />
       <main
         id="content"
-        className="wrap flex min-h-[calc(100vh-84px-200px)] flex-col items-center justify-center pt-[72px] pb-24 text-center min-[900px]:pt-[84px] min-[900px]:pb-0 page-transition"
+        className="wrap flex flex-col items-center justify-center text-center page-transition"
       >
         <div className="relative mx-auto my-auto max-w-[640px] rounded-[28px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/90 via-[#141E30]/80 to-[#0B1322]/90 p-8 sm:p-12 shadow-[0_20px_50px_rgba(4,9,18,0.5)]">
           <p className="eyebrow text-[#8FB0D6]">404 Error</p>

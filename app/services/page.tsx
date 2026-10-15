@@ -36,17 +36,17 @@ export default function Services() {
   return (
     <>
       <Navbar />
-      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
+      <main id="content" className="page-transition bg-transparent">
         {/* HERO SHOWCASE: Glass slab & interactive spheres */}
         <ServicesGlassShowcase />
 
         {/* A DELIBERATE PROCESS: 6-Step cards */}
-        <section className="wrap py-20 sm:py-24 mb-6">
+        <section className="wrap pt-[calc(var(--section-gap)/2)] pb-0">
           <p className="eyebrow text-[#8FB0D6]">A deliberate process</p>
-          <h2 className="section-heading mt-4 max-w-2xl font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+          <h2 className="section-heading mt-3 max-w-2xl font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
             Less guesswork. More momentum.
           </h2>
-          <div className="mt-12 sm:mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-[var(--header-gap)] grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               ["01", "Understand", "Business, audience, requirements and goals."],
               ["02", "Plan", "Structure, journey, direction and technology."],

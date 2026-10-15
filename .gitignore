@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -17,9 +18,12 @@
 /.next/
 /.vinext/
 /out/
+/dist/
 
 # misc
 .DS_Store
+*.log
+*.tsbuildinfo
 *.pem
 
 # debug
@@ -36,7 +40,6 @@ yarn-error.log*
 
 # typescript
 next-env.d.ts
-/dist/
 /.wrangler/
 # Checkout-local execution profile and tool state; never publish them.
 /.sites-runtime/

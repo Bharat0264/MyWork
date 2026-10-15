@@ -11,7 +11,7 @@ export default function Work() {
   return (
     <>
       <Navbar />
-      <main className="pt-20 sm:pt-24 bg-[#03060B]">
+      <main className="pt-20 sm:pt-24 bg-transparent">
         <WorkPortfolioShowcase />
         <CTA />
       </main>

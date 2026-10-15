@@ -102,23 +102,23 @@ export function WorkPortfolioShowcase() {
     <section
       id="work"
       aria-label="Garuda Portfolio Showcase"
-      className="relative w-full overflow-hidden bg-[#03060B] py-24 sm:py-32 text-[#F7F9FC]"
+      className="relative w-full overflow-hidden bg-transparent py-24 sm:py-32 text-[var(--text)]"
     >
-      {/* ATMOSPHERIC BACKGROUND LIGHTING & CURVED PLANETARY HORIZON */}
+      {/* ATMOSPHERIC BACKGROUND LIGHTING & SUBTLE HORIZON */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {/* Subtle technical grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(120,160,210,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(120,160,210,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(143,176,214,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(143,176,214,0.04)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
-        {/* Ambient cyan and electric-blue radial glow */}
-        <div className="absolute -top-40 right-1/4 h-[550px] w-[550px] rounded-full bg-[radial-gradient(circle,rgba(22,139,255,0.18)_0%,transparent_70%)] blur-[100px]" />
-        <div className="absolute top-1/3 left-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(113,91,255,0.12)_0%,transparent_70%)] blur-[90px]" />
-        <div className="absolute bottom-10 right-10 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(22,139,255,0.14)_0%,transparent_70%)] blur-[120px]" />
+        {/* Ambient steel and navy radial glow */}
+        <div className="absolute -top-40 right-1/4 h-[550px] w-[550px] rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.18)_0%,transparent_70%)] blur-[120px]" />
+        <div className="absolute top-1/3 left-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(95,134,176,0.12)_0%,transparent_70%)] blur-[100px]" />
+        <div className="absolute bottom-10 right-10 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.14)_0%,transparent_70%)] blur-[130px]" />
 
-        {/* Curved glowing horizon line across the lower canvas */}
+        {/* Subtle horizon curve */}
         <div
-          className="absolute -bottom-1/2 left-1/2 h-[900px] w-[1800px] -translate-x-1/2 rounded-[50%] border-t border-[rgba(22,139,255,0.45)] shadow-[0_-8px_40px_rgba(22,139,255,0.35)] opacity-80"
+          className="absolute -bottom-1/2 left-1/2 h-[900px] w-[1800px] -translate-x-1/2 rounded-[50%] border-t border-[var(--border)] opacity-60"
           style={{
-            background: "radial-gradient(ellipse at 50% 0%, rgba(16,42,85,0.45) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at 50% 0%, rgba(20,30,48,0.4) 0%, transparent 70%)",
           }}
         />
       </div>
@@ -127,17 +127,17 @@ export function WorkPortfolioShowcase() {
         {/* SECTION INTRODUCTION & SIGNATURE GARUDA ARTWORK */}
         <div className="relative mb-14 sm:mb-16 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <p className="eyebrow flex items-center gap-2.5 text-[#3DA5FF]">
-              <span className="h-2 w-2 rounded-full bg-[#168BFF]" />
+            <p className="eyebrow flex items-center gap-2.5 text-[var(--mist)]">
+              <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
               OUR WORK
             </p>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl leading-[1.08]">
+            <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-[var(--text)] sm:text-6xl lg:text-7xl leading-[1.08]">
               Work with a reason <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-[#168BFF] via-[#4BA2FF] to-[#715BFF] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#5F86B0] via-[#8FB0D6] to-[#E8EEF7] bg-clip-text text-transparent">
                 to exist.
               </span>
             </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-[#A8B4C7] sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">
               A selection of websites, products and digital experiences shaped around real business goals and user needs.
             </p>
           </div>
@@ -145,7 +145,7 @@ export function WorkPortfolioShowcase() {
           {/* Garuda Signature Water-Eagle Artwork */}
           <div className="relative flex shrink-0 items-center justify-center lg:mb-2">
             {/* Soft radial glow behind eagle */}
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(22,139,255,0.35)_0%,transparent_70%)] blur-2xl" />
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(53,87,125,0.2)_0%,transparent_70%)] blur-2xl" />
             <div className="relative garuda-floating-eagle">
               <Image
                 src="/logo-eagle.png"
@@ -153,7 +153,7 @@ export function WorkPortfolioShowcase() {
                 width={200}
                 height={200}
                 priority
-                className="h-[120px] w-auto sm:h-[150px] lg:h-[185px] object-contain drop-shadow-[0_0_24px_rgba(22,139,255,0.45)]"
+                className="h-[120px] w-auto sm:h-[150px] lg:h-[185px] object-contain"
               />
             </div>
           </div>
@@ -174,10 +174,10 @@ export function WorkPortfolioShowcase() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-[0.98] ${
+                  className={`rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] active:scale-[0.98] ${
                     isActive
-                      ? "bg-white text-[#03060B] font-semibold border border-transparent shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
-                      : "border border-white/12 bg-[#08111F] text-[#A8B4C7] hover:border-white/25 hover:bg-[#0c182c] hover:text-[#F7F9FC]"
+                      ? "bg-[#E8EEF7] text-[#141E30] font-semibold border border-transparent shadow-[var(--shadow-soft)]"
+                      : "border border-[var(--border)] bg-[#141E30]/70 text-[var(--text-muted)] hover:border-[var(--border-strong)] hover:bg-[#1B2B45] hover:text-[var(--text)]"
                   }`}
                 >
                   {cat}
@@ -193,18 +193,15 @@ export function WorkPortfolioShowcase() {
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="relative min-h-[580px] lg:min-h-[660px] rounded-[32px] sm:rounded-[40px] border border-[rgba(120,160,210,0.18)] bg-[#050B14]/80 p-6 sm:p-10 lg:p-12 shadow-[0_30px_90px_rgba(0,0,0,0.7)] backdrop-blur-xl overflow-hidden"
+          className="relative min-h-[580px] lg:min-h-[660px] rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45]/70 to-[#141E30]/80 p-6 sm:p-10 lg:p-12 shadow-[var(--shadow-soft)] backdrop-blur-xl overflow-hidden"
         >
-          {/* Inner ambient horizon lighting */}
-          <div className="pointer-events-none absolute -bottom-24 left-1/2 h-[340px] w-[800px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse,rgba(22,139,255,0.25)_0%,transparent_70%)] blur-3xl" />
-
           {/* Left Arrow Button */}
           {totalCount > 1 && (
             <button
               onClick={handlePrev}
               type="button"
               aria-label="Previous project"
-              className="absolute left-4 sm:left-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-[#08111F] text-white transition-colors duration-200 hover:border-white/25 hover:bg-[#0d1d36] active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
+              className="absolute left-4 sm:left-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--mist)] hover:bg-[#1B2B45] active:scale-[0.98] shadow-[var(--shadow-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] cursor-pointer"
             >
               <ChevronLeft size={22} strokeWidth={2.2} />
             </button>
@@ -216,7 +213,7 @@ export function WorkPortfolioShowcase() {
               onClick={handleNext}
               type="button"
               aria-label="Next project"
-              className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-[#08111F] text-white transition-colors duration-200 hover:border-white/25 hover:bg-[#0d1d36] active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
+              className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--mist)] hover:bg-[#1B2B45] active:scale-[0.98] shadow-[var(--shadow-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] cursor-pointer"
             >
               <ChevronRight size={22} strokeWidth={2.2} />
             </button>
@@ -235,16 +232,16 @@ export function WorkPortfolioShowcase() {
                     onClick={() => setCurrentIndex(origIndex)}
                     type="button"
                     title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-white/12 bg-[#091222] p-1.5 transition-colors duration-200 hover:border-white/25 active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
+                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[var(--border)] bg-[#141E30] p-1.5 transition-colors duration-200 hover:border-[var(--border-strong)] active:scale-[0.98] shadow-[var(--shadow-soft)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
                     style={{
                       transform: "rotateY(16deg) rotateX(2deg)",
                       transformStyle: "preserve-3d",
                     }}
                   >
-                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0a1426]">
+                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0B1322]">
                       <MiniPreviewScreen project={item} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-transparent to-transparent flex items-end p-1.5">
-                        <span className="text-[10px] font-semibold text-white/90 truncate">{item.title}</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B1322]/90 via-transparent to-transparent flex items-end p-1.5">
+                        <span className="text-[10px] font-semibold text-[var(--text)] truncate">{item.title}</span>
                       </div>
                     </div>
                   </button>
@@ -256,15 +253,15 @@ export function WorkPortfolioShowcase() {
             <div className="flex flex-col justify-center z-20 pl-2 sm:pl-6 xl:pl-4">
               {/* Counter and Animated Progress Line */}
               <div className="flex items-center gap-4">
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#3DA5FF]">
+                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--mist)]">
                   {formattedIndex}
                 </span>
-                <span className="text-sm font-semibold text-[#6680A6]">
+                <span className="text-sm font-semibold text-[var(--text-faint)]">
                   / {formattedTotal}
                 </span>
-                <div className="h-[2.5px] w-24 sm:w-32 rounded-full bg-[rgba(120,160,210,0.2)] overflow-hidden">
+                <div className="h-[2.5px] w-24 sm:w-32 rounded-full bg-[rgba(143,176,214,0.16)] overflow-hidden">
                   <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-[#168BFF] to-[#715BFF]"
+                    className="h-full rounded-full bg-gradient-to-r from-[#35577D] to-[#8FB0D6]"
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercent}%` }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
@@ -274,7 +271,7 @@ export function WorkPortfolioShowcase() {
 
               {/* Category Pill Tag */}
               <div className="mt-5">
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-[#168BFF]/40 bg-[#168BFF]/10 px-3 py-1 text-[11px] font-bold tracking-[0.16em] uppercase text-[#3DA5FF]">
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border-strong)] bg-[#1B2B45] px-3 py-1 text-[11px] font-bold tracking-[0.16em] uppercase text-[var(--mist)]">
                   <Sparkles size={11} />
                   {currentProject.category}
                 </span>
@@ -282,16 +279,16 @@ export function WorkPortfolioShowcase() {
 
               {/* Huge Display Heading with Gradient Second Half */}
               <div className="mt-5">
-                <h3 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-[1.05]">
+                <h3 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text)] leading-[1.05]">
                   {currentProject.titlePrefix} <br />
-                  <span className="bg-gradient-to-r from-[#168BFF] via-[#3DA5FF] to-[#715BFF] bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#5F86B0] via-[#8FB0D6] to-[#E8EEF7] bg-clip-text text-transparent">
                     {currentProject.titleSuffix}
                   </span>
                 </h3>
               </div>
 
               {/* Short Description */}
-              <p className="mt-5 max-w-md text-[15px] sm:text-[16px] leading-relaxed text-[#A8B4C7]">
+              <p className="mt-5 max-w-md text-[15px] sm:text-[16px] leading-relaxed text-[var(--text-muted)]">
                 {currentProject.shortDescription}
               </p>
 
@@ -302,7 +299,7 @@ export function WorkPortfolioShowcase() {
                     href={currentProject.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 rounded-full bg-[#168BFF] px-6 py-3.5 text-sm font-semibold text-white border border-white/12 shadow-[0_4px_12px_rgba(0,0,0,0.35)] transition-colors duration-200 hover:bg-[#1E90FF] hover:border-white/25 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#141E30] to-[#35577D] px-6 py-3.5 text-sm font-semibold text-white border border-[var(--border-strong)] shadow-[var(--shadow-soft)] transition-all duration-200 hover:border-[var(--mist)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
                   >
                     <span>View Project</span>
                     <ArrowUpRight size={17} />
@@ -312,7 +309,7 @@ export function WorkPortfolioShowcase() {
                 <Link
                   href={`/work/${currentProject.slug}`}
                   aria-label={`Read case study for ${currentProject.title}`}
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/12 bg-[#08111F] text-[#F7F9FC] transition-colors duration-200 hover:border-white/25 hover:bg-[#0e1d38] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border)] bg-[#141E30] text-[var(--text)] transition-colors duration-200 hover:border-[var(--border-strong)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
                 >
                   <ExternalLink size={18} />
                 </Link>
@@ -326,7 +323,7 @@ export function WorkPortfolioShowcase() {
                 initial={{ opacity: 0, scale: 0.94, rotateY: -16 }}
                 animate={{ opacity: 1, scale: 1, rotateY: isHovered ? -5 : -10 }}
                 transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
-                className="relative w-full max-w-[680px] rounded-[28px] sm:rounded-[36px] border border-[rgba(120,160,210,0.35)] bg-[#080E1B] p-2.5 sm:p-3.5 shadow-[0_30px_80px_rgba(0,0,0,0.85)] transition-transform duration-500 hover:shadow-[0_35px_90px_rgba(0,0,0,0.9)]"
+                className="relative w-full max-w-[680px] rounded-[28px] sm:rounded-[36px] border border-[var(--border-strong)] bg-[#0B1322] p-2.5 sm:p-3.5 shadow-[var(--shadow-soft)] transition-transform duration-500"
                 style={{
                   transformStyle: "preserve-3d",
                 }}
@@ -355,16 +352,16 @@ export function WorkPortfolioShowcase() {
                     onClick={() => setCurrentIndex(origIndex)}
                     type="button"
                     title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-white/12 bg-[#091222] p-1.5 transition-colors duration-200 hover:border-white/25 active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
+                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[var(--border)] bg-[#141E30] p-1.5 transition-colors duration-200 hover:border-[var(--border-strong)] active:scale-[0.98] shadow-[var(--shadow-soft)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
                     style={{
                       transform: "rotateY(-16deg) rotateX(2deg)",
                       transformStyle: "preserve-3d",
                     }}
                   >
-                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0a1426]">
+                    <div className="relative h-full w-full rounded-[12px] overflow-hidden bg-[#0B1322]">
                       <MiniPreviewScreen project={item} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-transparent to-transparent flex items-end p-1.5">
-                        <span className="text-[10px] font-semibold text-white/90 truncate">{item.title}</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B1322]/90 via-transparent to-transparent flex items-end p-1.5">
+                        <span className="text-[10px] font-semibold text-[var(--text)] truncate">{item.title}</span>
                       </div>
                     </div>
                   </button>
@@ -374,15 +371,15 @@ export function WorkPortfolioShowcase() {
           </div>
 
           {/* 5. BOTTOM METADATA ROW */}
-          <div className="mt-12 sm:mt-16 border-t border-[rgba(120,160,210,0.14)] pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 z-20 relative">
+          <div className="mt-12 sm:mt-16 border-t border-[var(--border)] pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 z-20 relative">
             <div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-white">
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--mist)]">
                 Project Overview
               </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2 text-[14px] text-[#A8B4C7]">
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[14px] text-[var(--text-muted)]">
                 {currentProject.services.map((service, i) => (
                   <span key={service} className="flex items-center gap-2">
-                    {i > 0 && <span className="h-1 w-1 rounded-full bg-[#168BFF]" />}
+                    {i > 0 && <span className="h-1 w-1 rounded-full bg-[var(--steel)]" />}
                     {service}
                   </span>
                 ))}
@@ -390,7 +387,7 @@ export function WorkPortfolioShowcase() {
             </div>
 
             <div className="max-w-xl">
-              <p className="text-[14px] leading-relaxed text-[#A8B4C7]">
+              <p className="text-[14px] leading-relaxed text-[var(--text-muted)]">
                 {currentProject.overviewNarrative}
               </p>
             </div>

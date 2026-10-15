@@ -185,7 +185,7 @@ export function Navbar() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.04] bg-[#050505]/80 backdrop-blur-md"
+        className="fixed inset-x-0 top-0 z-50 border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md"
       >
         {/* DESKTOP (900px and above) */}
         <div className="mx-auto hidden h-[84px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
@@ -283,7 +283,7 @@ export function Navbar() {
               type="button"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white transition-colors hover:bg-white/10 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[#141E30] text-[var(--text)] transition-colors hover:bg-[#1B2B45] hover:border-[var(--border-strong)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
             >
               {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -298,7 +298,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="overflow-hidden border-t border-white/[0.08] bg-[#050505]/95 px-6 py-6 backdrop-blur-xl min-[900px]:hidden"
+              className="overflow-hidden border-t border-[var(--border)] bg-[#0B1322]/95 px-6 py-6 backdrop-blur-xl min-[900px]:hidden"
             >
               <nav aria-label="Mobile Navigation" className="flex flex-col gap-4">
                 {navItems.map((item, idx) => {
@@ -312,7 +312,7 @@ export function Navbar() {
                         handleLinkClick(e, item, idx);
                       }}
                       className={`text-[17px] font-medium transition-colors ${
-                        isActive ? "text-[#1E90FF]" : "text-white/80 hover:text-white"
+                        isActive ? "text-[var(--text)] font-semibold" : "text-[var(--text-muted)] hover:text-[var(--text)]"
                       }`}
                     >
                       {item.label}
@@ -361,7 +361,7 @@ export function Footer() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative w-full overflow-hidden border-t border-white/[0.08] bg-[#05070B] bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(16,40,85,0.35)_0%,transparent_70%)] pt-14 pb-10 sm:pt-16 sm:pb-12"
+      className="relative w-full overflow-hidden border-t border-[var(--border)] bg-transparent pt-14 pb-10 sm:pt-16 sm:pb-12"
     >
       <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-14 xl:px-16">
         {/* 4 LOGICAL COLUMNS */}
@@ -383,7 +383,7 @@ export function Footer() {
                 />
               </picture>
             </Link>
-            <p className="mt-5 max-w-[340px] text-[14.5px] leading-relaxed text-[#A6AFBE]">
+            <p className="mt-5 max-w-[340px] text-[14.5px] leading-relaxed text-[var(--text-muted)]">
               We design and develop modern, high-performance websites that help businesses grow in the digital world.
             </p>
             <div className="mt-6">
@@ -393,14 +393,14 @@ export function Footer() {
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3 className="text-[17px] font-semibold text-[#F5F7FA]">Quick Links</h3>
-            <div className="mt-2.5 mb-5 h-[2px] w-7 rounded-full bg-[#168BFF]" aria-hidden="true" />
+            <h3 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[var(--mist)]">Quick Links</h3>
+            <div className="mt-2 mb-5 h-px w-6 bg-[var(--steel)]" aria-hidden="true" />
             <nav aria-label="Footer Quick Links" className="flex flex-col gap-3.5">
               {quickLinks.map(([label, href]) => (
                 <Link
                   key={label}
                   href={href}
-                  className="w-fit rounded-sm text-[15px] text-[#A6AFBE] transition-colors duration-200 hover:text-[#168BFF] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+                  className="w-fit rounded-sm text-[15px] text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--mist)]"
                 >
                   {label}
                 </Link>
@@ -410,14 +410,14 @@ export function Footer() {
 
           {/* Column 3: Our Services */}
           <div>
-            <h3 className="text-[17px] font-semibold text-[#F5F7FA]">Our Services</h3>
-            <div className="mt-2.5 mb-5 h-[2px] w-7 rounded-full bg-[#168BFF]" aria-hidden="true" />
+            <h3 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[var(--mist)]">Our Services</h3>
+            <div className="mt-2 mb-5 h-px w-6 bg-[var(--steel)]" aria-hidden="true" />
             <nav aria-label="Footer Our Services" className="flex flex-col gap-3.5">
               {serviceLinks.map(([label, href]) => (
                 <Link
                   key={label}
                   href={href}
-                  className="w-fit rounded-sm text-[15px] text-[#A6AFBE] transition-colors duration-200 hover:text-[#168BFF] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+                  className="w-fit rounded-sm text-[15px] text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--mist)]"
                 >
                   {label}
                 </Link>
@@ -426,15 +426,15 @@ export function Footer() {
           </div>
 
           {/* Column 4: Get in Touch */}
-          <div className="lg:border-l lg:border-white/[0.08] lg:pl-8 xl:pl-10">
-            <h3 className="text-[17px] font-semibold text-[#F5F7FA]">Get in Touch</h3>
-            <div className="mt-2.5 mb-5 h-[2px] w-7 rounded-full bg-[#168BFF]" aria-hidden="true" />
+          <div className="lg:border-l lg:border-[var(--border)] lg:pl-8 xl:pl-10">
+            <h3 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[var(--mist)]">Get in Touch</h3>
+            <div className="mt-2 mb-5 h-px w-6 bg-[var(--steel)]" aria-hidden="true" />
             <div className="flex flex-col gap-4">
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="group flex items-center gap-3.5 text-[15px] text-[#F5F7FA] transition-colors duration-200 hover:text-[#168BFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-lg"
+                className="group flex items-center gap-3.5 text-[15px] text-[var(--text)] transition-colors duration-200 hover:text-[var(--mist)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] rounded-lg"
               >
-                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] border border-white/12 bg-[#08111F] text-[#168BFF] transition-colors duration-200 group-hover:border-white/25 group-hover:bg-[#0c182c]">
+                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] border border-[var(--border)] bg-[#141E30] text-[var(--mist)] transition-colors duration-200 group-hover:border-[var(--border-strong)] group-hover:bg-[#1B2B45]">
                   <Mail size={18} strokeWidth={2} />
                 </span>
                 <span className="break-all">{siteConfig.email}</span>
@@ -442,9 +442,9 @@ export function Footer() {
 
               <a
                 href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="group flex items-center gap-3.5 text-[15px] text-[#F5F7FA] transition-colors duration-200 hover:text-[#168BFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-lg"
+                className="group flex items-center gap-3.5 text-[15px] text-[var(--text)] transition-colors duration-200 hover:text-[var(--mist)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] rounded-lg"
               >
-                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] border border-white/12 bg-[#08111F] text-[#168BFF] transition-colors duration-200 group-hover:border-white/25 group-hover:bg-[#0c182c]">
+                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] border border-[var(--border)] bg-[#141E30] text-[var(--mist)] transition-colors duration-200 group-hover:border-[var(--border-strong)] group-hover:bg-[#1B2B45]">
                   <Phone size={18} strokeWidth={2} />
                 </span>
                 <span>{siteConfig.phone}</span>
@@ -454,15 +454,15 @@ export function Footer() {
         </div>
 
         {/* HORIZONTAL DIVIDER */}
-        <div className="mt-12 mb-7 h-px w-full bg-white/[0.08]" aria-hidden="true" />
+        <div className="mt-12 mb-7 h-px w-full bg-[var(--border)]" aria-hidden="true" />
 
         {/* BOTTOM BAR */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <p className="text-[14px] font-semibold text-[#F5F7FA]">
+            <p className="text-[14px] font-medium text-[var(--text)]">
               © {currentYear} Garuda. All rights reserved.
             </p>
-            <p className="mt-1 text-[13px] text-[#A6AFBE]">
+            <p className="mt-1 text-[13px] text-[var(--text-muted)]">
               Built with intention. Designed for a better web.
             </p>
           </div>
@@ -474,7 +474,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/12 bg-[#060a14] text-[#F5F7FA] transition-colors duration-200 hover:border-white/25 hover:text-[#168BFF] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text-muted)] transition-colors duration-200 hover:border-[var(--mist)] hover:text-[var(--text)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
               >
                 <svg className="h-[16px] w-[16px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
@@ -485,7 +485,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/12 bg-[#060a14] text-[#F5F7FA] transition-colors duration-200 hover:border-white/25 hover:text-[#168BFF] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text-muted)] transition-colors duration-200 hover:border-[var(--mist)] hover:text-[var(--text)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
               >
                 <svg className="h-[16px] w-[16px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.67 1.67 0 1 0-.01-3.34 1.67 1.67 0 0 0 .01 3.34M7.85 18.5V10.1H5.06v8.4h2.79z"/>
@@ -496,7 +496,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/12 bg-[#060a14] text-[#F5F7FA] transition-colors duration-200 hover:border-white/25 hover:text-[#168BFF] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text-muted)] transition-colors duration-200 hover:border-[var(--mist)] hover:text-[var(--text)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
               >
                 <svg className="h-[16px] w-[16px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
@@ -507,7 +507,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="X (formerly Twitter)"
-                className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/12 bg-[#060a14] text-[#F5F7FA] transition-colors duration-200 hover:border-white/25 hover:text-[#168BFF] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text-muted)] transition-colors duration-200 hover:border-[var(--mist)] hover:text-[var(--text)] hover:bg-[#1B2B45] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
               >
                 <svg className="h-[14px] w-[14px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -515,15 +515,15 @@ export function Footer() {
               </a>
             </div>
 
-            <span className="hidden sm:block h-6 w-px bg-white/15 mx-2.5 sm:mx-3" aria-hidden="true" />
+            <span className="hidden sm:block h-6 w-px bg-[var(--border)] mx-2.5 sm:mx-3" aria-hidden="true" />
 
             <button
               onClick={scrollToTop}
               type="button"
               aria-label="Back to top"
-              className="group flex items-center gap-2.5 text-[14px] font-medium text-[#F5F7FA] transition-colors duration-200 hover:text-[#168BFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-full cursor-pointer py-1"
+              className="group flex items-center gap-2.5 text-[14px] font-medium text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)] rounded-full cursor-pointer py-1"
             >
-              <span className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/12 bg-[#060a14] text-[#F5F7FA] transition-colors duration-200 group-hover:border-white/25 group-hover:text-[#168BFF] active:scale-[0.98]">
+              <span className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[var(--border-strong)] bg-[#141E30] text-[var(--text-muted)] transition-colors duration-200 group-hover:border-[var(--mist)] group-hover:text-[var(--text)] group-hover:bg-[#1B2B45] active:scale-[0.98]">
                 <ArrowUp size={16} strokeWidth={2} />
               </span>
               <span>Back to top</span>
@@ -534,4 +534,4 @@ export function Footer() {
     </motion.footer>
   );
 }
-export function CTA(){return <section className="wrap py-24"><div className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_75%_0%,rgba(124,108,255,.23),transparent_34%),#101014] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-.055em] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton size="lg" /></div></div></section>}
+export function CTA(){return <section className="wrap py-24"><div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] shadow-[var(--shadow-soft)] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.02em] text-[var(--text)] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton size="lg" /></div></div></section>}

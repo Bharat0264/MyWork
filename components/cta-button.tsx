@@ -42,10 +42,10 @@ export function StartProjectButton({
     <Link
       href={href}
       onClick={onClick}
-      className={`group garuda-cta-capsule relative inline-flex items-center justify-between rounded-full font-semibold text-white tracking-[-0.01em] select-none whitespace-nowrap focus-visible:outline-none focus-visible:ring-0 ${sizeClasses.button} ${className}`}
+      className={`group garuda-cta-capsule relative inline-flex items-center justify-between rounded-full font-semibold text-[#141E30] tracking-[-0.01em] select-none whitespace-nowrap focus-visible:outline-none focus-visible:ring-0 ${sizeClasses.button} ${className}`}
     >
       {/* Label */}
-      <span className="relative z-10 font-medium text-white">
+      <span className="relative z-10 font-semibold text-[#141E30]">
         {label}
       </span>
 

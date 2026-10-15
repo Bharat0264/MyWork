@@ -31,7 +31,7 @@ export default function Home() {
                 <Link className="button" href="/work">
                   View my work <ArrowUpRight size={16} />
                 </Link>
-                <StartProjectButton size="md" />
+                <StartProjectButton />
               </div>
             </div>
 

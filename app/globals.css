@@ -324,33 +324,131 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(0.98);
 }
 
-/* "Start a project" CTA Capsule */
-.garuda-cta-capsule {
-  background: #FFFFFF;
-  color: #141E30;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: var(--shadow-soft);
+/* --- START A PROJECT PREMIUM FROSTED PILL --- */
+.btn-start {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-radius: 9999px;
+  padding: 8px;
+  height: 56px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #EEF3FB 100%);
+  border: 1px solid rgba(53, 87, 125, 0.18);
+  box-shadow: 0 6px 16px rgba(4, 9, 18, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9),
+              inset 0 -2px 6px rgba(53, 87, 125, 0.08);
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.25s ease, transform 0.15s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
 }
-.garuda-cta-capsule:hover {
-  background: #F0F4FA;
-  transform: translateY(-1px);
+
+.btn-start:hover {
+  background: linear-gradient(180deg, #F3F7FD 0%, #E2ECF8 100%);
+  border-color: rgba(53, 87, 125, 0.28);
+  box-shadow: 0 6px 16px rgba(4, 9, 18, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.95),
+              inset 0 -2px 6px rgba(53, 87, 125, 0.10);
+  transform: none;
 }
-.garuda-cta-capsule:active {
+
+.btn-start:active {
   transform: scale(0.98);
 }
 
-.garuda-cta-dial {
-  background: var(--steel);
-  border: none;
-  box-shadow: none;
-  transition: background-color 0.25s ease;
+.btn-start:focus-visible {
+  outline: 2px solid #5F86B0;
+  outline-offset: 3px;
 }
-.garuda-cta-capsule:hover .garuda-cta-dial {
-  background: var(--steel-light);
+
+/* Left Circle (Paper Plane) */
+.btn-start-plane-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #2F8BFF 0%, #1B5FD6 100%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35),
+              inset 0 -1.5px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Text */
+.btn-start-text {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  color: #0E1A33;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Right Circle (Arrow) */
+.btn-start-arrow-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E3ECFA 100%);
+  border: 1px solid rgba(53, 87, 125, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+              inset 0 -1px 3px rgba(53, 87, 125, 0.06),
+              0 2px 6px rgba(4, 9, 18, 0.08);
+}
+
+/* Arrow Icon and Hover Movement */
+.btn-start-arrow {
+  color: #0E1A33;
+  transition: transform 0.25s ease;
+}
+
+.btn-start:hover .btn-start-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* NAVBAR DESKTOP VARIANT */
+.btn-start-navbar {
+  height: 48px;
+  padding: 6px;
+  gap: 12px;
+}
+.btn-start-navbar .btn-start-plane-circle {
+  width: 34px;
+  height: 34px;
+}
+.btn-start-navbar .btn-start-text {
+  font-size: 15px;
+}
+.btn-start-navbar .btn-start-arrow-circle {
+  width: 34px;
+  height: 34px;
+}
+
+/* NAVBAR MOBILE COMPACT VARIANT (below 640px) */
+.btn-start-mobile {
+  height: 44px;
+  padding: 6px 6px 6px 14px;
+  gap: 10px;
+}
+.btn-start-mobile .btn-start-plane-circle {
+  display: none !important;
+}
+.btn-start-mobile .btn-start-text {
+  font-size: 14px;
+}
+.btn-start-mobile .btn-start-arrow-circle {
+  width: 32px;
+  height: 32px;
 }
 
 /* Inputs */
@@ -585,9 +683,11 @@ h1, h2, h3, h4, h5, h6 {
     transition: left 0.15s ease, width 0.15s ease, opacity 0.15s ease !important;
     transform: none !important;
   }
-  .garuda-cta-capsule,
-  .garuda-cta-dial,
-  .garuda-cta-capsule * {
+  .btn-start,
+  .btn-start:hover,
+  .btn-start:active,
+  .btn-start-arrow,
+  .btn-start:hover .btn-start-arrow {
     transition: none !important;
     transform: none !important;
   }

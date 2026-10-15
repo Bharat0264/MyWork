@@ -255,7 +255,7 @@ export function Navbar() {
 
           {/* Right: CTA Button */}
           <div className="flex items-center justify-end min-w-[200px]">
-            <StartProjectButton size="md" />
+            <StartProjectButton variant="navbar" />
           </div>
         </div>
 
@@ -278,7 +278,7 @@ export function Navbar() {
             <span className="sr-only">Garuda Web Designer and Developer</span>
           </Link>
           <div className="flex items-center gap-3">
-            <StartProjectButton size="sm" />
+            <StartProjectButton variant="navbar-mobile" />
             <button
               type="button"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -386,8 +386,8 @@ export function Footer() {
             <p className="mt-5 max-w-[340px] text-[14.5px] leading-relaxed text-[var(--text-muted)]">
               We design and develop modern, high-performance websites that help businesses grow in the digital world.
             </p>
-            <div className="mt-6">
-              <StartProjectButton size="md" />
+            <div className="mt-6 w-full max-w-[320px] sm:w-auto">
+              <StartProjectButton className="w-full max-w-[320px] justify-between sm:w-auto" />
             </div>
           </div>
 
@@ -534,4 +534,4 @@ export function Footer() {
     </motion.footer>
   );
 }
-export function CTA(){return <section className="wrap py-24"><div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] shadow-[var(--shadow-soft)] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.02em] text-[var(--text)] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton size="lg" /></div></div></section>}
+export function CTA(){return <section className="wrap py-24"><div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] shadow-[var(--shadow-soft)] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.02em] text-[var(--text)] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton /></div></div></section>}

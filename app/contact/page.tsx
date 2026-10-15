@@ -1,22 +1,19 @@
-"use client";
-
-import { FormEvent, useState } from "react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { siteConfig } from "@/config/site";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact | Garuda Web Designer and Developer",
+  description: "Tell me what you’re building, redesigning or trying to improve.",
+};
 
 export default function Contact() {
-  const [sent, setSent] = useState(false);
-
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    setSent(true);
-  }
-
   return (
     <>
       <Navbar />
-      <main className="wrap grid gap-14 pb-24 pt-36 lg:grid-cols-[.8fr_1.2fr]">
-        <section>
+      <main id="contact" className="wrap grid items-center gap-12 pb-24 pt-36 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+        {/* LEFT COLUMN: Contact Information */}
+        <section className="flex flex-col items-start justify-center">
           <p className="eyebrow">Contact</p>
           <h1 className="hero-heading mt-5 font-semibold text-[var(--text)]">
             Have a project in mind?
@@ -55,97 +52,34 @@ export default function Contact() {
               </a>
             </p>
           </div>
+
+          <div className="mt-8">
+            <a
+              href="mailto:bharathsaipulipati@gmail.com?subject=New%20project%20enquiry"
+              className="button"
+            >
+              Let’s build something
+            </a>
+          </div>
         </section>
 
-        <form
-          onSubmit={submit}
-          className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45]/70 to-[#141E30]/90 p-7 sm:p-10 shadow-[var(--shadow-soft)]"
-        >
-          <div className="grid gap-5 sm:grid-cols-2">
-            {[
-              ["Name", "text"],
-              ["Email", "email"],
-              ["Phone (optional)", "tel"],
-              ["Company (optional)", "text"],
-            ].map(([label, type]) => (
-              <label className="text-sm font-medium text-[var(--text-muted)]" key={label}>
-                {label}
-                <input required={!label.includes("optional")} type={type} className="input mt-2" />
-              </label>
-            ))}
+        {/* RIGHT COLUMN: Garuda Eagle Delivering Message Artwork */}
+        <section className="flex w-full items-center justify-center lg:justify-end">
+          <div className="w-full max-w-[340px] sm:max-w-[420px] lg:max-w-[560px]">
+            <picture className="block w-full">
+              <source srcSet="/contact-eagle.webp" type="image/webp" />
+              <img
+                src="/contact-eagle.png"
+                alt="Garuda eagle delivering a message"
+                width={1400}
+                height={1209}
+                loading="lazy"
+                sizes="(max-width: 900px) 340px, 560px"
+                className="contact-eagle-floating h-auto w-full object-contain"
+              />
+            </picture>
           </div>
-
-          <div className="mt-5 grid gap-5 sm:grid-cols-2">
-            <label className="text-sm font-medium text-[var(--text-muted)]">
-              What do you need?
-              <select className="input mt-2" defaultValue="">
-                <option value="" disabled className="bg-[#141E30] text-[var(--text)]">
-                  Choose a service
-                </option>
-                {[
-                  "New Website",
-                  "Website Redesign",
-                  "Web Application",
-                  "E-commerce",
-                  "SEO",
-                  "Marketing",
-                  "Other",
-                ].map((x) => (
-                  <option key={x} className="bg-[#141E30] text-[var(--text)]">
-                    {x}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="text-sm font-medium text-[var(--text-muted)]">
-              Budget
-              <select className="input mt-2" defaultValue="">
-                <option value="" disabled className="bg-[#141E30] text-[var(--text)]">
-                  Select a range
-                </option>
-                {[
-                  "Under ₹20,000",
-                  "₹20,000 – ₹50,000",
-                  "₹50,000 – ₹1,00,000",
-                  "₹1,00,000+",
-                  "Not sure yet",
-                ].map((x) => (
-                  <option key={x} className="bg-[#141E30] text-[var(--text)]">
-                    {x}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <label className="mt-5 block text-sm font-medium text-[var(--text-muted)]">
-            Project description
-            <textarea
-              required
-              className="input mt-2 min-h-32"
-              placeholder="A few words about the project…"
-            />
-          </label>
-
-          <label className="mt-5 block text-sm font-medium text-[var(--text-muted)]">
-            Timeline
-            <input className="input mt-2" placeholder="e.g. Next month" />
-          </label>
-
-          {sent ? (
-            <p
-              role="status"
-              className="mt-6 rounded-xl border border-[var(--border-strong)] bg-[#1B2B45] p-4 text-sm text-[var(--text)]"
-            >
-              Thanks—your project details are ready to connect to an email service. I’ll be in touch soon.
-            </p>
-          ) : (
-            <button className="button mt-7" type="submit">
-              Let’s build something
-            </button>
-          )}
-        </form>
+        </section>
       </main>
       <Footer />
     </>

@@ -830,6 +830,10 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 42px;
 }
 
+.contact-form__select-control select[data-placeholder="true"] {
+  color: #6F86A3;
+}
+
 .contact-form__select-control option {
   background: #141E30;
   color: #E8EEF7;
@@ -851,7 +855,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contact-form__textarea-control textarea {
-  min-height: 118px;
+  min-height: 120px;
   padding: 13px 15px;
   resize: vertical;
 }

@@ -319,12 +319,14 @@ function SelectField({
           onChange={(event) => onChange(field, event.target.value)}
           required={required}
           value={value}
+          data-placeholder={value === "" ? "true" : "false"}
+          className={value === "" ? "!text-[#6F86A3]" : "!text-[#E8EEF7]"}
         >
-          <option disabled value="">
+          <option disabled value="" className="bg-[#141E30] text-[#6F86A3]">
             {placeholder}
           </option>
           {options.map((option) => (
-            <option key={option} value={option}>
+            <option key={option} value={option} className="bg-[#141E30] text-[#E8EEF7]">
               {option}
             </option>
           ))}

@@ -94,46 +94,103 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please check the form fields." }, { status: 400 });
   }
 
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.CONTACT_FROM_EMAIL;
+  const resendKey = process.env.RESEND_API_KEY;
+  const web3FormsKey = process.env.WEB3FORMS_ACCESS_KEY;
 
-  if (!key || !from) {
-    return NextResponse.json({ error: "Email delivery is not configured." }, { status: 503 });
-  }
+  const emailSubject = `New project enquiry: ${service} - ${name}`;
+  const emailBody = [
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Phone: ${phone || "Not provided"}`,
+    `Company: ${company || "Not provided"}`,
+    `Service: ${service}`,
+    `Budget: ${budget || "Not provided"}`,
+    `Timeline: ${timeline || "Not provided"}`,
+    "",
+    "Project details:",
+    details,
+  ].join("\n");
 
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [recipient],
-        reply_to: email,
-        subject: `New project enquiry: ${service}`,
-        text: [
-          `Name: ${name}`,
-          `Email: ${email}`,
-          `Phone: ${phone || "Not provided"}`,
-          `Company: ${company || "Not provided"}`,
-          `Service: ${service}`,
-          `Budget: ${budget || "Not provided"}`,
-          `Timeline: ${timeline || "Not provided"}`,
-          "",
-          "Project details:",
-          details,
-        ].join("\n"),
-      }),
-    });
+  // 1. Send via Resend if RESEND_API_KEY is configured
+  if (resendKey) {
+    const from = process.env.CONTACT_FROM_EMAIL || "Garuda Portfolio <onboarding@resend.dev>";
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from,
+          to: [recipient],
+          reply_to: email,
+          subject: emailSubject,
+          text: emailBody,
+        }),
+      });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        return NextResponse.json({ error: "Email delivery failed." }, { status: 502 });
+      }
+
+      return NextResponse.json({ ok: true });
+    } catch {
       return NextResponse.json({ error: "Email delivery failed." }, { status: 502 });
     }
-  } catch {
-    return NextResponse.json({ error: "Email delivery failed." }, { status: 502 });
   }
 
-  return NextResponse.json({ ok: true });
+  // 2. Send via Web3Forms if WEB3FORMS_ACCESS_KEY is configured
+  if (web3FormsKey) {
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: web3FormsKey,
+          subject: emailSubject,
+          from_name: name,
+          email: email,
+          to_email: recipient,
+          message: emailBody,
+        }),
+      });
+
+      const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
+
+      if (!response.ok || (result && result.success === false)) {
+        return NextResponse.json({ error: "Email delivery failed." }, { status: 502 });
+      }
+
+      return NextResponse.json({ ok: true });
+    } catch {
+      return NextResponse.json({ error: "Email delivery failed." }, { status: 502 });
+    }
+  }
+
+  // 3. Fallback for development/testing when no API key is set yet
+  if (process.env.NODE_ENV !== "production") {
+    console.log("[Dev Contact Form submission]", {
+      name,
+      email,
+      phone,
+      company,
+      service,
+      budget,
+      timeline,
+      details,
+    });
+    return NextResponse.json({ ok: true, devMode: true });
+  }
+
+  return NextResponse.json(
+    {
+      error:
+        "Email delivery is not configured. Please add RESEND_API_KEY or WEB3FORMS_ACCESS_KEY in Vercel environment variables.",
+    },
+    { status: 503 }
+  );
 }

@@ -1,4 +1,4 @@
-import { Navbar, Footer, CTA } from "@/components/site-shell";
+import { Navbar, Footer } from "@/components/site-shell";
 import { WorkPortfolioShowcase } from "@/components/work-portfolio-showcase";
 import type { Metadata } from "next";
 
@@ -13,7 +13,6 @@ export default function Work() {
       <Navbar />
       <main className="pt-20 sm:pt-24 bg-transparent">
         <WorkPortfolioShowcase />
-        <CTA />
       </main>
       <Footer />
     </>

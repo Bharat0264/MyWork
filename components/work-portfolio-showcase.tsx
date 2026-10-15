@@ -166,7 +166,7 @@ export function WorkPortfolioShowcase() {
   }
 
   return (
-    <section id="work" className="wrap py-16 sm:py-20 lg:py-24">
+    <section id="work" className="wrap pt-16 sm:pt-20 lg:pt-24 pb-14 sm:pb-20">
       {/* 0. INTRO HEADING WITH EAGLE GRAPHIC */}
       <div className="mb-10 sm:mb-14">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">

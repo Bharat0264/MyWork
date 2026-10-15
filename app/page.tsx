@@ -94,7 +94,7 @@ export default function Home() {
                 <Link className="button" href="/work" prefetch={true}>
                   View my work <ArrowUpRight size={16} />
                 </Link>
-                <StartProjectButton />
+                <StartProjectButton className="w-full sm:w-auto max-w-[320px]" />
               </div>
             </div>
 

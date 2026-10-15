@@ -42,29 +42,23 @@ export function StartProjectButton({
     <Link
       href={href}
       onClick={onClick}
-      className={`group garuda-cta-capsule relative inline-flex items-center justify-between rounded-full font-semibold text-white tracking-[-0.01em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#03060B] select-none whitespace-nowrap ${sizeClasses.button} ${className}`}
+      className={`group garuda-cta-capsule relative inline-flex items-center justify-between rounded-full font-semibold text-white tracking-[-0.01em] select-none whitespace-nowrap focus-visible:outline-none focus-visible:ring-0 ${sizeClasses.button} ${className}`}
     >
       {/* Label */}
-      <span className="relative z-10 font-medium text-white transition-colors duration-200 group-hover:text-white">
+      <span className="relative z-10 font-medium text-white">
         {label}
       </span>
 
-      {/* Raised 3D Circular Arrow Element */}
+      {/* Flat Calm Circular Arrow Element */}
       <span
         aria-hidden="true"
-        className={`garuda-cta-dial relative z-10 flex shrink-0 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-105 ${sizeClasses.circle}`}
+        className={`garuda-cta-dial relative z-10 flex shrink-0 items-center justify-center rounded-full ${sizeClasses.circle}`}
       >
-        {/* Micro-faceted texture overlay */}
-        <span className="garuda-cta-knurl absolute inset-0 rounded-full pointer-events-none opacity-60" />
-
-        {/* Specular top rim shine */}
-        <span className="absolute inset-0 rounded-full border border-white/50 pointer-events-none" />
-
         {/* White Arrow Icon */}
         <ArrowUpRight
           size={sizeClasses.iconSize}
           strokeWidth={sizeClasses.iconStroke}
-          className="relative z-10 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="relative z-10 text-white"
         />
       </span>
     </Link>

@@ -128,7 +128,7 @@ export function WorkPortfolioShowcase() {
         <div className="relative mb-14 sm:mb-16 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow flex items-center gap-2.5 text-[#3DA5FF]">
-              <span className="h-2 w-2 rounded-full bg-[#168BFF] shadow-[0_0_10px_#168BFF]" />
+              <span className="h-2 w-2 rounded-full bg-[#168BFF]" />
               OUR WORK
             </p>
             <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl leading-[1.08]">
@@ -174,10 +174,10 @@ export function WorkPortfolioShowcase() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`rounded-full px-5 py-2.5 text-[14px] font-medium transition-all duration-300 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF] ${
+                  className={`rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-[0.98] ${
                     isActive
-                      ? "bg-white text-[#03060B] font-semibold shadow-[0_0_24px_rgba(255,255,255,0.3)] scale-[1.02]"
-                      : "border border-[rgba(120,160,210,0.22)] bg-[#08111F]/70 text-[#A8B4C7] hover:border-[#168BFF]/50 hover:bg-[#0c182c] hover:text-[#F7F9FC]"
+                      ? "bg-white text-[#03060B] font-semibold border border-transparent shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+                      : "border border-white/12 bg-[#08111F] text-[#A8B4C7] hover:border-white/25 hover:bg-[#0c182c] hover:text-[#F7F9FC]"
                   }`}
                 >
                   {cat}
@@ -204,7 +204,7 @@ export function WorkPortfolioShowcase() {
               onClick={handlePrev}
               type="button"
               aria-label="Previous project"
-              className="absolute left-4 sm:left-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(120,160,210,0.35)] bg-[#08111F]/85 text-white transition-all duration-300 hover:scale-110 hover:border-[#168BFF] hover:bg-[#0d1d36] hover:shadow-[0_0_20px_rgba(22,139,255,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF] cursor-pointer"
+              className="absolute left-4 sm:left-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-[#08111F] text-white transition-colors duration-200 hover:border-white/25 hover:bg-[#0d1d36] active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
             >
               <ChevronLeft size={22} strokeWidth={2.2} />
             </button>
@@ -216,7 +216,7 @@ export function WorkPortfolioShowcase() {
               onClick={handleNext}
               type="button"
               aria-label="Next project"
-              className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(120,160,210,0.35)] bg-[#08111F]/85 text-white transition-all duration-300 hover:scale-110 hover:border-[#168BFF] hover:bg-[#0d1d36] hover:shadow-[0_0_20px_rgba(22,139,255,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF] cursor-pointer"
+              className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-[#08111F] text-white transition-colors duration-200 hover:border-white/25 hover:bg-[#0d1d36] active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
             >
               <ChevronRight size={22} strokeWidth={2.2} />
             </button>
@@ -235,7 +235,7 @@ export function WorkPortfolioShowcase() {
                     onClick={() => setCurrentIndex(origIndex)}
                     type="button"
                     title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[rgba(120,160,210,0.22)] bg-[#091222] p-1.5 transition-all duration-400 hover:border-[#168BFF] hover:scale-105 hover:shadow-[0_0_20px_rgba(22,139,255,0.3)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
+                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-white/12 bg-[#091222] p-1.5 transition-colors duration-200 hover:border-white/25 active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
                     style={{
                       transform: "rotateY(16deg) rotateX(2deg)",
                       transformStyle: "preserve-3d",
@@ -302,17 +302,17 @@ export function WorkPortfolioShowcase() {
                     href={currentProject.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 rounded-full bg-[#168BFF] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_24px_rgba(22,139,255,0.45)] transition-all duration-300 hover:bg-[#1E90FF] hover:scale-105 hover:shadow-[0_0_32px_rgba(22,139,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF]"
+                    className="group inline-flex items-center gap-2.5 rounded-full bg-[#168BFF] px-6 py-3.5 text-sm font-semibold text-white border border-white/12 shadow-[0_4px_12px_rgba(0,0,0,0.35)] transition-colors duration-200 hover:bg-[#1E90FF] hover:border-white/25 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                   >
                     <span>View Project</span>
-                    <ArrowUpRight size={17} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={17} />
                   </a>
                 )}
 
                 <Link
                   href={`/work/${currentProject.slug}`}
                   aria-label={`Read case study for ${currentProject.title}`}
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(120,160,210,0.3)] bg-[#08111F]/80 text-[#F7F9FC] transition-all duration-300 hover:border-[#168BFF] hover:bg-[#0e1d38] hover:text-[#168BFF] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF]"
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/12 bg-[#08111F] text-[#F7F9FC] transition-colors duration-200 hover:border-white/25 hover:bg-[#0e1d38] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                 >
                   <ExternalLink size={18} />
                 </Link>
@@ -326,7 +326,7 @@ export function WorkPortfolioShowcase() {
                 initial={{ opacity: 0, scale: 0.94, rotateY: -16 }}
                 animate={{ opacity: 1, scale: 1, rotateY: isHovered ? -5 : -10 }}
                 transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
-                className="relative w-full max-w-[680px] rounded-[28px] sm:rounded-[36px] border border-[rgba(120,160,210,0.35)] bg-[#080E1B] p-2.5 sm:p-3.5 shadow-[0_30px_80px_rgba(0,0,0,0.85),0_0_60px_rgba(22,139,255,0.22)] transition-transform duration-500 hover:shadow-[0_35px_90px_rgba(0,0,0,0.9),0_0_80px_rgba(22,139,255,0.35)]"
+                className="relative w-full max-w-[680px] rounded-[28px] sm:rounded-[36px] border border-[rgba(120,160,210,0.35)] bg-[#080E1B] p-2.5 sm:p-3.5 shadow-[0_30px_80px_rgba(0,0,0,0.85)] transition-transform duration-500 hover:shadow-[0_35px_90px_rgba(0,0,0,0.9)]"
                 style={{
                   transformStyle: "preserve-3d",
                 }}
@@ -355,7 +355,7 @@ export function WorkPortfolioShowcase() {
                     onClick={() => setCurrentIndex(origIndex)}
                     type="button"
                     title={`View ${item.title}`}
-                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-[rgba(120,160,210,0.22)] bg-[#091222] p-1.5 transition-all duration-400 hover:border-[#168BFF] hover:scale-105 hover:shadow-[0_0_20px_rgba(22,139,255,0.3)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
+                    className="group relative h-[105px] w-[135px] rounded-[18px] border border-white/12 bg-[#091222] p-1.5 transition-colors duration-200 hover:border-white/25 active:scale-[0.98] shadow-[0_4px_12px_rgba(0,0,0,0.35)] cursor-pointer overflow-hidden opacity-70 hover:opacity-100"
                     style={{
                       transform: "rotateY(-16deg) rotateX(2deg)",
                       transformStyle: "preserve-3d",
@@ -466,7 +466,7 @@ function ProjectTabletScreen({ project }: { project: Project }) {
             {/* Hillside & Tree artwork */}
             <div className="relative w-full h-[120px] sm:h-[180px] rounded-2xl overflow-hidden bg-gradient-to-b from-[#BAE6FD] via-[#D1FAE5] to-[#86EFAC] p-3 flex items-center justify-center shadow-inner">
               {/* Sun & Clouds */}
-              <div className="absolute top-2 left-4 h-6 w-6 rounded-full bg-[#FDE047] shadow-[0_0_12px_#FDE047]" />
+              <div className="absolute top-2 left-4 h-6 w-6 rounded-full bg-[#FDE047]" />
               <div className="absolute top-3 left-14 h-3 w-8 rounded-full bg-white/80" />
               <div className="absolute top-2 right-8 h-4 w-12 rounded-full bg-white/70" />
 

@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";
 import { StartProjectButton } from "@/components/cta-button";
+import { Container } from "@/components/container";
 
 export function SkipToContent() {
   return (
@@ -143,7 +144,7 @@ export function Navbar() {
       {/* FIXED TOP HEADER */}
       <header className="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md pt-[env(safe-area-inset-top)]">
         {/* DESKTOP (900px and above) */}
-        <div className="mx-auto hidden h-full max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
+        <Container className="hidden h-full items-center justify-between min-[900px]:flex">
           {/* Left: Garuda Logo Lockup */}
           <div className="flex items-center min-w-[200px]">
             <Link
@@ -220,10 +221,10 @@ export function Navbar() {
           <div className="flex items-center justify-end min-w-[200px]">
             <StartProjectButton variant="navbar" />
           </div>
-        </div>
+        </Container>
 
         {/* MOBILE TOP BAR (below 900px) */}
-        <div className="flex h-full items-center justify-between px-5 sm:px-8 min-[900px]:hidden">
+        <Container className="flex h-full items-center justify-between min-[900px]:hidden">
           <Link
             href="/"
             onClick={handleLogoClick}
@@ -248,7 +249,7 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <StartProjectButton variant="navbar-mobile" />
           </div>
-        </div>
+        </Container>
       </header>
 
       {/* MOBILE BOTTOM TAB BAR (below 900px, 5 items with House icon for Home) */}
@@ -323,8 +324,9 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] px-5 pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 sm:px-6 sm:pb-8 sm:pt-16 lg:px-8">
-      <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 p-5 shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[28px] sm:p-8 sm:supports-[backdrop-filter]:bg-[#1B2B45]/45 sm:backdrop-blur-[18px] lg:p-[40px_44px]">
+    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 sm:pb-8 sm:pt-16">
+      <Container>
+        <div className="relative w-full overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 p-5 shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[28px] sm:p-8 sm:supports-[backdrop-filter]:bg-[#1B2B45]/45 sm:backdrop-blur-[18px] lg:p-[40px_44px]">
         {/* FAINT WATERMARK */}
         <div
           aria-hidden="true"
@@ -530,7 +532,8 @@ export function Footer() {
             </button>
           </div>
         </div>
-      </div>
+        </div>
+      </Container>
     </footer>
   );
 }

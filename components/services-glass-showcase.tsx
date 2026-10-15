@@ -114,7 +114,7 @@ export function ServicesGlassShowcase() {
 
     event.preventDefault();
     selectService(nextIndex, true);
-    tabRefs.current[nextIndex]?.focus();
+    tabRefs.current[nextIndex]?.focus({ preventScroll: true });
   };
 
   return (

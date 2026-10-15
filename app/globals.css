@@ -100,8 +100,20 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   background-color: var(--bg-deep);
+}
+
+main[id],
+section[id] {
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 899px) {
+  main[id],
+  section[id] {
+    scroll-margin-top: 88px;
+  }
 }
 
 body {

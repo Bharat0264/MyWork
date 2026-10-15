@@ -17,7 +17,7 @@
 .footer-logo:focus:not(:focus-visible) { outline: none; }
 .footer-logo:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
 .footer-logo:hover, .footer-logo:active, .footer-logo:focus { opacity: 1; filter: none; transform: none; }
-.footer-logo-img { width: 240px; height: auto; object-fit: contain; filter: drop-shadow(0 0 14px rgba(30,107,255,0.45)); user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+.footer-logo-img { width: 240px; height: auto; object-fit: contain; filter: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 @media (max-width: 640px) { .footer-logo-img { width: 210px; } }
-.footer-logo-img:hover, .footer-logo-img:active, .footer-logo-img:focus { filter: drop-shadow(0 0 14px rgba(30,107,255,0.45)); transform: none; opacity: 1; }
-.footer-logo:hover .footer-logo-img, .footer-logo:active .footer-logo-img, .footer-logo:focus .footer-logo-img { filter: drop-shadow(0 0 14px rgba(30,107,255,0.45)); transform: none; opacity: 1; }
+.footer-logo-img:hover, .footer-logo-img:active, .footer-logo-img:focus { filter: none; transform: none; opacity: 1; }
+.footer-logo:hover .footer-logo-img, .footer-logo:active .footer-logo-img, .footer-logo:focus .footer-logo-img { filter: none; transform: none; opacity: 1; }

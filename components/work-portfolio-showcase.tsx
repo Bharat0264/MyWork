@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ChevronUp,
   ChevronDown,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, Project } from "@/data/projects";
+import { ViewProjectLiquidButton } from "@/components/view-project-button";
 
 // Short category labels as requested: All, Creation, Redesign, Full-stack, E-commerce, SEO, Marketing
 const categoryItems = [
@@ -72,8 +74,6 @@ export function WorkPortfolioShowcase() {
   const safeIndex = Math.min(currentIndex, Math.max(0, totalCount - 1));
   const currentProject: Project = filteredProjects[safeIndex] || projects[0];
 
-  const nextIndex = (safeIndex + 1) % (totalCount || 1);
-  const nextProject = filteredProjects[nextIndex] || currentProject;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -175,8 +175,6 @@ export function WorkPortfolioShowcase() {
 
   return (
     <section id="work" className="wrap pt-0 pb-0">
-      {/* Preload next project screenshot */}
-      <link rel="preload" as="image" href={`/projects/${nextProject.slug}-full.webp`} />
 
       {/* ========================================================
           1. HEADER (LEFT-ALIGNED BLOCK, NO LOGO, REAL STATS ON RIGHT)
@@ -192,14 +190,14 @@ export function WorkPortfolioShowcase() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           {/* Left Block: Eyebrow, Heading, Paragraph */}
           <div className="max-w-[760px]">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6] flex items-center gap-2.5">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-[#A9C8EB] flex items-center gap-2.5 md:text-[12px] md:tracking-[0.2em]">
               <span className="inline-block w-6 h-px bg-[#8FB0D6]" aria-hidden="true" />
               <span>SELECTED WORK</span>
             </p>
-            <h1 className="mt-3 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(2.2rem,4.4vw,3.4rem)]">
+            <h1 className="mt-3 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(36px,9vw,40px)] md:text-[clamp(2.2rem,4.4vw,3.4rem)]">
               Websites and products <span className="text-[#8FB0D6]">built to perform.</span>
             </h1>
-            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-[#9FB3CC]">
+            <p className="mt-4 max-w-[560px] text-[16px] leading-[1.55] text-[#B8C9DE] md:text-[17px] md:leading-[1.7] md:text-[#9FB3CC]">
               A curated selection of websites, platforms and digital experiences, each shaped around a real business goal and the people who use it.
             </p>
           </div>
@@ -210,7 +208,7 @@ export function WorkPortfolioShowcase() {
               <p className="text-[32px] font-semibold text-white leading-none">
                 {projects.length}
               </p>
-              <p className="mt-1 text-[12px] font-medium uppercase tracking-wider text-[#9FB3CC]">
+              <p className="mt-1 text-[13px] font-medium uppercase tracking-wider text-[#B8C9DE] md:text-[12px] md:text-[#9FB3CC]">
                 Projects
               </p>
             </div>
@@ -219,7 +217,7 @@ export function WorkPortfolioShowcase() {
               <p className="text-[32px] font-semibold text-white leading-none">
                 {totalCategoriesCount}
               </p>
-              <p className="mt-1 text-[12px] font-medium uppercase tracking-wider text-[#9FB3CC]">
+              <p className="mt-1 text-[13px] font-medium uppercase tracking-wider text-[#B8C9DE] md:text-[12px] md:text-[#9FB3CC]">
                 Categories
               </p>
             </div>
@@ -245,7 +243,7 @@ export function WorkPortfolioShowcase() {
                 onClick={() => handleCategoryChange(item.full)}
                 title={item.full}
                 aria-label={item.full}
-                className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
+                className={`min-h-11 rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] active:scale-[0.97] ${
                   isActive
                     ? "bg-white text-[#141E30] font-semibold border border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
                     : "border border-white/[0.12] bg-[#141E30]/70 text-[#9FB3CC] hover:border-white/25 hover:text-white"
@@ -274,7 +272,7 @@ export function WorkPortfolioShowcase() {
         aria-label="Project showcase environment"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[32px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45] via-[#141E30] to-[#0F1829] p-5 sm:p-7 lg:p-9 shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px] flex flex-col justify-between"
+        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45] via-[#141E30] to-[#0F1829] p-5 sm:rounded-[32px] sm:p-7 lg:p-9 shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px] flex flex-col justify-between"
       >
         {/* Faint grain overlay (0.03) */}
         <div
@@ -336,9 +334,12 @@ export function WorkPortfolioShowcase() {
                   >
                     {/* 56px Rounded Thumbnail */}
                     <div className="relative h-[56px] w-[56px] shrink-0 rounded-[12px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
-                      <img
+                      <Image
                         src={`/projects/${item.slug}.webp`}
                         alt={`Thumbnail for ${item.title}`}
+                        width={56}
+                        height={56}
+                        sizes="56px"
                         className="h-full w-full object-cover object-top"
                         loading="lazy"
                       />
@@ -432,25 +433,9 @@ export function WorkPortfolioShowcase() {
                   ))}
                 </div>
 
-                {/* Buttons: "View project" frosted pill + secondary "Live site ↗" */}
+                {/* Buttons: "View project" liquid glass pill + secondary "Live site ↗" */}
                 <div className="flex flex-wrap items-center gap-4 pt-3">
-                  <Link
-                    href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-                    target={currentProject.liveUrl ? "_blank" : undefined}
-                    rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-                    aria-label={`View ${currentProject.title} project`}
-                    className="group inline-flex items-center gap-2 rounded-full border border-[rgba(53,87,125,0.22)] bg-gradient-to-b from-white to-[#EEF3FB] px-4 py-2 text-[13px] font-semibold text-[#141E30] shadow-[0_4px_12px_rgba(4,9,18,0.25)] transition-all duration-200 hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
-                  >
-                    <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#2F8BFF] to-[#1B5FD6] text-white">
-                      <svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 24 24">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                      </svg>
-                    </span>
-                    <span>View project</span>
-                    <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full border border-[rgba(53,87,125,0.15)] bg-gradient-to-b from-white to-[#DFE7F2] text-[#141E30]">
-                      <ArrowUpRight size={13} strokeWidth={2.5} />
-                    </span>
-                  </Link>
+                  <ViewProjectLiquidButton project={currentProject} />
 
                   {currentProject.liveUrl && (
                     <a
@@ -596,9 +581,12 @@ export function WorkPortfolioShowcase() {
                     }`}
                   >
                     <div className="relative h-[50px] w-[50px] shrink-0 rounded-[10px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
-                      <img
+                      <Image
                         src={`/projects/${item.slug}.webp`}
                         alt={`Thumbnail for ${item.title}`}
+                        width={50}
+                        height={50}
+                        sizes="50px"
                         className="h-full w-full object-cover object-top"
                         loading="lazy"
                       />
@@ -691,15 +679,7 @@ export function WorkPortfolioShowcase() {
                 ))}
               </div>
               <div className="flex items-center gap-4 pt-2">
-                <Link
-                  href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-                  target={currentProject.liveUrl ? "_blank" : undefined}
-                  rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-                  className="button-white button-small inline-flex items-center gap-2"
-                >
-                  <span>View project</span>
-                  <ArrowUpRight size={14} />
-                </Link>
+                <ViewProjectLiquidButton project={currentProject} />
                 {currentProject.liveUrl && (
                   <a
                     href={currentProject.liveUrl}
@@ -801,15 +781,7 @@ export function WorkPortfolioShowcase() {
               ))}
             </div>
             <div className="flex items-center gap-4 pt-2">
-              <Link
-                href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-                target={currentProject.liveUrl ? "_blank" : undefined}
-                rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-                className="button-white button-small inline-flex items-center gap-2"
-              >
-                <span>View project</span>
-                <ArrowUpRight size={14} />
-              </Link>
+              <ViewProjectLiquidButton project={currentProject} />
               {currentProject.liveUrl && (
                 <a
                   href={currentProject.liveUrl}
@@ -840,9 +812,13 @@ export function WorkPortfolioShowcase() {
                     }`}
                   >
                     <div className="relative h-[44px] w-[44px] shrink-0 rounded-lg overflow-hidden bg-[#0A0F1D]">
-                      <img
+                      <Image
                         src={`/projects/${p.slug}.webp`}
                         alt={p.title}
+                        width={44}
+                        height={44}
+                        sizes="44px"
+                        loading="lazy"
                         className="h-full w-full object-cover object-top"
                       />
                     </div>
@@ -865,14 +841,14 @@ export function WorkPortfolioShowcase() {
             ======================================================== */}
         <div className="flex min-[700px]:hidden flex-col gap-4 relative z-10 w-full">
           {/* Top Row: Counter & Category / Live Badges */}
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FB0D6]">
+          <div className="flex items-center justify-between text-[13px] font-mono text-[#A9C8EB]">
             <span>{formattedIndex} / {formattedTotal}</span>
             <div className="flex items-center gap-2">
-              <span className="rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[10px] text-[#8FB0D6]">
+              <span className="rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[13px] text-[#A9C8EB]">
                 {currentProject.category}
               </span>
               {currentProject.liveUrl && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[10px] text-[#E8EEF7]">
+                <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[13px] text-[#E8EEF7]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
                   Live
                 </span>
@@ -880,27 +856,9 @@ export function WorkPortfolioShowcase() {
             </div>
           </div>
 
-          {/* Device Mockup (width 94%, tilt -2deg) */}
-          <div className="flex flex-col items-center justify-center w-full my-1">
-            <div
-              className="relative w-[94%] aspect-[4/3] rounded-[18px] border border-white/20 bg-[#0B1322] p-2 shadow-[0_16px_36px_rgba(0,0,0,0.6)] flex flex-col"
-              style={{ transform: isReducedMotion ? "none" : "rotate(-2deg)" }}
-            >
-              <div className="relative flex-1 w-full overflow-hidden rounded-[12px] bg-[#0A0F1D] flex flex-col">
-                <div className="h-[26px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-2.5 flex items-center gap-1 z-20">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#FF5F56]/80" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]/80" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#27C93F]/80" />
-                  <div className="ml-1.5 rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-white/60 truncate max-w-[140px]">
-                    {currentProject.liveUrl
-                      ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
-                      : `${currentProject.slug}.com`}
-                  </div>
-                </div>
-                <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
-              </div>
-            </div>
-            <div aria-hidden="true" className="w-[70%] h-[12px] rounded-[100%] bg-black/45 blur-[10px] mt-2" />
+          {/* Clean mobile screenshot */}
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-white/15 bg-[#0A0F1D]">
+            <Image src={`/projects/${currentProject.slug}.webp`} alt={`Screenshot of ${currentProject.title}`} fill sizes="(max-width: 699px) calc(100vw - 82px), 320px" loading="lazy" className="object-cover object-top" />
           </div>
 
           {/* Project Name (28px) */}
@@ -909,7 +867,7 @@ export function WorkPortfolioShowcase() {
           </h2>
 
           {/* Description */}
-          <p className="text-[14px] leading-[1.65] text-[#9FB3CC]">
+          <p className="text-[16px] leading-[1.55] text-[#B8C9DE]">
             {currentProject.shortDescription}
           </p>
 
@@ -918,7 +876,7 @@ export function WorkPortfolioShowcase() {
             {currentProject.services.slice(0, 4).map((tag) => (
               <span
                 key={tag}
-                className="text-[11px] rounded-full px-2.5 py-1 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7]"
+                className="text-[13px] rounded-full px-3 py-1.5 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7]"
               >
                 {tag}
               </span>
@@ -926,22 +884,14 @@ export function WorkPortfolioShowcase() {
           </div>
 
           {/* Buttons: View project & Live site */}
-          <div className="flex items-center gap-3 pt-1">
-            <Link
-              href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-              target={currentProject.liveUrl ? "_blank" : undefined}
-              rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-              className="button-white button-small inline-flex items-center gap-2"
-            >
-              <span>View project</span>
-              <ArrowUpRight size={14} />
-            </Link>
+          <div className="flex flex-col items-stretch gap-3 pt-1">
+            <ViewProjectLiquidButton project={currentProject} />
             {currentProject.liveUrl && (
               <a
                 href={currentProject.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[13px] text-[#8FB0D6] hover:text-white"
+                className="flex min-h-11 items-center justify-center rounded-full border border-white/15 text-[13px] text-[#B8D4F2] hover:text-white"
               >
                 Live site ↗
               </a>
@@ -965,15 +915,19 @@ export function WorkPortfolioShowcase() {
                     }`}
                   >
                     <div className="relative h-[38px] w-[38px] shrink-0 rounded-lg overflow-hidden bg-[#0A0F1D]">
-                      <img
+                      <Image
                         src={`/projects/${p.slug}.webp`}
                         alt={p.title}
+                        width={38}
+                        height={38}
+                        sizes="38px"
+                        loading="lazy"
                         className="h-full w-full object-cover object-top"
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-bold text-white truncate">{p.title}</p>
-                      <p className="text-[10px] text-[#9FB3CC] truncate">{p.category}</p>
+                      <p className="text-[13px] font-bold text-white truncate">{p.title}</p>
+                      <p className="text-[13px] text-[#B8C9DE] truncate">{p.category}</p>
                     </div>
                   </button>
                 );
@@ -987,7 +941,7 @@ export function WorkPortfolioShowcase() {
               onClick={handlePrev}
               type="button"
               aria-label="Previous project"
-              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
             >
               <ChevronLeft size={18} strokeWidth={2.2} />
             </button>
@@ -995,7 +949,7 @@ export function WorkPortfolioShowcase() {
               onClick={handleNext}
               type="button"
               aria-label="Next project"
-              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
             >
               <ChevronRight size={18} strokeWidth={2.2} />
             </button>
@@ -1005,7 +959,7 @@ export function WorkPortfolioShowcase() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Open live website for ${currentProject.title}`}
-                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16]"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16]"
               >
                 <ExternalLink size={16} strokeWidth={2.2} />
               </a>
@@ -1095,6 +1049,7 @@ function DeviceScreen({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const [imageSrc, setImageSrc] = useState(`/projects/${project.slug}-full.webp`);
   const [isHovered, setIsHovered] = useState(false);
   const [maxScroll, setMaxScroll] = useState(0);
 
@@ -1108,6 +1063,7 @@ function DeviceScreen({
 
   useEffect(() => {
     setIsHovered(false);
+    setImageSrc(`/projects/${project.slug}-full.webp`);
     measureOverflow();
   }, [project.slug]);
 
@@ -1127,18 +1083,16 @@ function DeviceScreen({
       }}
       className="relative flex-1 w-full h-[calc(100%-28px)] overflow-hidden cursor-pointer bg-[#0A0F1D]"
     >
-      <img
+      <Image
         ref={imgRef}
-        src={`/projects/${project.slug}-full.webp`}
+        src={imageSrc}
         alt={`Home page of ${project.title}`}
         width={1440}
         height={900}
+        sizes="(max-width: 699px) calc(100vw - 80px), (max-width: 1024px) 70vw, 600px"
+        loading="lazy"
         onLoad={measureOverflow}
-        onError={(e) => {
-          if (project.previewImage && e.currentTarget.src !== project.previewImage) {
-            e.currentTarget.src = project.previewImage;
-          }
-        }}
+        onError={() => { if (project.previewImage && imageSrc !== project.previewImage) setImageSrc(project.previewImage); }}
         className="w-full h-auto block select-none pointer-events-none"
         style={{
           transform: `translateY(${translateY}px)`,

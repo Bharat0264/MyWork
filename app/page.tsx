@@ -32,8 +32,8 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  // Real spotlight project
-  const spotlightProject = projects[0]; // Rainbow Digi School
+  // Featured spotlight project: PrintBee
+  const spotlightProject = projects.find((p) => p.slug === "printbee") || projects[1];
   const spotlightChips = spotlightProject.technologies.slice(0, 3);
 
   // Exact real data computations for "At a glance"
@@ -74,8 +74,8 @@ export default function Home() {
         {/* ========================================================
             1. HERO SECTION
             ======================================================== */}
-        <section className="grid-bg relative overflow-hidden pb-14">
-          <div className="absolute -right-32 top-8 h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none" />
+        <section className="grid-bg relative overflow-hidden pb-12 sm:pb-14">
+          <div className="absolute -right-32 top-8 hidden h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none md:block" />
           <div className="wrap relative grid items-center gap-12 lg:grid-cols-[1.05fr_.95fr]">
             <div>
               <p className="eyebrow flex items-center gap-2">
@@ -87,14 +87,14 @@ export default function Home() {
                 <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
                 work smarter, and grow faster.
               </h1>
-              <p className="mt-4 max-w-xl text-lg leading-8 text-[var(--text-muted)]">
+              <p className="mt-5 max-w-xl text-[16px] leading-[1.55] text-[#B8C9DE] md:mt-4 md:text-lg md:leading-8 md:text-[var(--text-muted)]">
                 I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
               </p>
-              <div className="mt-[var(--header-gap)] flex flex-wrap items-center gap-3">
+              <div className="mt-[var(--header-gap)] flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Link className="button" href="/work" prefetch={true}>
                   View my work <ArrowUpRight size={16} />
                 </Link>
-                <StartProjectButton className="w-full sm:w-auto max-w-[320px]" />
+                <StartProjectButton className="w-full sm:w-auto sm:max-w-[320px]" />
               </div>
             </div>
 
@@ -168,12 +168,12 @@ export default function Home() {
               {/* Left Column: Device Frame */}
               <div className="relative overflow-hidden rounded-[20px] border border-[rgba(143,176,214,0.22)] bg-[#0A0F1D] shadow-[0_16px_40px_rgba(0,0,0,0.6)]">
                 {/* Browser chrome header bar */}
-                <div className="flex h-9 items-center gap-2 border-b border-white/10 bg-[#141E30]/80 px-4">
+                <div className="hidden h-9 items-center gap-2 border-b border-white/10 bg-[#141E30]/80 px-4 md:flex">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]/80" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]/80" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F]/80" />
                   <span className="ml-3 truncate text-[11px] font-mono text-[#6F86A3]">
-                    {spotlightProject.liveUrl?.replace("https://", "") || "rainbow-digi-school.vercel.app"}
+                    {spotlightProject.liveUrl?.replace(/^https?:\/\//, "") || "www.printbee.co.in"}
                   </span>
                 </div>
 
@@ -184,8 +184,8 @@ export default function Home() {
                     alt={`Real homepage screenshot of ${spotlightProject.title}`}
                     width={1440}
                     height={900}
-                    sizes="(max-width: 1024px) 100vw, 600px"
-                    priority
+                    sizes="(max-width: 640px) calc(100vw - 80px), (max-width: 1024px) 50vw, 600px"
+                    loading="lazy"
                     className="h-full w-full object-cover object-top"
                   />
                 </div>
@@ -251,51 +251,51 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-6">
             {/* Tile 1: Projects */}
-            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+            <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                 <FolderGit2 size={22} strokeWidth={2} />
               </div>
-              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+              <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
                 {totalProjects}
               </p>
-              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+              <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
                 Featured Projects
               </h3>
-              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+              <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
                 Bespoke websites and full-stack applications in portfolio.
               </p>
             </div>
 
             {/* Tile 2: Services */}
-            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+            <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                 <Sparkles size={22} strokeWidth={2} />
               </div>
-              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+              <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
                 {totalServices}
               </p>
-              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+              <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
                 Core Services
               </h3>
-              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+              <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
                 Specialized digital offerings from creation to SEO and growth.
               </p>
             </div>
 
             {/* Tile 3: Technologies */}
-            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+            <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                 <Cpu size={22} strokeWidth={2} />
               </div>
-              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+              <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
                 {uniqueTechnologies}
               </p>
-              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+              <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
                 Technologies & Tools
               </h3>
-              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+              <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
                 Modern tools including React, Next.js, Node.js, and TypeScript.
               </p>
             </div>

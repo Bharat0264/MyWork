@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Navbar, Footer } from "@/components/site-shell";
 import { ContactForm } from "@/components/ContactForm";
 
@@ -40,10 +41,9 @@ export default function Contact() {
           {/* RIGHT COLUMN: Garuda Eagle Delivering Message Artwork */}
           <section aria-label="Garuda eagle artwork" className="flex w-full items-center justify-center min-[900px]:justify-end">
             <div className="w-full max-w-[320px] min-[900px]:max-w-[520px]">
-              <picture className="block w-full">
-                <source srcSet="/contact-eagle.webp" type="image/webp" />
-                <img
-                  src="/contact-eagle.png"
+              <div className="block w-full">
+                <Image
+                  src="/contact-eagle.webp"
                   alt="Garuda eagle delivering a message"
                   width={1400}
                   height={1209}
@@ -51,7 +51,7 @@ export default function Contact() {
                   sizes="(max-width: 899px) 320px, 520px"
                   className="contact-eagle-floating h-auto w-full object-contain"
                 />
-              </picture>
+              </div>
             </div>
           </section>
         </div>

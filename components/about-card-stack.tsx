@@ -338,14 +338,14 @@ export function AboutCardStack() {
 
   // Autoplay: advance every 4s after viewport entrance, stop on user interaction, pause on >1s hover
   useEffect(() => {
-    if (!hasEntered || userInteracted || isHoverPaused || !isTabVisible || prefersReducedMotion) {
+    if (!hasEntered || userInteracted || isHoverPaused || !isTabVisible || prefersReducedMotion || isMobile) {
       return;
     }
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % total);
     }, 4000);
     return () => clearInterval(timer);
-  }, [hasEntered, userInteracted, isHoverPaused, isTabVisible, prefersReducedMotion, total]);
+  }, [hasEntered, userInteracted, isHoverPaused, isTabVisible, prefersReducedMotion, isMobile, total]);
 
   const stopAutoplay = () => {
     setUserInteracted(true);
@@ -470,7 +470,7 @@ export function AboutCardStack() {
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onMouseEnter={handleStageMouseEnter}
-      className="relative mx-auto w-full max-w-[1100px] overflow-hidden rounded-[32px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-b from-[#1B2B45] via-[#141E30] to-[#0B1322] shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] select-none [-webkit-tap-highlight-color:transparent]"
+      className="relative mx-auto w-full max-w-[1100px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-b from-[#1B2B45] via-[#141E30] to-[#0B1322] shadow-[0_24px_60px_rgba(4,9,18,0.5)] sm:rounded-[32px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] select-none [-webkit-tap-highlight-color:transparent]"
     >
       {/* Subtle top ambient glow & grain overlay */}
       <div
@@ -509,7 +509,14 @@ export function AboutCardStack() {
       </motion.p>
 
       {/* Center Stage: Constant height reserved, tilting subtly towards pointer */}
-      <div className="relative z-10 flex min-h-[560px] md:min-h-[580px] w-full flex-col items-center justify-center px-4 py-16 sm:px-8 sm:py-20 md:py-24">
+      <div className="relative z-10 flex min-h-0 w-full flex-col items-center justify-center px-4 pb-5 pt-16 sm:min-h-[560px] sm:px-8 sm:py-20 md:min-h-[580px] md:py-24">
+        <div role="tablist" aria-label="Skill categories" className="mb-5 grid w-full grid-cols-2 gap-1 rounded-[18px] border border-white/10 bg-[#0B1322]/70 p-1 sm:hidden">
+          {skillGroups.map((group, index) => (
+            <button key={group.name} type="button" role="tab" aria-selected={activeIndex === index} aria-controls="about-main-panel" onClick={() => { stopAutoplay(); selectGroup(index); }} className={`min-h-11 rounded-[14px] px-2 text-[13px] font-medium leading-tight transition-all duration-200 active:scale-[0.97] ${activeIndex === index ? "bg-[#35577D] text-white shadow-sm" : "text-[#C3D2E5]"}`}>
+              {group.name}
+            </button>
+          ))}
+        </div>
         <motion.div
           role="tablist"
           aria-label="Skill categories"
@@ -549,7 +556,7 @@ export function AboutCardStack() {
                       : false
                   }
                   animate={{ scale: 1, opacity: 1 }}
-                  className="relative z-10 w-full rounded-[28px] border border-white/[0.14] bg-gradient-to-br from-[#35577D] via-[#1E3250] to-[#141E30] p-5 sm:p-7 shadow-[0_20px_48px_rgba(4,9,18,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                  className="relative z-10 w-full rounded-[24px] border border-white/[0.14] bg-gradient-to-br from-[#35577D] via-[#1E3250] to-[#141E30] p-5 sm:rounded-[28px] sm:p-7 shadow-[0_20px_48px_rgba(4,9,18,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
                   drag="y"
                   dragConstraints={{ top: 0, bottom: 0 }}
                   dragElastic={0.4}
@@ -629,7 +636,7 @@ export function AboutCardStack() {
                           nextGroup();
                         }}
                         aria-label="Next skill group"
-                        className="flex h-[36px] items-center gap-1.5 rounded-full border border-white/[0.18] bg-white/[0.08] px-3.5 text-[13px] font-medium text-white transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
+                        className="flex h-11 items-center gap-1.5 rounded-full border border-white/[0.18] bg-white/[0.08] px-3.5 text-[13px] font-medium text-white transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer sm:h-[36px]"
                       >
                         <span>Next</span>
                         <ArrowRight size={14} className="stroke-[2.5]" />
@@ -681,7 +688,7 @@ export function AboutCardStack() {
                   </div>
 
                   {/* Slider with spring-gliding thumb and filled track */}
-                  <div className="my-5 sm:my-6">
+                  <div className="my-5 hidden sm:block sm:my-6">
                     <div
                       ref={sliderTrackRef}
                       onClick={handleSliderClick}
@@ -778,7 +785,7 @@ export function AboutCardStack() {
                                 },
                                 exit: { opacity: 0, y: -4, transition: { duration: 0.15 } },
                               }}
-                              className="inline-flex items-center rounded-full border border-white/[0.14] bg-white/[0.06] px-3 py-1.5 text-[12px] font-normal text-[#E8EEF7]"
+                              className="inline-flex items-center rounded-full border border-white/[0.14] bg-white/[0.06] px-3 py-1.5 text-[13px] font-normal text-[#E8EEF7] sm:text-[12px]"
                             >
                               {tool}
                             </motion.span>
@@ -834,7 +841,7 @@ export function AboutCardStack() {
                   opacity: pillOpacity,
                   scale: 1,
                 }}
-                className="flex w-full justify-center"
+                className="hidden w-full justify-center sm:flex"
               >
                 <motion.button
                   type="button"

@@ -118,9 +118,9 @@ export function Navbar() {
       setIsPressed(false);
     }, 200);
 
+    window.scrollTo(0, 0);
     if (pathname === href) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -141,7 +141,7 @@ export function Navbar() {
       </svg>
 
       {/* FIXED TOP HEADER */}
-      <header className="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md pt-[env(safe-area-inset-top)]">
         {/* DESKTOP (900px and above) */}
         <div className="mx-auto hidden h-full max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
           {/* Left: Garuda Logo Lockup */}
@@ -254,7 +254,7 @@ export function Navbar() {
       {/* MOBILE BOTTOM TAB BAR (below 900px, 5 items with House icon for Home) */}
       <nav
         aria-label="Mobile Navigation"
-        className="fixed inset-x-0 bottom-0 z-50 flex h-[62px] items-center justify-around border-t border-[rgba(143,176,214,0.18)] bg-[#0B1322]/95 px-2 pb-[env(safe-area-inset-bottom,4px)] backdrop-blur-xl shadow-[0_-8px_32px_rgba(4,9,18,0.5)] min-[900px]:hidden"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-5 right-5 z-50 flex h-[68px] items-center justify-around rounded-full border border-white/20 bg-[#182942]/85 p-1 backdrop-blur-xl shadow-[0_12px_36px_rgba(3,9,20,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] min-[900px]:hidden"
       >
         {mobileTabItems.map((item, idx) => {
           const isActive = activeSection === idx;
@@ -266,7 +266,7 @@ export function Navbar() {
               prefetch={true}
               aria-current={isActive ? "page" : undefined}
               onClick={(e) => handleLinkClick(e, item.href)}
-              className={`group flex flex-1 flex-col items-center justify-center py-1 transition-colors select-none ${
+              className={`group flex min-h-11 min-w-0 flex-1 flex-col items-center justify-center rounded-full py-1 transition-transform duration-200 ease-out active:scale-[0.97] select-none ${
                 isActive ? "text-[#E8EEF7]" : "text-[#9FB3CC] hover:text-[#E8EEF7]"
               }`}
             >
@@ -280,7 +280,7 @@ export function Navbar() {
                 <Icon size={18} strokeWidth={isActive ? 2.3 : 1.8} />
               </span>
               <span
-                className={`mt-0.5 text-[11px] font-medium leading-none tracking-tight ${
+                className={`mt-0.5 text-[13px] font-medium leading-none tracking-tight ${
                   isActive ? "text-[#E8EEF7] font-semibold" : "text-[#9FB3CC]"
                 }`}
               >
@@ -323,8 +323,8 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pt-16 pb-8 px-4 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 supports-[backdrop-filter]:bg-[#1B2B45]/45 backdrop-blur-[18px] p-6 sm:p-8 lg:p-[40px_44px] shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]">
+    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] px-5 pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 sm:px-6 sm:pb-8 sm:pt-16 lg:px-8">
+      <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 p-5 shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[28px] sm:p-8 sm:supports-[backdrop-filter]:bg-[#1B2B45]/45 sm:backdrop-blur-[18px] lg:p-[40px_44px]">
         {/* FAINT WATERMARK */}
         <div
           aria-hidden="true"
@@ -334,9 +334,9 @@ export function Footer() {
         </div>
 
         {/* TOP ROW */}
-        <div className="relative z-10 grid grid-cols-1 gap-10 text-center items-center justify-items-center md:grid-cols-2 md:text-left md:items-start md:justify-items-start md:gap-x-10 md:gap-y-10 lg:grid-cols-[1.3fr_1.1fr_1.1fr] lg:gap-12">
+        <div className="relative z-10 grid grid-cols-1 gap-6 text-left items-center justify-items-stretch sm:gap-10 sm:text-center sm:justify-items-center md:grid-cols-2 md:text-left md:items-start md:justify-items-start md:gap-x-10 md:gap-y-10 lg:grid-cols-[1.3fr_1.1fr_1.1fr] lg:gap-12">
           {/* Column 1: Brand (36%) */}
-          <div className="flex flex-col items-center text-center md:items-start md:text-left md:col-start-1 md:row-start-1 lg:col-start-1 lg:row-start-1">
+          <div className="flex flex-col items-start text-left sm:items-center sm:text-center md:items-start md:text-left md:col-start-1 md:row-start-1 lg:col-start-1 lg:row-start-1">
             <Link
               href="/"
               aria-label="Garuda Web Designer and Developer"
@@ -358,14 +358,24 @@ export function Footer() {
                 />
               </picture>
             </Link>
-            <p className="mt-4 max-w-[340px] text-[15px] leading-[1.7] text-[#9FB3CC]">
+            <p className="mt-3 max-w-[340px] text-[14px] leading-[1.6] text-[#B8C9DE] sm:mt-4 sm:text-[15px] sm:leading-[1.7]">
               We design and develop modern, high-performance websites that help businesses grow in the digital world.
             </p>
           </div>
 
           {/* Column 2: Links (34%) */}
           <div className="w-full max-w-sm md:max-w-none md:col-span-2 md:row-start-2 lg:col-span-1 lg:col-start-2 lg:row-start-1">
-            <div className="grid grid-cols-2 gap-8 sm:gap-12 text-center md:text-left">
+            <div className="space-y-1 sm:hidden">
+              <details className="border-t border-white/10 py-1 group">
+                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[13px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Quick Links <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
+                <nav aria-label="Mobile footer quick links" className="grid grid-cols-2 gap-2 pb-3">{quickLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[13px] text-[#E8EEF7]">{label}</Link>)}</nav>
+              </details>
+              <details className="border-y border-white/10 py-1 group">
+                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[13px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Our Services <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
+                <nav aria-label="Mobile footer services" className="grid grid-cols-2 gap-2 pb-3">{serviceLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[13px] text-[#E8EEF7]">{label}</Link>)}</nav>
+              </details>
+            </div>
+            <div className="hidden grid-cols-2 gap-8 text-center sm:grid sm:gap-12 md:text-left">
               {/* Sub-column 1: Quick Links */}
               <div>
                 <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
@@ -405,21 +415,20 @@ export function Footer() {
           </div>
 
           {/* Column 3: Get in touch (30%) */}
-          <div className="w-full min-w-[260px] flex flex-col items-center md:items-start md:col-start-2 md:row-start-1 lg:col-start-3 lg:row-start-1">
+          <div className="w-full min-w-0 flex flex-col items-start sm:min-w-[260px] sm:items-center md:items-start md:col-start-2 md:row-start-1 lg:col-start-3 lg:row-start-1">
             <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
               Get in touch
             </h3>
-            <div className="mt-4 flex flex-col gap-3.5 w-full items-center md:items-start">
+            <div className="mt-3 flex flex-col gap-2 w-full items-start sm:mt-4 sm:gap-3.5 sm:items-center md:items-start">
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="group inline-flex items-center gap-3.5 rounded-xl text-[15px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-xl text-[13px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] sm:gap-3.5 sm:text-[15px]"
               >
                 <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] border border-[rgba(143,176,214,0.18)] bg-white/[0.05] text-[#8FB0D6] transition-colors duration-200 group-hover:border-[rgba(143,176,214,0.32)] group-hover:bg-white/[0.08]">
                   <Mail size={18} strokeWidth={2} />
                 </span>
                 <span
-                  className="whitespace-nowrap font-normal text-[15px]"
-                  style={{ whiteSpace: "nowrap", overflowWrap: "normal" }}
+                  className="min-w-0 truncate font-normal text-[13px] sm:text-[15px]"
                 >
                   {siteConfig.email}
                 </span>
@@ -427,14 +436,13 @@ export function Footer() {
 
               <a
                 href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="group inline-flex items-center gap-3.5 rounded-xl text-[15px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                className="group inline-flex min-h-11 items-center gap-3 rounded-xl text-[13px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] sm:gap-3.5 sm:text-[15px]"
               >
                 <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] border border-[rgba(143,176,214,0.18)] bg-white/[0.05] text-[#8FB0D6] transition-colors duration-200 group-hover:border-[rgba(143,176,214,0.32)] group-hover:bg-white/[0.08]">
                   <Phone size={18} strokeWidth={2} />
                 </span>
                 <span
-                  className="whitespace-nowrap font-normal text-[15px]"
-                  style={{ whiteSpace: "nowrap", overflowWrap: "normal" }}
+                  className="font-normal text-[13px] sm:text-[15px]"
                 >
                   {siteConfig.phone}
                 </span>
@@ -444,7 +452,7 @@ export function Footer() {
         </div>
 
         {/* HORIZONTAL DIVIDER */}
-        <div className="relative z-10 mt-8 mb-6 h-px w-full bg-[rgba(143,176,214,0.14)]" aria-hidden="true" />
+        <div className="relative z-10 mt-5 mb-5 h-px w-full bg-[rgba(143,176,214,0.14)] sm:mt-8 sm:mb-6" aria-hidden="true" />
 
         {/* BOTTOM ROW */}
         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">

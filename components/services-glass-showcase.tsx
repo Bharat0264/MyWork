@@ -54,6 +54,7 @@ export function ServicesGlassShowcase() {
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const mobileCarouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -70,7 +71,7 @@ export function ServicesGlassShowcase() {
   }, []);
 
   useEffect(() => {
-    if (!motionPreferenceReady || reducedMotion || hasInteracted) {
+    if (!motionPreferenceReady || reducedMotion || hasInteracted || window.matchMedia("(max-width: 699px)").matches) {
       return;
     }
 
@@ -87,6 +88,24 @@ export function ServicesGlassShowcase() {
     if (initiatedByUser) {
       setHasInteracted(true);
     }
+  };
+
+  const selectMobileService = (index: number) => {
+    selectService(index, true);
+    const carousel = mobileCarouselRef.current;
+    const card = carousel?.children[index] as HTMLElement | undefined;
+    if (carousel && card) {
+      carousel.scrollTo({ left: card.offsetLeft - carousel.offsetLeft - 20, behavior: reducedMotion ? "instant" : "smooth" });
+    }
+  };
+
+  const handleMobileScroll = () => {
+    const carousel = mobileCarouselRef.current;
+    if (!carousel) return;
+    const firstCard = carousel.firstElementChild as HTMLElement | null;
+    if (!firstCard) return;
+    const index = Math.round(carousel.scrollLeft / (firstCard.offsetWidth + 12));
+    setActiveIndex(Math.min(services.length - 1, Math.max(0, index)));
   };
 
   const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
@@ -120,6 +139,29 @@ export function ServicesGlassShowcase() {
   return (
     <section className={styles.servicesPage} aria-labelledby="services-heading">
       <div className={styles.scene}>
+        <div className={styles.mobileShowcase}>
+          <p className={styles.mobileEyebrow}>Services</p>
+          <h1 className={styles.mobileHeading}>A sharper digital presence starts here.</h1>
+          <div ref={mobileCarouselRef} className={styles.mobileCarousel} onScroll={handleMobileScroll} aria-label="Services carousel">
+            {services.map(([number, title, description, why]) => (
+              <article key={number} className={styles.mobileCard}>
+                <p className={styles.mobileNumber}>{number} / 0{services.length}</p>
+                <h2>{title}</h2>
+                <p className={styles.mobileDescription}>{description}</p>
+                <div className={styles.mobileDivider} />
+                <p className={styles.mobileWhyLabel}>Why it matters</p>
+                <p className={styles.mobileWhyText}>{why}</p>
+              </article>
+            ))}
+          </div>
+          <div className={styles.mobileDots} aria-label="Choose a service">
+            {services.map(([, title], index) => (
+              <button key={title} type="button" aria-label={`Show ${title}`} aria-pressed={activeIndex === index} onClick={() => selectMobileService(index)}>
+                <span data-active={activeIndex === index} />
+              </button>
+            ))}
+          </div>
+        </div>
         <div
           aria-hidden="true"
           className={`${styles.sphere} ${styles.sphereTop}`}

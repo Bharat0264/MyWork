@@ -41,13 +41,13 @@ export default function About() {
         <section className="wrap pt-0 pb-[calc(var(--section-gap)/2)]">
           {/* HEADER */}
           <div className="max-w-[1200px]">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6]">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-[#A9C8EB] md:text-[12px] md:tracking-[0.2em] md:text-[#8FB0D6]">
               About
             </p>
-            <h1 className="mt-3 max-w-[760px] text-white font-semibold text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.12] tracking-[-0.02em]">
+            <h1 className="mt-3 max-w-[760px] text-white font-semibold text-[clamp(36px,9vw,40px)] leading-[1.1] tracking-[-0.02em] md:text-[clamp(2rem,4.2vw,3.2rem)] md:leading-[1.12]">
               I build digital experiences that solve real business problems.
             </h1>
-            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.65] text-[#9FB3CC]">
+            <p className="mt-4 max-w-[560px] text-[16px] leading-[1.55] text-[#B8C9DE] md:text-[17px] md:leading-[1.65] md:text-[#9FB3CC]">
               I work across product design, development, business workflows, automation, SEO and digital presence—bringing the pieces together into work that looks clear and works hard.
             </p>
           </div>

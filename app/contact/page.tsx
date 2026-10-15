@@ -29,7 +29,7 @@ export default function Contact() {
     <>
       <Navbar />
       <main
-        id="contact"
+        id="content"
         className="page-transition bg-transparent"
       >
         <div className="wrap grid grid-cols-1 items-center justify-items-center min-[900px]:justify-items-stretch min-[900px]:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] gap-12 min-[900px]:gap-[56px]">

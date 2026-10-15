@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import {
   ChevronUp,
@@ -11,7 +10,7 @@ import {
   ArrowUpRight,
   ExternalLink,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { projects, Project } from "@/data/projects";
 import { ViewProjectLiquidButton } from "@/components/view-project-button";
 
@@ -61,7 +60,7 @@ export function WorkPortfolioShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [railScrollOffset, setRailScrollOffset] = useState<number>(0);
-  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  const isReducedMotion = useReducedMotion() ?? false;
   const touchStartXRef = useRef<number | null>(null);
 
   // Filter projects by category
@@ -75,13 +74,9 @@ export function WorkPortfolioShowcase() {
   const currentProject: Project = filteredProjects[safeIndex] || projects[0];
 
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setIsReducedMotion(mediaQuery.matches);
-    const handler = () => setIsReducedMotion(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
+  const visibleRailOffset = safeIndex < railScrollOffset
+    ? safeIndex
+    : safeIndex >= railScrollOffset + 3 ? safeIndex - 2 : railScrollOffset;
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -99,18 +94,9 @@ export function WorkPortfolioShowcase() {
     setCurrentIndex((prev) => (prev - 1 + totalCount) % totalCount);
   }, [totalCount]);
 
-  // Keep rail scroll window centered on active project
-  useEffect(() => {
-    if (safeIndex < railScrollOffset) {
-      setRailScrollOffset(safeIndex);
-    } else if (safeIndex >= railScrollOffset + 3) {
-      setRailScrollOffset(safeIndex - 2);
-    }
-  }, [safeIndex, railScrollOffset]);
-
   const scrollRailUp = () => {
-    if (railScrollOffset > 0) {
-      setRailScrollOffset((prev) => Math.max(0, prev - 1));
+    if (visibleRailOffset > 0) {
+      setRailScrollOffset(visibleRailOffset - 1);
     } else if (totalCount > 3) {
       setRailScrollOffset(totalCount - 3);
     }
@@ -118,8 +104,8 @@ export function WorkPortfolioShowcase() {
   };
 
   const scrollRailDown = () => {
-    if (railScrollOffset < Math.max(0, totalCount - 3)) {
-      setRailScrollOffset((prev) => prev + 1);
+    if (visibleRailOffset < Math.max(0, totalCount - 3)) {
+      setRailScrollOffset(visibleRailOffset + 1);
     } else {
       setRailScrollOffset(0);
     }
@@ -164,7 +150,7 @@ export function WorkPortfolioShowcase() {
     currentProject.title.toUpperCase();
 
   // Rail visible window (3 items on desktop)
-  const visibleRailProjects = filteredProjects.slice(railScrollOffset, railScrollOffset + 3);
+  const visibleRailProjects = filteredProjects.slice(visibleRailOffset, visibleRailOffset + 3);
   if (visibleRailProjects.length < 3 && filteredProjects.length >= 3) {
     const needed = 3 - visibleRailProjects.length;
     visibleRailProjects.push(...filteredProjects.slice(0, needed));
@@ -1049,9 +1035,12 @@ function DeviceScreen({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const [imageSrc, setImageSrc] = useState(`/projects/${project.slug}-full.webp`);
-  const [isHovered, setIsHovered] = useState(false);
+  const [failedSlug, setFailedSlug] = useState<string | null>(null);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [maxScroll, setMaxScroll] = useState(0);
+  const imageSrc = failedSlug === project.slug && project.previewImage
+    ? project.previewImage : `/projects/${project.slug}-full.webp`;
+  const isHovered = hoveredSlug === project.slug;
 
   const measureOverflow = () => {
     if (imgRef.current && containerRef.current) {
@@ -1061,12 +1050,6 @@ function DeviceScreen({
     }
   };
 
-  useEffect(() => {
-    setIsHovered(false);
-    setImageSrc(`/projects/${project.slug}-full.webp`);
-    measureOverflow();
-  }, [project.slug]);
-
   const translateY = isHovered && !isReducedMotion ? -maxScroll : 0;
 
   return (
@@ -1074,12 +1057,12 @@ function DeviceScreen({
       ref={containerRef}
       onMouseEnter={() => {
         measureOverflow();
-        setIsHovered(true);
+        setHoveredSlug(project.slug);
       }}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => setHoveredSlug(null)}
       onTouchStart={() => {
         measureOverflow();
-        setIsHovered((prev) => !prev);
+        setHoveredSlug((prev) => prev === project.slug ? null : project.slug);
       }}
       className="relative flex-1 w-full h-[calc(100%-28px)] overflow-hidden cursor-pointer bg-[#0A0F1D]"
     >
@@ -1092,7 +1075,7 @@ function DeviceScreen({
         sizes="(max-width: 699px) calc(100vw - 80px), (max-width: 1024px) 70vw, 600px"
         loading="lazy"
         onLoad={measureOverflow}
-        onError={() => { if (project.previewImage && imageSrc !== project.previewImage) setImageSrc(project.previewImage); }}
+        onError={() => { if (project.previewImage && imageSrc !== project.previewImage) setFailedSlug(project.slug); }}
         className="w-full h-auto block select-none pointer-events-none"
         style={{
           transform: `translateY(${translateY}px)`,

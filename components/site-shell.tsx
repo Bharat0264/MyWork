@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, Mail, Phone, ArrowUp, Home, Briefcase, Sparkles, User } from "lucide-react";
+import { Mail, Phone, ArrowUp, Home, Briefcase, Sparkles, User } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";

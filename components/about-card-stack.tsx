@@ -615,6 +615,7 @@ export function AboutCardStack() {
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeDasharray={ringCircumference}
+                            initial={{ strokeDashoffset: ringCircumference }}
                             animate={{
                               strokeDashoffset:
                                 ringCircumference * (1 - (activeIndex + 1) / total),

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, AlertCircle } from "lucide-react";
 import type { Project } from "@/data/projects";
 
@@ -16,23 +16,13 @@ export function ViewProjectLiquidButton({
 }: ViewProjectLiquidButtonProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isUnavailable, setIsUnavailable] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = useReducedMotion() ?? false;
   const [travelDistance, setTravelDistance] = useState(142);
 
   const containerRef = useRef<HTMLButtonElement | null>(null);
   const orbRef = useRef<HTMLSpanElement | null>(null);
   const discRef = useRef<HTMLSpanElement | null>(null);
   const unavailableTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Check system prefers-reduced-motion
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   // Measure exact pixel distance between the left orb and right arrow disc
   const measureDistance = useCallback(() => {

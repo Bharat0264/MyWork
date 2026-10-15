@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, Mail, Phone, ArrowUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowUpRight, Mail, Phone, ArrowUp, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 
@@ -13,103 +13,22 @@ const navItems = [
   { label: "Contact", href: "/contact", id: "contact" },
 ] as const;
 
-function renderMobileIcon(id: string) {
-  switch (id) {
-    case "work":
-      return (
-        <svg
-          className="h-[20px] w-[20px] shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-        </svg>
-      );
-    case "services":
-      return (
-        <svg
-          className="h-[20px] w-[20px] shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="7" height="7" x="3" y="3" rx="1" />
-          <rect width="7" height="7" x="14" y="3" rx="1" />
-          <rect width="7" height="7" x="14" y="14" rx="1" />
-          <rect width="7" height="7" x="3" y="14" rx="1" />
-        </svg>
-      );
-    case "about":
-      return (
-        <svg
-          className="h-[20px] w-[20px] shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      );
-    case "contact":
-      return (
-        <svg
-          className="h-[20px] w-[20px] shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="20" height="16" x="2" y="4" rx="2" />
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
 export function Navbar() {
   const pathname = usePathname();
 
   const [activeSection, setActiveSection] = useState<number>(0);
   const [hoverSection, setHoverSection] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   // Stretch & press animation states
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const [isPressed, setIsPressed] = useState<boolean>(false);
-  const [mobileIsMoving, setMobileIsMoving] = useState<boolean>(false);
-  const [mobileIsPressed, setMobileIsPressed] = useState<boolean>(false);
 
   // Measurement references
   const desktopNavRef = useRef<HTMLDivElement>(null);
   const desktopItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
-  const mobileBarRef = useRef<HTMLDivElement>(null);
-  const mobileItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const [desktopBubble, setDesktopBubble] = useState<{ left: number; width: number; ready: boolean }>({
-    left: 0,
-    width: 0,
-    ready: false,
-  });
-  const [mobileBubble, setMobileBubble] = useState<{ left: number; width: number; ready: boolean }>({
     left: 0,
     width: 0,
     ready: false,
@@ -117,8 +36,6 @@ export function Navbar() {
 
   const prevTargetRef = useRef<number>(0);
   const moveTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const mobilePrevTargetRef = useRef<number>(0);
-  const mobileMoveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync route and observe page sections
   useEffect(() => {
@@ -220,42 +137,10 @@ export function Navbar() {
     };
   }, [targetDesktopIndex]);
 
-  // Mobile bubble measurement & movement
-  useEffect(() => {
-    const updateMobileBubble = () => {
-      const el = mobileItemsRef.current[activeSection];
-      if (el) {
-        setMobileBubble({
-          left: el.offsetLeft,
-          width: el.offsetWidth,
-          ready: true,
-        });
-
-        if (mobilePrevTargetRef.current !== activeSection) {
-          setMobileIsMoving(true);
-          if (mobileMoveTimerRef.current) clearTimeout(mobileMoveTimerRef.current);
-          mobileMoveTimerRef.current = setTimeout(() => {
-            setMobileIsMoving(false);
-          }, 380);
-          mobilePrevTargetRef.current = activeSection;
-        }
-      }
-    };
-
-    updateMobileBubble();
-    window.addEventListener("resize", updateMobileBubble);
-    return () => {
-      window.removeEventListener("resize", updateMobileBubble);
-      if (mobileMoveTimerRef.current) clearTimeout(mobileMoveTimerRef.current);
-    };
-  }, [activeSection]);
-
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof navItems)[number], idx: number) => {
     setIsPressed(true);
-    setMobileIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
-      setMobileIsPressed(false);
     }, 200);
 
     if (pathname === item.href) {
@@ -393,53 +278,55 @@ export function Navbar() {
             </picture>
             <span className="sr-only">Garuda Web Designer and Developer</span>
           </Link>
-          <Link href="/contact" className="button button-small !py-2 !px-3.5 !text-xs font-semibold">
-            Start a project <ArrowUpRight size={14} />
-          </Link>
-        </div>
-      </motion.header>
-
-      {/* MOBILE BOTTOM FLOATING TAB BAR (below 900px) */}
-      <nav
-        ref={mobileBarRef}
-        aria-label="Mobile Navigation"
-        className="liquid-mobile-tab-bar min-[900px]:hidden"
-      >
-        {/* Sliding Glass Bubble Lens */}
-        <div
-          className="liquid-mobile-bubble"
-          style={{
-            left: `${mobileBubble.left}px`,
-            width: `${mobileBubble.width}px`,
-            opacity: mobileBubble.ready ? 1 : 0,
-            transform: mobileIsPressed ? "scale(0.96)" : mobileIsMoving ? "scaleX(1.12)" : "scale(1)",
-          }}
-          aria-hidden="true"
-        />
-        {navItems.map((item, idx) => {
-          const isActive = activeSection === idx;
-          return (
-            <Link
-              key={item.label}
-              ref={(el) => {
-                mobileItemsRef.current[idx] = el;
-              }}
-              href={item.href}
-              aria-current={isActive ? "page" : undefined}
-              data-active={isActive}
-              onTouchStart={() => setMobileIsPressed(true)}
-              onTouchEnd={() => setMobileIsPressed(false)}
-              onMouseDown={() => setMobileIsPressed(true)}
-              onMouseUp={() => setMobileIsPressed(false)}
-              onClick={(e) => handleLinkClick(e, item, idx)}
-              className="liquid-mobile-tab-item"
-            >
-              {renderMobileIcon(item.id)}
-              <span>{item.label}</span>
+          <div className="flex items-center gap-3">
+            <Link href="/contact" className="button button-small !py-2 !px-3.5 !text-xs font-semibold">
+              Start a project <ArrowUpRight size={14} />
             </Link>
-          );
-        })}
-      </nav>
+            <button
+              type="button"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E6BFF]"
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* MOBILE DROPDOWN DRAWER (below 900px) */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden border-t border-white/[0.08] bg-[#050505]/95 px-6 py-6 backdrop-blur-xl min-[900px]:hidden"
+            >
+              <nav aria-label="Mobile Navigation" className="flex flex-col gap-4">
+                {navItems.map((item, idx) => {
+                  const isActive = activeSection === idx;
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={(e) => {
+                        setMenuOpen(false);
+                        handleLinkClick(e, item, idx);
+                      }}
+                      className={`text-[17px] font-medium transition-colors ${
+                        isActive ? "text-[#1E90FF]" : "text-white/80 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
     </>
   );
 }

@@ -1,7 +1,5 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
-
-export const viewport: Viewport = { themeColor: "#141E30" };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://my-work-umber.vercel.app"),
@@ -33,7 +31,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#141E30" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react
 import { Navbar, Footer, CTA } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
 import { siteConfig } from "@/config/site";
+import { socialConfig } from "@/config/social";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 
@@ -49,7 +50,12 @@ export default function Home() {
     description: "Web design, development and digital growth for businesses, startups and growing brands.",
     telephone: siteConfig.phone,
     email: siteConfig.email,
-    sameAs: [siteConfig.github || "https://github.com/Bharat0264"],
+    sameAs: [
+      socialConfig.github,
+      socialConfig.linkedin,
+      socialConfig.instagram,
+      socialConfig.x,
+    ],
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",

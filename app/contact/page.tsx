@@ -63,7 +63,7 @@ export default function Contact() {
                   className="font-medium text-[var(--text)] underline transition-colors hover:text-[var(--mist)]"
                   href={siteConfig.github}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   github.com/Bharat0264
                 </a>

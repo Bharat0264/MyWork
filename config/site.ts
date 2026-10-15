@@ -1,1 +1,16 @@
-export const siteConfig = { name: "Garuda Web Designer and Developer", professionalTitle: "Web Developer & Digital Growth Partner", description: "I design, build, redesign and grow digital experiences that help businesses look better, work better and sell better.", email: "bharathsaipulipati@gmail.com", phone: "+91 8688964531", location: "India · Working worldwide", availability: "Available for freelance projects", github: "https://github.com/Bharat0264", linkedin: "", instagram: "", twitter: "" };
+import { socialConfig } from "./social";
+
+export const siteConfig = {
+  name: "Garuda Web Designer and Developer",
+  professionalTitle: "Web Developer & Digital Growth Partner",
+  description:
+    "I design, build, redesign and grow digital experiences that help businesses look better, work better and sell better.",
+  email: "bharathsaipulipati@gmail.com",
+  phone: "+91 8688964531",
+  location: "India · Working worldwide",
+  availability: "Available for freelance projects",
+  github: socialConfig.github,
+  linkedin: socialConfig.linkedin,
+  instagram: socialConfig.instagram,
+  twitter: socialConfig.x,
+};

@@ -526,4 +526,3 @@ export function Footer() {
     </footer>
   );
 }
-export function CTA(){return <section className="wrap py-24"><div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] shadow-[var(--shadow-soft)] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.02em] text-[var(--text)] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton /></div></div></section>}

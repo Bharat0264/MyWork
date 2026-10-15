@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react";
-import { Navbar, Footer, CTA } from "@/components/site-shell";
+import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";
@@ -307,7 +307,7 @@ export default function Home() {
             (Moved here from other pages - lives ONLY on Home)
             ======================================================== */}
         <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60">
-          <div className="wrap grid gap-12 py-20 sm:py-24 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
+          <div className="wrap grid gap-12 pt-16 sm:pt-24 pb-14 sm:pb-20 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
             <div>
               <p className="eyebrow text-[#8FB0D6]">Why go digital</p>
               <h2 className="section-heading mt-4 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
@@ -332,11 +332,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ========================================================
-            6. FINAL CTA: Only on Home page
-            ======================================================== */}
-        <CTA />
       </main>
       <Footer />
     </>

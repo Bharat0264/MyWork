@@ -124,3 +124,32 @@
   }
 }
 
+/* --- GARUDA WORK SHOWCASE STYLES --- */
+@keyframes garudaEagleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+}
+
+.garuda-floating-eagle {
+  animation: garudaEagleFloat 6s ease-in-out infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garuda-floating-eagle {
+    animation: none !important;
+  }
+}
+
+

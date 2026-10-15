@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { SkipToContent } from "@/components/site-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased">
+        <SkipToContent />
         <ScrollToTop />
         {children}
       </body>

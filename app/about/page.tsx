@@ -1,19 +1,44 @@
-import { Navbar, Footer } from "@/components/site-shell";
-import { AboutCardStack } from "@/components/about-card-stack";
-import { Check } from "lucide-react";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+import { Check } from "lucide-react";
+import { Navbar, Footer } from "@/components/site-shell";
+
+const AboutCardStack = dynamic(
+  () => import("@/components/about-card-stack").then((mod) => mod.AboutCardStack),
+  {
+    ssr: true,
+    loading: () => <div className="min-h-[500px] w-full" aria-busy="true" />,
+  }
+);
 
 export const metadata: Metadata = {
   title: "About | Garuda Web Designer and Developer",
-  description: "I work across product design, development, business workflows, automation, SEO and digital presence.",
+  description:
+    "I build digital experiences that solve real business problems, bridging product design, development, and digital presence.",
+  alternates: {
+    canonical: "https://my-work-umber.vercel.app/about",
+  },
+  openGraph: {
+    title: "About · Garuda",
+    description: "I build digital experiences that solve real business problems.",
+    url: "https://my-work-umber.vercel.app/about",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About Garuda" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About · Garuda",
+    description: "I build digital experiences that solve real business problems.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function About() {
   return (
     <>
       <Navbar />
-      <main className="pt-36">
-        <section className="wrap pb-14 sm:pb-20">
+      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
+        <section className="wrap pt-10 sm:pt-14 pb-14 sm:pb-20">
           {/* HEADER */}
           <div className="max-w-[1200px]">
             <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6]">

@@ -1,61 +1,82 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowDown,
-  ArrowUpRight,
-  Globe,
-  RefreshCw,
-  Layers,
-  ShoppingBag,
-  Zap,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react";
 import { Navbar, Footer, CTA } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
 import { siteConfig } from "@/config/site";
 import { projects } from "@/data/projects";
+import { services } from "@/data/services";
 
-// Capabilities teaser services
-const teaserServices = [
-  { name: "Website Creation", icon: Globe },
-  { name: "Website Redesign", icon: RefreshCw },
-  { name: "Full-stack Development", icon: Layers },
-  { name: "E-commerce", icon: ShoppingBag },
-  { name: "SEO & Performance", icon: Zap },
-  { name: "Digital Marketing", icon: TrendingUp },
-];
-
-// Core tech chips from existing About data
-const coreTechChips = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "MongoDB",
-  "Tailwind CSS",
-  "REST APIs",
-  "Git",
-];
+export const metadata: Metadata = {
+  title: "Garuda Web Designer and Developer | High-Performance Modern Websites",
+  description:
+    "Web design, development and digital growth for businesses, startups and growing brands. Websites built to look better, work smarter, and grow faster.",
+  alternates: {
+    canonical: "https://my-work-umber.vercel.app",
+  },
+  openGraph: {
+    title: "Garuda Web Designer and Developer",
+    description: "Websites that look better, work smarter and grow faster.",
+    url: "https://my-work-umber.vercel.app",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Designer and Developer" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Garuda Web Designer and Developer",
+    description: "Websites that look better, work smarter and grow faster.",
+    images: ["/og-image.png"],
+  },
+};
 
 export default function Home() {
-  // 3 most recent projects for compact teaser cards
-  const featuredProjects = projects.slice(0, 3);
+  // Real spotlight project
+  const spotlightProject = projects[0]; // Rainbow Digi School
+  const spotlightChips = spotlightProject.technologies.slice(0, 3);
+
+  // Exact real data computations for "At a glance"
+  const totalProjects = projects.length;
+  const totalServices = services.length;
+  const uniqueTechnologies = Array.from(new Set(projects.flatMap((p) => p.technologies))).length;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Garuda Web Designer and Developer",
+    url: "https://my-work-umber.vercel.app",
+    logo: "https://my-work-umber.vercel.app/logo-full.png",
+    description: "Web design, development and digital growth for businesses, startups and growing brands.",
+    telephone: siteConfig.phone,
+    email: siteConfig.email,
+    sameAs: [siteConfig.github || "https://github.com/Bharat0264"],
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "IN",
+    },
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
-      <main className="bg-transparent">
+      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
         {/* ========================================================
-            a. HERO SECTION
+            1. HERO SECTION
             ======================================================== */}
-        <section className="grid-bg relative overflow-hidden pt-36">
-          <div className="absolute -right-32 top-8 h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px]" />
-          <div className="wrap relative grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.05fr_.95fr]">
+        <section className="grid-bg relative overflow-hidden pt-12 sm:pt-20">
+          <div className="absolute -right-32 top-8 h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none" />
+          <div className="wrap relative grid min-h-[680px] items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr]">
             <div>
               <p className="eyebrow flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
                 {siteConfig.availability}
               </p>
-              <h1 className="hero-heading mt-7 max-w-3xl font-semibold">
+              <h1 className="hero-heading mt-7 max-w-3xl font-semibold text-white">
                 Websites built to{" "}
                 <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
                 work smarter, and grow faster.
@@ -64,7 +85,7 @@ export default function Home() {
                 I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link className="button" href="/work">
+                <Link className="button" href="/work" prefetch={true}>
                   View my work <ArrowUpRight size={16} />
                 </Link>
                 <StartProjectButton />
@@ -72,7 +93,7 @@ export default function Home() {
             </div>
 
             {/* 3D PERSPECTIVE GRAPHIC */}
-            <div className="perspective relative hidden h-[440px] lg:block">
+            <div className="perspective relative hidden h-[440px] lg:block" aria-hidden="true">
               <div className="floating-plane left-8 top-14">
                 <p className="p-7 text-xs font-medium tracking-wider text-[var(--text-muted)]">
                   DIGITAL EXPERIENCE
@@ -89,8 +110,8 @@ export default function Home() {
             </div>
 
             <a
-              href="#recent-work"
-              aria-label="Scroll to featured work"
+              href="#featured-project"
+              aria-label="Scroll to featured project"
               className="absolute bottom-7 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
             >
               <ArrowDown size={18} />
@@ -99,7 +120,7 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            b. TRUST STRIP: Pillars row under hero
+            2. TRUST / MARQUEE STRIP
             ======================================================== */}
         <section className="border-y border-[var(--border)] bg-[#141E30]/40 py-5">
           <div className="wrap flex flex-wrap justify-between gap-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
@@ -112,18 +133,19 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            c. FEATURED WORK (TEASER): Recent work with 3 compact cards
+            3. FEATURED PROJECT (ONE large spotlight card)
             ======================================================== */}
-        <section id="recent-work" className="wrap py-16 sm:py-24">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <section id="featured-project" className="wrap py-16 sm:py-24">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-12">
             <div>
-              <p className="eyebrow text-[#8FB0D6]">Featured projects</p>
+              <p className="eyebrow text-[#8FB0D6]">Featured project</p>
               <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
-                Recent work
+                Spotlight: {spotlightProject.title}
               </h2>
             </div>
             <Link
               href="/work"
+              prefetch={true}
               className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white self-start sm:self-auto"
             >
               <span>See all work</span>
@@ -134,145 +156,179 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* 3 Compact Project Cards Row (scroll-snap on mobile) */}
-          <div className="mt-10 sm:mt-12 flex overflow-x-auto pb-4 gap-5 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-3 md:gap-6 lg:gap-8 md:overflow-visible md:pb-0">
-            {featuredProjects.map((project) => (
-              <Link
-                key={project.slug}
-                href="/work"
-                className="group flex flex-col rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/90 via-[#141E30]/80 to-[#0B1322]/90 p-3.5 sm:p-4 shadow-[0_16px_36px_rgba(4,9,18,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(143,176,214,0.38)] hover:shadow-[0_20px_48px_rgba(4,9,18,0.6)] cursor-pointer snap-center shrink-0 w-[84vw] max-w-[340px] md:w-auto md:max-w-none"
-              >
-                {/* 16:10 Thumbnail */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] bg-[#0A0F1D] border border-white/10">
-                  <img
-                    src={`/projects/${project.slug}.webp`}
-                    alt={`Preview of ${project.title}`}
+          {/* Large Spotlight Card with Real Screenshot inside Device Frame */}
+          <div className="overflow-hidden rounded-[28px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/90 via-[#141E30]/80 to-[#0B1322]/90 p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(4,9,18,0.5)]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
+              {/* Left Column: Device Frame */}
+              <div className="relative overflow-hidden rounded-[20px] border border-[rgba(143,176,214,0.22)] bg-[#0A0F1D] shadow-[0_16px_40px_rgba(0,0,0,0.6)]">
+                {/* Browser chrome header bar */}
+                <div className="flex h-9 items-center gap-2 border-b border-white/10 bg-[#141E30]/80 px-4">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F]/80" />
+                  <span className="ml-3 truncate text-[11px] font-mono text-[#6F86A3]">
+                    {spotlightProject.liveUrl?.replace("https://", "") || "rainbow-digi-school.vercel.app"}
+                  </span>
+                </div>
+
+                {/* Real screenshot inside mockup */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0A0F1D]">
+                  <Image
+                    src={`/projects/${spotlightProject.slug}.webp`}
+                    alt={`Real homepage screenshot of ${spotlightProject.title}`}
                     width={1440}
                     height={900}
-                    loading="lazy"
-                    className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    priority
+                    className="h-full w-full object-cover object-top"
                   />
                 </div>
-
-                {/* Info row below thumbnail */}
-                <div className="mt-4 flex items-center justify-between gap-3 px-1 pb-1">
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-[17px] font-semibold text-white tracking-tight truncate group-hover:text-[#8FB0D6] transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="mt-0.5 text-[13px] text-[#9FB3CC] font-normal truncate">
-                      {project.category}
-                    </p>
-                  </div>
-                  <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full border border-[rgba(143,176,214,0.2)] bg-white/5 text-[#8FB0D6] transition-all duration-200 group-hover:bg-white group-hover:text-[#141E30] group-hover:scale-105">
-                    <ArrowUpRight size={15} strokeWidth={2.2} />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================
-            d. WHAT I DO (TEASER): What I can build for you (3x2 grid)
-            ======================================================== */}
-        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <p className="eyebrow text-[#8FB0D6]">Capabilities</p>
-              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
-                What I can build for you
-              </h2>
-            </div>
-            <Link
-              href="/services"
-              className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white self-start sm:self-auto"
-            >
-              <span>Explore services</span>
-              <ArrowUpRight
-                size={16}
-                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </Link>
-          </div>
-
-          {/* 3x2 Grid of small glass tiles */}
-          <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {teaserServices.map((service) => {
-              const Icon = service.icon;
-              return (
-                <Link
-                  key={service.name}
-                  href="/services"
-                  className="group flex items-center justify-between rounded-[20px] border border-[rgba(143,176,214,0.16)] bg-[#1B2B45]/40 backdrop-blur-md px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(143,176,214,0.35)] hover:bg-[#1B2B45]/70 shadow-[0_8px_24px_rgba(4,9,18,0.3)]"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#8FB0D6] transition-colors group-hover:border-white/25 group-hover:text-white">
-                      <Icon size={19} strokeWidth={2} />
-                    </span>
-                    <span className="text-[15px] font-medium text-white tracking-tight truncate group-hover:text-[#8FB0D6] transition-colors">
-                      {service.name}
-                    </span>
-                  </div>
-                  <ArrowUpRight
-                    size={16}
-                    className="shrink-0 text-[#6F86A3] transition-colors group-hover:text-white"
-                  />
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ========================================================
-            e. ABOUT (TEASER): Compact two-column band
-            ======================================================== */}
-        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center">
-            {/* Left Column: Fresh 2-sentence intro + link to /about */}
-            <div>
-              <p className="eyebrow text-[#8FB0D6]">About</p>
-              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
-                A builder’s approach to digital products.
-              </h2>
-              <p className="mt-6 text-[16px] sm:text-[17px] leading-[1.65] text-[#9FB3CC] max-w-xl">
-                I bridge the gap between thoughtful design and resilient full-stack code to turn ideas into digital products that perform. Every interface is built to load instantly, feel intuitive to users, and scale sustainably.
-              </p>
-              <div className="mt-8">
-                <Link
-                  href="/about"
-                  className="group inline-flex items-center gap-2 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white"
-                >
-                  <span>More about me</span>
-                  <ArrowUpRight
-                    size={16}
-                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </Link>
               </div>
-            </div>
 
-            {/* Right Column: 8 Tech Chips in a Glass Container */}
-            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/40 backdrop-blur-md p-6 sm:p-8 shadow-[0_16px_36px_rgba(4,9,18,0.3)]">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6] mb-5">
-                Core Technologies
-              </p>
-              <div className="flex flex-wrap gap-2.5">
-                {coreTechChips.map((tech) => (
-                  <span
-                    key={tech}
-                    className="inline-flex items-center rounded-full border border-white/[0.14] bg-white/[0.06] px-4 py-2 text-[13px] font-medium text-[#E8EEF7] shadow-sm transition-colors hover:border-white/25 hover:bg-white/10"
+              {/* Right Column: Project Details */}
+              <div className="flex flex-col justify-center">
+                <p className="eyebrow text-[#8FB0D6]">{spotlightProject.category}</p>
+                <h3 className="card-heading mt-3 text-2xl sm:text-3xl font-semibold text-white tracking-tight">
+                  {spotlightProject.title}
+                </h3>
+                <p className="mt-4 text-[15px] sm:text-[16px] leading-[1.7] text-[#9FB3CC]">
+                  {spotlightProject.shortDescription}
+                </p>
+
+                {/* 3 Tech Chips */}
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {spotlightChips.map((chip) => (
+                    <span
+                      key={chip}
+                      className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.05] px-3.5 py-1.5 text-[12px] font-medium text-[#E8EEF7]"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <Link
+                    href="/work"
+                    prefetch={true}
+                    className="button inline-flex items-center gap-2"
                   >
-                    {tech}
-                  </span>
-                ))}
+                    <span>See all work</span>
+                    <ArrowUpRight size={16} />
+                  </Link>
+                  {spotlightProject.liveUrl && (
+                    <a
+                      href={spotlightProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button-secondary inline-flex items-center gap-2"
+                    >
+                      <span>Visit live site</span>
+                      <ArrowUpRight size={16} />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* ========================================================
-            f. FINAL CTA: Only on Home page
+            4. AT A GLANCE (3 small stat tiles computed from real data)
+            ======================================================== */}
+        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
+          <div className="max-w-2xl mb-10 sm:mb-12">
+            <p className="eyebrow text-[#8FB0D6]">At a glance</p>
+            <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+              Work and capability in numbers
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Tile 1: Projects */}
+            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+                <FolderGit2 size={22} strokeWidth={2} />
+              </div>
+              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+                {totalProjects}
+              </p>
+              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+                Featured Projects
+              </h3>
+              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+                Bespoke websites and full-stack applications in portfolio.
+              </p>
+            </div>
+
+            {/* Tile 2: Services */}
+            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+                <Sparkles size={22} strokeWidth={2} />
+              </div>
+              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+                {totalServices}
+              </p>
+              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+                Core Services
+              </h3>
+              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+                Specialized digital offerings from creation to SEO and growth.
+              </p>
+            </div>
+
+            {/* Tile 3: Technologies */}
+            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-7 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] mb-6">
+                <Cpu size={22} strokeWidth={2} />
+              </div>
+              <p className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+                {uniqueTechnologies}
+              </p>
+              <h3 className="card-heading mt-3 text-lg font-semibold text-white">
+                Technologies & Tools
+              </h3>
+              <p className="mt-2 text-sm text-[#9FB3CC] leading-relaxed">
+                Modern tools including React, Next.js, Node.js, and TypeScript.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            5. WHY GO DIGITAL: Your website is your hardest-working first impression
+            (Moved here from other pages - lives ONLY on Home)
+            ======================================================== */}
+        <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60">
+          <div className="wrap grid gap-12 py-20 sm:py-24 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
+            <div>
+              <p className="eyebrow text-[#8FB0D6]">Why go digital</p>
+              <h2 className="section-heading mt-4 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                Your website is your hardest-working first impression.
+              </h2>
+              <p className="mt-5 max-w-md text-base leading-7 text-[#9FB3CC]">
+                It is where people check whether you are credible, understand what you offer and decide whether to contact or buy from you—often before they speak to anyone.
+              </p>
+            </div>
+            <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+              {[
+                ["Always discoverable", "Give customers a clear place to find you, understand your services and make contact."],
+                ["Build trust faster", "A polished, current experience signals care, reliability and professionalism."],
+                ["Make decisions easier", "Clear information, proof and calls to action help visitors take the next step."],
+                ["Support growth", "A flexible digital foundation can grow into lead capture, commerce, automation or a client portal."],
+              ].map(([t, d]) => (
+                <article className="border-t border-[rgba(143,176,214,0.18)] pt-6" key={t}>
+                  <h3 className="card-heading text-lg font-semibold text-white">{t}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#9FB3CC]">{d}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            6. FINAL CTA: Only on Home page
             ======================================================== */}
         <CTA />
       </main>

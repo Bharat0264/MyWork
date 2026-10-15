@@ -1,40 +1,56 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, Mail, Phone, ArrowUp, Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Mail, Phone, ArrowUp, Home, Briefcase, Sparkles, User } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 import { StartProjectButton } from "@/components/cta-button";
 
+export function SkipToContent() {
+  return (
+    <a href="#content" className="skip-link">
+      Skip to content
+    </a>
+  );
+}
+
 const navItems = [
+  { label: "Home", href: "/", id: "home" },
   { label: "Work", href: "/work", id: "work" },
   { label: "Services", href: "/services", id: "services" },
   { label: "About", href: "/about", id: "about" },
   { label: "Contact", href: "/contact", id: "contact" },
 ] as const;
 
+const mobileTabItems = [
+  { label: "Home", href: "/", icon: Home },
+  { label: "Work", href: "/work", icon: Briefcase },
+  { label: "Services", href: "/services", icon: Sparkles },
+  { label: "About", href: "/about", icon: User },
+  { label: "Contact", href: "/contact", icon: Mail },
+] as const;
+
 export function Navbar() {
   const pathname = usePathname();
 
-  const getActiveFromPath = (path: string): number | null => {
-    if (path === "/work" || path.startsWith("/work/")) return 0;
-    if (path === "/services" || path.startsWith("/services/")) return 1;
-    if (path === "/about" || path.startsWith("/about/")) return 2;
-    if (path === "/contact" || path.startsWith("/contact/")) return 3;
-    return null;
+  const getActiveFromPath = (path: string): number => {
+    if (path === "/") return 0;
+    if (path === "/work" || path.startsWith("/work/")) return 1;
+    if (path === "/services" || path.startsWith("/services/")) return 2;
+    if (path === "/about" || path.startsWith("/about/")) return 3;
+    if (path === "/contact" || path.startsWith("/contact/")) return 4;
+    return 0;
   };
 
   const activeSection = getActiveFromPath(pathname);
   const [hoverSection, setHoverSection] = useState<number | null>(null);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   // Stretch & press animation states
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   // Measurement references
-  const desktopNavRef = useRef<HTMLDivElement>(null);
+  const desktopNavRef = useRef<HTMLElement>(null);
   const desktopItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const [desktopBubble, setDesktopBubble] = useState<{ left: number; width: number; ready: boolean }>({
@@ -76,6 +92,9 @@ export function Navbar() {
 
     updateDesktopBubble();
     window.addEventListener("resize", updateDesktopBubble);
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(updateDesktopBubble);
+    }
     return () => {
       window.removeEventListener("resize", updateDesktopBubble);
       if (moveTimerRef.current) clearTimeout(moveTimerRef.current);
@@ -92,13 +111,13 @@ export function Navbar() {
     }
   };
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof navItems)[number]) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     setIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
     }, 200);
 
-    if (pathname === item.href) {
+    if (pathname === href) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -121,12 +140,7 @@ export function Navbar() {
       </svg>
 
       {/* FIXED TOP HEADER */}
-      <motion.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-x-0 top-0 z-50 border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md"
-      >
+      <header className="fixed inset-x-0 top-0 z-50 h-[72px] min-[900px]:h-[84px] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md">
         {/* DESKTOP (900px and above) */}
         <div className="mx-auto hidden h-[84px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
           {/* Left: Garuda Logo Lockup */}
@@ -182,14 +196,17 @@ export function Navbar() {
                     desktopItemsRef.current[idx] = el;
                   }}
                   href={item.href}
+                  prefetch={true}
                   aria-current={isActive ? "page" : undefined}
                   data-active={isActive || isHovered}
                   onMouseEnter={() => setHoverSection(idx)}
+                  onFocus={() => setHoverSection(idx)}
+                  onBlur={() => setHoverSection(null)}
                   onMouseDown={() => setIsPressed(true)}
                   onMouseUp={() => setIsPressed(false)}
                   onTouchStart={() => setIsPressed(true)}
                   onTouchEnd={() => setIsPressed(false)}
-                  onClick={(e) => handleLinkClick(e, item)}
+                  onClick={(e) => handleLinkClick(e, item.href)}
                   className="liquid-nav-link"
                 >
                   {item.label}
@@ -229,56 +246,54 @@ export function Navbar() {
           </Link>
           <div className="flex items-center gap-3">
             <StartProjectButton variant="navbar-mobile" />
-            <button
-              type="button"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[#141E30] text-[var(--text)] transition-colors hover:bg-[#1B2B45] hover:border-[var(--border-strong)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mist)]"
-            >
-              {menuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
           </div>
         </div>
+      </header>
 
-        {/* MOBILE DROPDOWN DRAWER (below 900px) */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="overflow-hidden border-t border-[var(--border)] bg-[#0B1322]/95 px-6 py-6 backdrop-blur-xl min-[900px]:hidden"
+      {/* MOBILE BOTTOM TAB BAR (below 900px, 5 items with House icon for Home) */}
+      <nav
+        aria-label="Mobile Navigation"
+        className="fixed inset-x-0 bottom-0 z-50 flex h-[62px] items-center justify-around border-t border-[rgba(143,176,214,0.18)] bg-[#0B1322]/95 px-2 pb-[env(safe-area-inset-bottom,4px)] backdrop-blur-xl shadow-[0_-8px_32px_rgba(4,9,18,0.5)] min-[900px]:hidden"
+      >
+        {mobileTabItems.map((item, idx) => {
+          const isActive = activeSection === idx;
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              prefetch={true}
+              aria-current={isActive ? "page" : undefined}
+              onClick={(e) => handleLinkClick(e, item.href)}
+              className={`group flex flex-1 flex-col items-center justify-center py-1 transition-colors select-none ${
+                isActive ? "text-[#E8EEF7]" : "text-[#9FB3CC] hover:text-[#E8EEF7]"
+              }`}
             >
-              <nav aria-label="Mobile Navigation" className="flex flex-col gap-4">
-                {navItems.map((item, idx) => {
-                  const isActive = activeSection === idx;
-                  return (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      aria-current={isActive ? "page" : undefined}
-                      onClick={(e) => {
-                        setMenuOpen(false);
-                        handleLinkClick(e, item);
-                      }}
-                      className={`text-[17px] font-medium transition-colors ${
-                        isActive ? "text-[var(--text)] font-semibold" : "text-[var(--text-muted)] hover:text-[var(--text)]"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.header>
+              <span
+                className={`flex h-7 w-11 items-center justify-center rounded-full transition-all duration-200 ${
+                  isActive
+                    ? "bg-[rgba(143,176,214,0.2)] text-[#8FB0D6] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
+                    : "text-[#9FB3CC] group-hover:text-white"
+                }`}
+              >
+                <Icon size={18} strokeWidth={isActive ? 2.3 : 1.8} />
+              </span>
+              <span
+                className={`mt-0.5 text-[11px] font-medium leading-none tracking-tight ${
+                  isActive ? "text-[#E8EEF7] font-semibold" : "text-[#9FB3CC]"
+                }`}
+              >
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
     </>
   );
 }
 const quickLinks = [
+  ["Home", "/"],
   ["Work", "/work"],
   ["Services", "/services"],
   ["About", "/about"],
@@ -307,13 +322,7 @@ export function Footer() {
   };
 
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pt-16 pb-8 px-4 sm:px-6 lg:px-8"
-    >
+    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pt-16 pb-8 px-4 sm:px-6 lg:px-8">
       <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 supports-[backdrop-filter]:bg-[#1B2B45]/45 backdrop-blur-[18px] p-6 sm:p-8 lg:p-[40px_44px] shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]">
         {/* FAINT WATERMARK */}
         <div
@@ -509,7 +518,7 @@ export function Footer() {
           </div>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }
 export function CTA(){return <section className="wrap py-24"><div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] shadow-[var(--shadow-soft)] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-0.02em] text-[var(--text)] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton /></div></div></section>}

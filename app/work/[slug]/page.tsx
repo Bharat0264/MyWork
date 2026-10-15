@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
-import { Navbar, Footer, CTA } from "@/components/site-shell";
+import { Navbar, Footer } from "@/components/site-shell";
 import type { Metadata } from "next";
 import { LiveProjectPreview } from "@/components/live-project-preview";
 
@@ -22,7 +22,7 @@ export default async function Case({
   return (
     <>
       <Navbar />
-      <main className="pt-32">
+      <main id="content" className="pt-[72px] min-[900px]:pt-[84px] pb-24 min-[900px]:pb-0 page-transition bg-transparent">
         <section className="wrap">
           <p className="eyebrow">Case study · {p.year}</p>
           <div className="mt-5 flex flex-wrap items-end justify-between gap-8">
@@ -106,8 +106,6 @@ export default async function Case({
             </div>
           </div>
         </section>
-
-        <CTA />
       </main>
       <Footer />
     </>
@@ -124,5 +122,8 @@ export async function generateMetadata({
   return {
     title: p ? `${p.title} Case Study | Garuda` : "Project | Garuda",
     description: p?.shortDescription,
+    alternates: {
+      canonical: `https://my-work-umber.vercel.app/work/${slug}`,
+    },
   };
 }

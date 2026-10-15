@@ -102,6 +102,65 @@
 html {
   scroll-behavior: auto;
   background-color: var(--bg-deep);
+  scrollbar-gutter: stable;
+}
+
+/* --- VIEW TRANSITIONS & PAGE ROUTE TRANSITIONS --- */
+@keyframes routeFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.page-transition {
+  animation: routeFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@supports (view-transition-name: root) {
+  ::view-transition-old(root) {
+    animation: 0.15s ease-out both fadeOut;
+  }
+  ::view-transition-new(root) {
+    animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both routeFadeIn;
+  }
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: #141E30;
+  color: #FFFFFF;
+  border: 1px solid var(--border-strong);
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+  text-decoration: none;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--mist) !important;
+  outline-offset: 3px !important;
 }
 
 main[id],

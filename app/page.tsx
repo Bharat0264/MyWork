@@ -1,16 +1,52 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, Check } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Globe,
+  RefreshCw,
+  Layers,
+  ShoppingBag,
+  Zap,
+  TrendingUp,
+} from "lucide-react";
 import { Navbar, Footer, CTA } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
-import { WorkPortfolioShowcase } from "@/components/work-portfolio-showcase";
 import { siteConfig } from "@/config/site";
+import { projects } from "@/data/projects";
+
+// Capabilities teaser services
+const teaserServices = [
+  { name: "Website Creation", icon: Globe },
+  { name: "Website Redesign", icon: RefreshCw },
+  { name: "Full-stack Development", icon: Layers },
+  { name: "E-commerce", icon: ShoppingBag },
+  { name: "SEO & Performance", icon: Zap },
+  { name: "Digital Marketing", icon: TrendingUp },
+];
+
+// Core tech chips from existing About data
+const coreTechChips = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Node.js",
+  "MongoDB",
+  "Tailwind CSS",
+  "REST APIs",
+  "Git",
+];
 
 export default function Home() {
+  // 3 most recent projects for compact teaser cards
+  const featuredProjects = projects.slice(0, 3);
+
   return (
     <>
       <Navbar />
-      <main>
-        {/* HERO SECTION */}
+      <main className="bg-transparent">
+        {/* ========================================================
+            a. HERO SECTION
+            ======================================================== */}
         <section className="grid-bg relative overflow-hidden pt-36">
           <div className="absolute -right-32 top-8 h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px]" />
           <div className="wrap relative grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.05fr_.95fr]">
@@ -38,7 +74,9 @@ export default function Home() {
             {/* 3D PERSPECTIVE GRAPHIC */}
             <div className="perspective relative hidden h-[440px] lg:block">
               <div className="floating-plane left-8 top-14">
-                <p className="p-7 text-xs font-medium tracking-wider text-[var(--text-muted)]">DIGITAL EXPERIENCE</p>
+                <p className="p-7 text-xs font-medium tracking-wider text-[var(--text-muted)]">
+                  DIGITAL EXPERIENCE
+                </p>
                 <div className="mx-7 h-px bg-[var(--border)]" />
                 <p className="p-7 text-3xl font-semibold text-[var(--text)]">
                   Built to feel<br />ahead of now.
@@ -50,13 +88,19 @@ export default function Home() {
               </div>
             </div>
 
-            <a href="#work" aria-label="Scroll to work" className="absolute bottom-7 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]">
+            <a
+              href="#recent-work"
+              aria-label="Scroll to featured work"
+              className="absolute bottom-7 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
+            >
               <ArrowDown size={18} />
             </a>
           </div>
         </section>
 
-        {/* PILLARS STRIP */}
+        {/* ========================================================
+            b. TRUST STRIP: Pillars row under hero
+            ======================================================== */}
         <section className="border-y border-[var(--border)] bg-[#141E30]/40 py-5">
           <div className="wrap flex flex-wrap justify-between gap-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
             <span>Strategy</span>
@@ -67,89 +111,169 @@ export default function Home() {
           </div>
         </section>
 
-        {/* WORK SHOWCASE */}
-        <WorkPortfolioShowcase />
-
-        {/* WHY GO DIGITAL */}
-        <section className="border-y border-[var(--border)] bg-[#141E30]/60">
-          <div className="wrap grid gap-12 py-24 sm:py-28 lg:grid-cols-[.8fr_1.2fr]">
+        {/* ========================================================
+            c. FEATURED WORK (TEASER): Recent work with 3 compact cards
+            ======================================================== */}
+        <section id="recent-work" className="wrap py-16 sm:py-24">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <p className="eyebrow">Why go digital</p>
-              <h2 className="section-heading mt-4 font-semibold">
-                Your website is your hardest-working first impression.
+              <p className="eyebrow text-[#8FB0D6]">Featured projects</p>
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                Recent work
               </h2>
-              <p className="mt-5 max-w-md text-base leading-7 text-[var(--text-muted)]">
-                It is where people check whether you are credible, understand what you offer and decide whether to contact or buy from you—often before they speak to anyone.
-              </p>
             </div>
-            <div className="grid gap-x-8 sm:grid-cols-2">
-              {[
-                ["Always discoverable", "Give customers a clear place to find you, understand your services and make contact."],
-                ["Build trust faster", "A polished, current experience signals care, reliability and professionalism."],
-                ["Make decisions easier", "Clear information, proof and calls to action help visitors take the next step."],
-                ["Support growth", "A flexible digital foundation can grow into lead capture, commerce, automation or a client portal."],
-              ].map(([t, d]) => (
-                <article className="border-t border-[var(--border)] py-6" key={t}>
-                  <h3 className="card-heading">{t}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{d}</p>
-                </article>
-              ))}
-            </div>
+            <Link
+              href="/work"
+              className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white self-start sm:self-auto"
+            >
+              <span>See all work</span>
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
           </div>
-        </section>
 
-        {/* DELIBERATE PROCESS */}
-        <section className="wrap py-24 sm:py-28">
-          <p className="eyebrow">A deliberate process</p>
-          <h2 className="section-heading mt-4 max-w-2xl font-semibold">
-            Less guesswork. More momentum.
-          </h2>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              ["01", "Understand", "Business, audience, requirements and goals."],
-              ["02", "Plan", "Structure, journey, direction and technology."],
-              ["03", "Design", "Create a distinctive visual experience."],
-              ["04", "Develop", "Build responsive, scalable functionality."],
-              ["05", "Launch", "Test, optimize and deploy with care."],
-              ["06", "Grow", "Support SEO, analytics and future moves."],
-            ].map(([n, t, d]) => (
-              <article
-                className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45] to-[#141E30] p-7 sm:p-8 shadow-[var(--shadow-soft)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-strong)]"
-                key={n}
+          {/* 3 Compact Project Cards Row (scroll-snap on mobile) */}
+          <div className="mt-10 sm:mt-12 flex overflow-x-auto pb-4 gap-5 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-3 md:gap-6 lg:gap-8 md:overflow-visible md:pb-0">
+            {featuredProjects.map((project) => (
+              <Link
+                key={project.slug}
+                href="/work"
+                className="group flex flex-col rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/90 via-[#141E30]/80 to-[#0B1322]/90 p-3.5 sm:p-4 shadow-[0_16px_36px_rgba(4,9,18,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(143,176,214,0.38)] hover:shadow-[0_20px_48px_rgba(4,9,18,0.6)] cursor-pointer snap-center shrink-0 w-[84vw] max-w-[340px] md:w-auto md:max-w-none"
               >
-                <p className="text-sm font-semibold tracking-wider text-[var(--mist)]">{n}</p>
-                <h3 className="card-heading mt-6">{t}</h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{d}</p>
-              </article>
+                {/* 16:10 Thumbnail */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] bg-[#0A0F1D] border border-white/10">
+                  <img
+                    src={`/projects/${project.slug}.webp`}
+                    alt={`Preview of ${project.title}`}
+                    width={1440}
+                    height={900}
+                    loading="lazy"
+                    className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Info row below thumbnail */}
+                <div className="mt-4 flex items-center justify-between gap-3 px-1 pb-1">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-[17px] font-semibold text-white tracking-tight truncate group-hover:text-[#8FB0D6] transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="mt-0.5 text-[13px] text-[#9FB3CC] font-normal truncate">
+                      {project.category}
+                    </p>
+                  </div>
+                  <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full border border-[rgba(143,176,214,0.2)] bg-white/5 text-[#8FB0D6] transition-all duration-200 group-hover:bg-white group-hover:text-[#141E30] group-hover:scale-105">
+                    <ArrowUpRight size={15} strokeWidth={2.2} />
+                  </span>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
 
-        {/* WHY WORK TOGETHER */}
-        <section className="wrap pb-16">
-          <div className="grid gap-10 border-y border-[var(--border)] py-20 md:grid-cols-2">
+        {/* ========================================================
+            d. WHAT I DO (TEASER): What I can build for you (3x2 grid)
+            ======================================================== */}
+        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <p className="eyebrow">Why work together</p>
-              <h2 className="section-heading mt-4 font-semibold">
-                Design thinking with a builder’s mindset.
+              <p className="eyebrow text-[#8FB0D6]">Capabilities</p>
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                What I can build for you
               </h2>
             </div>
-            <div className="grid content-start gap-4">
-              {[
-                "Design + development in one focused partnership",
-                "Technology choices grounded in business requirements",
-                "Responsive, performant experiences from day one",
-                "End-to-end execution from idea to deployment",
-              ].map((x) => (
-                <p className="flex items-center gap-3 text-[var(--text)]" key={x}>
-                  <Check className="shrink-0 text-[var(--mist)]" size={18} />
-                  <span>{x}</span>
-                </p>
-              ))}
+            <Link
+              href="/services"
+              className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white self-start sm:self-auto"
+            >
+              <span>Explore services</span>
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
+          </div>
+
+          {/* 3x2 Grid of small glass tiles */}
+          <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {teaserServices.map((service) => {
+              const Icon = service.icon;
+              return (
+                <Link
+                  key={service.name}
+                  href="/services"
+                  className="group flex items-center justify-between rounded-[20px] border border-[rgba(143,176,214,0.16)] bg-[#1B2B45]/40 backdrop-blur-md px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(143,176,214,0.35)] hover:bg-[#1B2B45]/70 shadow-[0_8px_24px_rgba(4,9,18,0.3)]"
+                >
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#8FB0D6] transition-colors group-hover:border-white/25 group-hover:text-white">
+                      <Icon size={19} strokeWidth={2} />
+                    </span>
+                    <span className="text-[15px] font-medium text-white tracking-tight truncate group-hover:text-[#8FB0D6] transition-colors">
+                      {service.name}
+                    </span>
+                  </div>
+                  <ArrowUpRight
+                    size={16}
+                    className="shrink-0 text-[#6F86A3] transition-colors group-hover:text-white"
+                  />
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================
+            e. ABOUT (TEASER): Compact two-column band
+            ======================================================== */}
+        <section className="wrap py-16 sm:py-24 border-t border-[rgba(143,176,214,0.16)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center">
+            {/* Left Column: Fresh 2-sentence intro + link to /about */}
+            <div>
+              <p className="eyebrow text-[#8FB0D6]">About</p>
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                A builder’s approach to digital products.
+              </h2>
+              <p className="mt-6 text-[16px] sm:text-[17px] leading-[1.65] text-[#9FB3CC] max-w-xl">
+                I bridge the gap between thoughtful design and resilient full-stack code to turn ideas into digital products that perform. Every interface is built to load instantly, feel intuitive to users, and scale sustainably.
+              </p>
+              <div className="mt-8">
+                <Link
+                  href="/about"
+                  className="group inline-flex items-center gap-2 text-[14px] font-semibold text-[#8FB0D6] transition-colors hover:text-white"
+                >
+                  <span>More about me</span>
+                  <ArrowUpRight
+                    size={16}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: 8 Tech Chips in a Glass Container */}
+            <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/40 backdrop-blur-md p-6 sm:p-8 shadow-[0_16px_36px_rgba(4,9,18,0.3)]">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6] mb-5">
+                Core Technologies
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {coreTechChips.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center rounded-full border border-white/[0.14] bg-white/[0.06] px-4 py-2 text-[13px] font-medium text-[#E8EEF7] shadow-sm transition-colors hover:border-white/25 hover:bg-white/10"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
+        {/* ========================================================
+            f. FINAL CTA: Only on Home page
+            ======================================================== */}
         <CTA />
       </main>
       <Footer />

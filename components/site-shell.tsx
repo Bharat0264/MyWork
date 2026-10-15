@@ -17,7 +17,15 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname();
 
-  const [activeSection, setActiveSection] = useState<number>(0);
+  const getActiveFromPath = (path: string): number | null => {
+    if (path === "/work" || path.startsWith("/work/")) return 0;
+    if (path === "/services" || path.startsWith("/services/")) return 1;
+    if (path === "/about" || path.startsWith("/about/")) return 2;
+    if (path === "/contact" || path.startsWith("/contact/")) return 3;
+    return null;
+  };
+
+  const activeSection = getActiveFromPath(pathname);
   const [hoverSection, setHoverSection] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -35,82 +43,18 @@ export function Navbar() {
     ready: false,
   });
 
-  const prevTargetRef = useRef<number>(0);
+  const prevTargetRef = useRef<number | null>(null);
   const moveTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Sync route and observe page sections
-  useEffect(() => {
-    if (pathname === "/work" || pathname.startsWith("/work/")) {
-      setActiveSection(0);
-      return;
-    }
-    if (pathname === "/services" || pathname.startsWith("/services/")) {
-      setActiveSection(1);
-      return;
-    }
-    if (pathname === "/about" || pathname.startsWith("/about/")) {
-      setActiveSection(2);
-      return;
-    }
-    if (pathname === "/contact" || pathname.startsWith("/contact/")) {
-      setActiveSection(3);
-      return;
-    }
-
-    if (pathname === "/") {
-      const handleScroll = () => {
-        if (window.scrollY < 200) {
-          setActiveSection(0);
-        }
-      };
-      window.addEventListener("scroll", handleScroll, { passive: true });
-
-      const sectionEls = [
-        document.getElementById("work") || document.querySelector("main > section:nth-of-type(3)"),
-        document.querySelector("main > section:nth-of-type(4)"), // Services
-        document.querySelector("main > section:nth-of-type(6)"), // About
-        document.querySelector("main > section:last-of-type"),  // Contact / CTA
-      ];
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (window.scrollY < 200) {
-            setActiveSection(0);
-            return;
-          }
-          const visible = entries.filter((e) => e.isIntersecting);
-          if (visible.length > 0) {
-            const topVisible = visible.reduce((best, curr) =>
-              curr.intersectionRatio > best.intersectionRatio ? curr : best
-            );
-            const index = sectionEls.indexOf(topVisible.target);
-            if (index !== -1) {
-              setActiveSection(index);
-            }
-          }
-        },
-        {
-          threshold: [0.15, 0.4, 0.7],
-          rootMargin: "-15% 0px -40% 0px",
-        }
-      );
-
-      sectionEls.forEach((el) => {
-        if (el) observer.observe(el);
-      });
-
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-        observer.disconnect();
-      };
-    }
-  }, [pathname]);
 
   // Desktop bubble measurement & stretch movement
   const targetDesktopIndex = hoverSection !== null ? hoverSection : activeSection;
 
   useEffect(() => {
     const updateDesktopBubble = () => {
+      if (targetDesktopIndex === null) {
+        setDesktopBubble((prev) => ({ ...prev, ready: false }));
+        return;
+      }
       const el = desktopItemsRef.current[targetDesktopIndex];
       if (el) {
         setDesktopBubble({
@@ -138,7 +82,17 @@ export function Navbar() {
     };
   }, [targetDesktopIndex]);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof navItems)[number], idx: number) => {
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (window.location.hash) {
+        window.history.replaceState(null, "", "/");
+      }
+    }
+  };
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof navItems)[number]) => {
     setIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
@@ -147,21 +101,7 @@ export function Navbar() {
     if (pathname === item.href) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
     }
-
-    if (pathname === "/" && item.id === "work") {
-      const el = document.getElementById("work");
-      if (el) {
-        e.preventDefault();
-        el.scrollIntoView({ behavior: "smooth" });
-        window.history.pushState(null, "", "#work");
-        setActiveSection(idx);
-        return;
-      }
-    }
-
-    setActiveSection(idx);
   };
 
   return (
@@ -191,7 +131,12 @@ export function Navbar() {
         <div className="mx-auto hidden h-[84px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-14 xl:px-16 min-[900px]:flex">
           {/* Left: Garuda Logo Lockup */}
           <div className="flex items-center min-w-[200px]">
-            <Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0">
+            <Link
+              href="/"
+              onClick={handleLogoClick}
+              aria-label="Garuda Web Designer and Developer"
+              className="navbar-logo flex items-center shrink-0"
+            >
               <picture>
                 <source srcSet="/logo-full.webp" type="image/webp" />
                 <img
@@ -244,7 +189,7 @@ export function Navbar() {
                   onMouseUp={() => setIsPressed(false)}
                   onTouchStart={() => setIsPressed(true)}
                   onTouchEnd={() => setIsPressed(false)}
-                  onClick={(e) => handleLinkClick(e, item, idx)}
+                  onClick={(e) => handleLinkClick(e, item)}
                   className="liquid-nav-link"
                 >
                   {item.label}
@@ -261,7 +206,12 @@ export function Navbar() {
 
         {/* MOBILE TOP BAR (below 900px) */}
         <div className="flex h-[72px] items-center justify-between px-5 sm:px-8 min-[900px]:hidden">
-          <Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0">
+          <Link
+            href="/"
+            onClick={handleLogoClick}
+            aria-label="Garuda Web Designer and Developer"
+            className="navbar-logo flex items-center shrink-0"
+          >
             <picture>
               <source srcSet="/logo-full.webp" type="image/webp" />
               <img
@@ -307,9 +257,10 @@ export function Navbar() {
                     <Link
                       key={item.label}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={(e) => {
                         setMenuOpen(false);
-                        handleLinkClick(e, item, idx);
+                        handleLinkClick(e, item);
                       }}
                       className={`text-[17px] font-medium transition-colors ${
                         isActive ? "text-[var(--text)] font-semibold" : "text-[var(--text-muted)] hover:text-[var(--text)]"

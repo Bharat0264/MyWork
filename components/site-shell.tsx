@@ -8,7 +8,7 @@ export function Footer(){const currentYear=new Date().getFullYear();return <moti
   <Link href="/" aria-label="Garuda Web Designer and Developer" className="footer-logo shrink-0">
     <picture>
       <source srcSet="/logo-full.webp" type="image/webp" />
-      <img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={220} height={74} loading="lazy" className="footer-logo-img" />
+      <img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={220} height={74} loading="lazy" draggable={false} className="footer-logo-img" />
     </picture>
   </Link>
   <nav aria-label="Footer Navigation" className="footer-nav">

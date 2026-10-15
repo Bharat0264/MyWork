@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ChevronUp,
@@ -54,16 +53,6 @@ function matchesCategory(project: Project, category: string): boolean {
     );
   }
   return project.categories.includes(category);
-}
-
-// Auto-fit font size for vertical title so full name fits within stage height minus 64px
-function getVerticalTitleRem(title: string): number {
-  const len = title.length;
-  if (len <= 8) return 2.6;
-  if (len <= 12) return 2.2;
-  if (len <= 16) return 1.85;
-  if (len <= 20) return 1.6;
-  return 1.5;
 }
 
 export function WorkPortfolioShowcase() {
@@ -181,45 +170,64 @@ export function WorkPortfolioShowcase() {
     visibleRailProjects.push(...filteredProjects.slice(0, needed));
   }
 
-  const verticalTitleRem = getVerticalTitleRem(currentProject.title);
+  // Count categories excluding "All"
+  const totalCategoriesCount = categoryItems.length - 1;
 
   return (
-    <section id="work" className="wrap pt-16 sm:pt-20 lg:pt-24 pb-14 sm:pb-20">
+    <section id="work" className="wrap pt-24 pb-14 sm:pb-20">
       {/* Preload next project screenshot */}
       <link rel="preload" as="image" href={`/projects/${nextProject.slug}-full.webp`} />
 
-      {/* 0. INTRO HEADING WITH EAGLE GRAPHIC */}
-      <div className="mb-10 sm:mb-14">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div className="max-w-2xl">
-            <p className="eyebrow flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--steel-light)]" />
-              OUR WORK
+      {/* ========================================================
+          1. HEADER (LEFT-ALIGNED BLOCK, NO LOGO, REAL STATS ON RIGHT)
+          Spacing: 96px above (pt-24 on wrap), 48px below (mb-12)
+          ======================================================== */}
+      <motion.div
+        initial={isReducedMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="mb-12"
+      >
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          {/* Left Block: Eyebrow, Heading, Paragraph */}
+          <div className="max-w-[760px]">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6] flex items-center gap-2.5">
+              <span className="inline-block w-6 h-px bg-[#8FB0D6]" aria-hidden="true" />
+              <span>SELECTED WORK</span>
             </p>
-            <h2 className="section-heading mt-4 font-semibold tracking-[-0.02em] text-[var(--text)] text-3xl sm:text-5xl lg:text-6xl">
-              Work with a reason <br className="hidden sm:inline" />
-              <span className="text-[var(--mist)]">to exist.</span>
-            </h2>
-            <p className="mt-4 max-w-xl text-[15px] sm:text-[16px] leading-relaxed text-[var(--text-muted)]">
-              A selection of websites, products and digital experiences shaped around real business goals and user needs.
+            <h1 className="mt-4 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(2.2rem,4.4vw,3.4rem)]">
+              Websites and products <span className="text-[#8FB0D6]">built to perform.</span>
+            </h1>
+            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-[#9FB3CC]">
+              A curated selection of websites, platforms and digital experiences, each shaped around a real business goal and the people who use it.
             </p>
           </div>
 
-          {/* Garuda Eagle Emblem */}
-          <div className="shrink-0 select-none hidden md:block">
-            <Image
-              src="/logo-eagle.png"
-              alt="Garuda Web Designer and Developer Emblem"
-              width={160}
-              height={160}
-              priority
-              className="h-[105px] w-auto lg:h-[130px] object-contain"
-            />
+          {/* Right Block: Stats Summary (replaces the removed logo) */}
+          <div className="flex items-center gap-6 sm:gap-8 shrink-0 pb-1">
+            <div>
+              <p className="text-[32px] font-semibold text-white leading-none">
+                {projects.length}
+              </p>
+              <p className="mt-1 text-[12px] font-medium uppercase tracking-wider text-[#9FB3CC]">
+                Projects
+              </p>
+            </div>
+            <div className="h-10 w-px bg-[rgba(143,176,214,0.2)]" aria-hidden="true" />
+            <div>
+              <p className="text-[32px] font-semibold text-white leading-none">
+                {totalCategoriesCount}
+              </p>
+              <p className="mt-1 text-[12px] font-medium uppercase tracking-wider text-[#9FB3CC]">
+                Categories
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* HORIZONTAL CATEGORY MENU (TABLET & MOBILE <1024px) */}
+      {/* HORIZONTAL CATEGORY MENU (SHOWN ABOVE STAGE FOR <1024px) */}
       <div className="mb-6 lg:hidden">
         <div
           role="tablist"
@@ -251,138 +259,109 @@ export function WorkPortfolioShowcase() {
       </div>
 
       {/* ========================================================
-          1. THE STAGE (MAIN SHOWCASE CONTAINER)
-          Strict CSS Grid on Desktop:
-          grid-template-columns: 224px 64px minmax(240px, 300px) minmax(0, 1fr) 72px;
-          column-gap: 24px; padding: 32px; min-height: 640px;
+          2. THE STAGE (MAIN SHOWCASE CONTAINER)
+          Max-width 1200px, radius 32px, min-height 640px, padding 36px
+          Background: linear-gradient(145deg, #1B2B45 0%, #141E30 60%, #0F1829 100%)
+          1px border rgba(143,176,214,0.18), shadow 0 24px 60px rgba(4,9,18,0.5), faint grain overlay 0.03
           ======================================================== */}
-      <div
+      <motion.div
+        initial={isReducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         tabIndex={0}
         role="region"
         aria-label="Project showcase environment"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[32px] border border-[rgba(143,176,214,0.22)] bg-gradient-to-br from-[#141E30] via-[#1E3250] to-[#35577D] shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px]"
+        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[32px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45] via-[#141E30] to-[#0F1829] p-5 sm:p-7 lg:p-9 shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px] flex flex-col justify-between"
       >
-        {/* Subtle ambient accent glow & grain texture */}
+        {/* Faint grain overlay (0.03) */}
         <div
-          className="pointer-events-none absolute inset-0 transition-colors duration-700 ease-out"
-          style={{
-            background: `radial-gradient(ellipse at 65% 50%, ${currentProject.accent}14 0%, transparent 65%)`,
-          }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 rounded-[32px] opacity-[0.04] bg-[radial-gradient(rgba(255,255,255,0.8)_1px,_transparent_1px)] bg-[size:16px_16px]"
+          className="pointer-events-none absolute inset-0 rounded-[32px] opacity-[0.03] bg-[radial-gradient(rgba(255,255,255,0.8)_1px,_transparent_1px)] bg-[size:16px_16px]"
           aria-hidden="true"
         />
 
-        {/* GHOST WORD (BEHIND HERO IMAGE, OPACITY 0.05, NOT VISIBLE THROUGH TEXT) */}
+        {/* GHOST WORD (OPACITY 0.035, FONT-SIZE ~220px, CLIPPED, BEHIND EVERYTHING) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-[58%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none z-0 whitespace-nowrap leading-none transition-opacity duration-500 ease-out text-white/[0.05] font-extrabold tracking-[-0.03em] hidden sm:block"
+          className="pointer-events-none absolute left-[56%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none z-0 whitespace-nowrap leading-none transition-opacity duration-500 ease-out text-white/[0.035] font-extrabold tracking-[-0.03em] hidden sm:block overflow-hidden"
           style={{
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
-            fontSize: "clamp(160px, 20vw, 290px)",
+            fontSize: "clamp(140px, 16vw, 220px)",
           }}
         >
           {ghostWord}
         </div>
 
-        {/* TOP-RIGHT COUNTER (Inside padding, left of right gutter) */}
-        <div
-          aria-label={`Project ${formattedIndex} of ${formattedTotal}`}
-          className="absolute top-6 right-8 lg:top-8 lg:right-[104px] z-30 font-mono text-[13px] font-bold tracking-[0.14em] text-[#8FB0D6] select-none"
-        >
-          {formattedIndex} / {formattedTotal}
-        </div>
-
         {/* ========================================================
-            DESKTOP & TABLET GRID LAYOUT (>= 700px)
-            Strict grid: [Col 1: Rail 224px] [Col 2: Vertical Title 64px] [Col 3: Info 240-300px] [Col 4: Device flex] [Col 5: Right Gutter 72px]
+            DESKTOP LAYOUT (>= 1200px):
+            Grid: 232px | minmax(280px, 340px) | minmax(0, 1fr) | 56px
+            Gap: 32px, align-items: center
             ======================================================== */}
-        <div className="hidden min-[700px]:grid w-full h-full min-h-[640px] p-6 lg:p-8 gap-5 lg:gap-6 grid-cols-[200px_minmax(240px,280px)_minmax(0,1fr)] xl:grid-cols-[224px_64px_minmax(240px,300px)_minmax(0,1fr)_72px] lg:grid-cols-[200px_minmax(240px,280px)_minmax(0,1fr)_72px] items-center relative z-10">
+        <div className="hidden xl:grid w-full grid-cols-[232px_minmax(280px,340px)_minmax(0,1fr)_56px] gap-8 items-center relative z-10 flex-1 py-4">
           
-          {/* ─── COLUMN 1: THE RAIL (224px / 200px) ─── */}
-          <div className="flex flex-col items-center justify-center h-full max-h-[580px]">
+          {/* ─── COLUMN 1: THE RAIL (232px) ─── */}
+          <div className="flex flex-col items-center justify-center w-[232px]">
             {/* Scroll Up Button */}
             <button
               onClick={scrollRailUp}
               type="button"
               aria-label="Previous project thumbnail"
-              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer mb-2.5 shrink-0"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer mb-3 shrink-0"
             >
               <ChevronUp size={18} strokeWidth={2.2} />
             </button>
 
-            {/* Thumbnail Cards and Position Dots side-by-side (NO overlap) */}
-            <div className="flex items-center gap-2.5 w-full">
-              {/* 3 Visible Thumbnails */}
-              <div role="tablist" aria-label="Projects rail" className="flex flex-col gap-2.5 flex-1 min-w-0">
-                {visibleRailProjects.map((item, idx) => {
-                  const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
-                  const isActive = origIndex === safeIndex;
+            {/* 3 Visible Thumbnails */}
+            <div role="tablist" aria-label="Projects rail" className="flex flex-col gap-2.5 w-full">
+              {visibleRailProjects.map((item, idx) => {
+                const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
+                const isActive = origIndex === safeIndex;
 
-                  return (
-                    <button
-                      key={`${item.slug}-${idx}`}
-                      role="tab"
-                      type="button"
-                      aria-selected={isActive}
-                      aria-current={isActive ? "true" : undefined}
-                      onClick={() => setCurrentIndex(origIndex)}
-                      className={`group relative h-[94px] w-full rounded-[18px] p-2 flex items-center gap-2.5 text-left transition-all duration-300 backdrop-blur-[12px] cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
-                        isActive
-                          ? "border border-white/35 bg-white/[0.12] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2.5px] before:rounded-r before:bg-[#5F86B0]"
-                          : "border border-white/[0.12] bg-white/[0.06] hover:border-white/25 hover:bg-white/[0.09] opacity-80 hover:opacity-100"
-                      }`}
-                    >
-                      {/* Real thumbnail screen preview */}
-                      <div className="relative h-[48px] w-[54px] shrink-0 rounded-[10px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
-                        <img
-                          src={`/projects/${item.slug}.webp`}
-                          alt={`Thumbnail for ${item.title}`}
-                          className="h-full w-full object-cover object-top"
-                          loading="lazy"
-                        />
-                      </div>
+                return (
+                  <button
+                    key={`${item.slug}-${idx}`}
+                    role="tab"
+                    type="button"
+                    aria-selected={isActive}
+                    aria-current={isActive ? "true" : undefined}
+                    onClick={() => setCurrentIndex(origIndex)}
+                    className={`group relative h-[92px] w-[232px] rounded-[16px] p-2.5 flex items-center gap-3 text-left transition-all duration-300 backdrop-blur-[12px] cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] ${
+                      isActive
+                        ? "border border-white/30 bg-white/[0.08] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2px] before:rounded-r before:bg-[#5F86B0]"
+                        : "border border-white/[0.12] bg-white/[0.04] hover:border-white/25 hover:bg-white/[0.07] opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    {/* 56px Rounded Thumbnail */}
+                    <div className="relative h-[56px] w-[56px] shrink-0 rounded-[12px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
+                      <img
+                        src={`/projects/${item.slug}.webp`}
+                        alt={`Thumbnail for ${item.title}`}
+                        className="h-full w-full object-cover object-top"
+                        loading="lazy"
+                      />
+                    </div>
 
-                      {/* Metadata: Fits "Royal Mechanics" cleanly */}
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[13px] font-bold text-white leading-snug line-clamp-2">
-                          {item.title}
-                        </p>
-                        <p className="mt-0.5 text-[11px] text-[#9FB3CC] font-medium truncate">
-                          {item.category}
-                        </p>
-                        <p className="mt-1 text-[10px] text-[#6F86A3] font-mono">
-                          {item.year}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Vertical position indicator dots to the right (NO overlap) */}
-              <div className="flex flex-col items-center gap-1.5 py-1 shrink-0" aria-hidden="true">
-                {filteredProjects.map((p, idx) => {
-                  const isActive = idx === safeIndex;
-                  return (
-                    <button
-                      key={p.slug}
-                      onClick={() => setCurrentIndex(idx)}
-                      className={`rounded-full transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "h-[18px] w-[4px] bg-[#8FB0D6]"
-                          : "h-[4px] w-[4px] bg-white/25 hover:bg-white/50"
-                      }`}
-                      aria-label={`Go to ${p.title}`}
-                    />
-                  );
-                })}
-              </div>
+                    {/* Metadata */}
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className="text-[13px] font-semibold text-white leading-snug truncate"
+                        title={item.title}
+                      >
+                        {item.title}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-[#9FB3CC] font-normal truncate">
+                        {item.category}
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-[#6F86A3] font-mono">
+                        {item.year}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Scroll Down Button */}
@@ -390,125 +369,151 @@ export function WorkPortfolioShowcase() {
               onClick={scrollRailDown}
               type="button"
               aria-label="Next project thumbnail"
-              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer mt-2.5 shrink-0"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer mt-3 shrink-0"
             >
               <ChevronDown size={18} strokeWidth={2.2} />
             </button>
-          </div>
 
-          {/* ─── COLUMN 2: VERTICAL TITLE (64px, visible >= 1200px) ─── */}
-          <div className="hidden xl:flex flex-col justify-end items-center h-full pb-8 select-none">
-            <h3
-              className="font-extrabold uppercase tracking-[-0.03em] leading-none text-white transition-all duration-300"
-              style={{
-                writingMode: "vertical-rl",
-                transform: "rotate(180deg)",
-                fontSize: `${verticalTitleRem}rem`,
-              }}
-            >
-              <span>{currentProject.titlePrefix}</span>{" "}
-              <span className="text-[#8FB0D6]">{currentProject.titleSuffix || ""}</span>
-            </h3>
-          </div>
-
-          {/* ─── COLUMN 3: THE INFO (240px to 300px) ─── */}
-          <div className="flex flex-col justify-center gap-6 h-full py-4 min-w-0">
-            {/* Fallback heading when vertical title is hidden (<1200px) */}
-            <div className="xl:hidden">
-              <h3 className="text-[26px] sm:text-[28px] font-extrabold uppercase tracking-tight text-white leading-tight">
-                {currentProject.titlePrefix}{" "}
-                <span className="text-[#8FB0D6]">{currentProject.titleSuffix || ""}</span>
-              </h3>
-            </div>
-
-            {/* Tagline */}
-            <p className="text-[14px] leading-[1.6] text-[#9FB3CC] line-clamp-4">
-              {currentProject.shortDescription}
-            </p>
-
-            {/* Chips (wrapping, max 4) */}
-            <div className="flex flex-wrap gap-1.5">
-              {currentProject.services.slice(0, 4).map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-md border border-white/[0.12] bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-[#E8EEF7]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* View Project Button */}
-            <div>
-              <Link
-                href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-                target={currentProject.liveUrl ? "_blank" : undefined}
-                rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-                aria-label={`View ${currentProject.title} project`}
-                className="group inline-flex items-center gap-2 rounded-full border border-[rgba(53,87,125,0.22)] bg-gradient-to-b from-white to-[#EEF3FB] px-3 py-1.5 text-[12px] font-semibold text-[#141E30] shadow-[0_4px_12px_rgba(4,9,18,0.25)] transition-all duration-200 hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
-              >
-                <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#2F8BFF] to-[#1B5FD6] text-white">
-                  <svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                  </svg>
-                </span>
-                <span className="font-semibold text-[#141E30]">View project</span>
-                <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full border border-[rgba(53,87,125,0.15)] bg-gradient-to-b from-white to-[#DFE7F2] text-[#141E30]">
-                  <ArrowUpRight size={13} strokeWidth={2.5} />
-                </span>
-              </Link>
+            {/* Horizontal Position Dots under rail (centered) */}
+            <div className="flex items-center justify-center gap-1.5 mt-3 select-none" aria-hidden="true">
+              {filteredProjects.map((p, idx) => {
+                const isActive = idx === safeIndex;
+                return (
+                  <button
+                    key={p.slug}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`rounded-full transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? "h-[5px] w-[18px] bg-[#8FB0D6]"
+                        : "h-[5px] w-[5px] bg-white/25 hover:bg-white/50"
+                    }`}
+                    aria-label={`Go to ${p.title}`}
+                  />
+                );
+              })}
             </div>
           </div>
 
-          {/* ─── COLUMN 4: THE DEVICE (Flexible, centered, aspect 4/3, tilt rotate(-4deg) rotateY(-8deg)) ─── */}
-          <div className="flex flex-col items-center justify-center h-full p-4 lg:p-6 w-full min-w-0" style={{ perspective: "1200px" }}>
-            {/* Small Category label ABOVE tablet (instead of on the screen) */}
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-0.5 text-[11px] font-medium text-[#8FB0D6] mb-3 select-none">
-              {currentProject.category}
-            </span>
-
-            {/* Tablet Mockup */}
+          {/* ─── COLUMN 2: THE INFO (minmax(280px, 340px), VERTICALLY CENTERED) ─── */}
+          <div className="flex flex-col justify-center min-w-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentProject.slug}
-                initial={isReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="relative w-full max-w-[480px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(4,9,18,0.55)] transition-transform duration-500 ease-out flex flex-col"
+                initial={isReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, y: -6, filter: "blur(4px)" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="flex flex-col gap-4"
+              >
+                {/* Category & Year */}
+                <p className="text-[12px] uppercase font-semibold tracking-wider text-[#8FB0D6]">
+                  {currentProject.category} · {currentProject.year}
+                </p>
+
+                {/* Project Name (Normal Horizontal Heading, 38px, replaces vertical title) */}
+                <h2 className="text-[34px] xl:text-[38px] font-semibold text-white leading-[1.1] tracking-tight">
+                  {currentProject.title}
+                </h2>
+
+                {/* Description (max 4 lines) */}
+                <p className="text-[15px] leading-[1.7] text-[#9FB3CC] line-clamp-4">
+                  {currentProject.shortDescription}
+                </p>
+
+                {/* Tag Chips (max 4, 12px, radius 999px, padding 6px 12px) */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {currentProject.services.slice(0, 4).map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[12px] rounded-full px-3 py-1.5 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7] font-medium leading-none"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Buttons: "View project" frosted pill + secondary "Live site ↗" */}
+                <div className="flex flex-wrap items-center gap-4 pt-3">
+                  <Link
+                    href={currentProject.liveUrl || `/work/${currentProject.slug}`}
+                    target={currentProject.liveUrl ? "_blank" : undefined}
+                    rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
+                    aria-label={`View ${currentProject.title} project`}
+                    className="group inline-flex items-center gap-2 rounded-full border border-[rgba(53,87,125,0.22)] bg-gradient-to-b from-white to-[#EEF3FB] px-4 py-2 text-[13px] font-semibold text-[#141E30] shadow-[0_4px_12px_rgba(4,9,18,0.25)] transition-all duration-200 hover:bg-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                  >
+                    <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#2F8BFF] to-[#1B5FD6] text-white">
+                      <svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                      </svg>
+                    </span>
+                    <span>View project</span>
+                    <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full border border-[rgba(53,87,125,0.15)] bg-gradient-to-b from-white to-[#DFE7F2] text-[#141E30]">
+                      <ArrowUpRight size={13} strokeWidth={2.5} />
+                    </span>
+                  </Link>
+
+                  {currentProject.liveUrl && (
+                    <a
+                      href={currentProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#8FB0D6] transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
+                    >
+                      <span>Live site</span>
+                      <ArrowUpRight size={14} strokeWidth={2} />
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* ─── COLUMN 3: THE DEVICE (Tablet / Browser Mockup, centered, min 420px) ─── */}
+          <div className="flex flex-col items-center justify-center w-full min-w-[420px]" style={{ perspective: "1000px" }}>
+            {/* Top Corners: Category Chip (Left) & Live Project Chip (Right) OUT of the screen */}
+            <div className="flex items-center justify-between w-[90%] max-w-[560px] mb-2.5 px-1 select-none">
+              {/* Category chip above top-left corner */}
+              <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
+                {currentProject.category}
+              </span>
+
+              {/* Live Project chip above top-right corner */}
+              {currentProject.liveUrl && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#E8EEF7]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
+                  Live Project
+                </span>
+              )}
+            </div>
+
+            {/* Device Mockup */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentProject.slug}
+                initial={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                className="relative w-[90%] max-w-[560px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_24px_50px_rgba(0,0,0,0.6)] flex flex-col"
                 style={{
-                  transform: isReducedMotion
-                    ? "none"
-                    : "rotate(-4deg) rotateY(-8deg)",
-                  transformStyle: "preserve-3d",
+                  transform: isReducedMotion ? "none" : "rotate(-3deg)",
                 }}
               >
-                {/* Camera dot */}
-                <div className="absolute top-1.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-white/20" />
-
                 {/* Display Screen */}
                 <div className="relative flex-1 w-full overflow-hidden rounded-[16px] bg-[#0A0F1D] flex flex-col">
-                  {/* Slim 28px Browser Bar in Dark Glass */}
+                  {/* Clean 28px Browser Bar on top (Dots + Domain Pill only, NO overlapping chips) */}
                   <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center justify-between z-20">
                     <div className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-red-400" />
-                      <span className="h-2 w-2 rounded-full bg-amber-400" />
-                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                      <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
+                      <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
+                      <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
                       {/* Rounded Address Pill showing real domain */}
-                      <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[170px]">
+                      <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[240px]">
                         {currentProject.liveUrl
                           ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
                           : `${currentProject.slug}.com`}
                       </div>
                     </div>
-
-                    {/* Thin Live Project Chip if live */}
-                    {currentProject.liveUrl && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[9px] font-semibold text-emerald-400">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        Live Project
-                      </span>
-                    )}
                   </div>
 
                   {/* Real Home Page Full Screenshot with Slow Scroll on Hover */}
@@ -520,18 +525,15 @@ export function WorkPortfolioShowcase() {
             {/* Soft Neutral Floor Shadow (No Glow) */}
             <div
               aria-hidden="true"
-              className="pointer-events-none w-[75%] h-[16px] rounded-[100%] bg-black/40 blur-[14px] mt-2"
+              className="pointer-events-none w-[75%] h-[16px] rounded-[100%] bg-black/45 blur-[14px] mt-3"
             />
           </div>
 
-          {/* ─── COLUMN 5: RIGHT GUTTER (72px, vertical category menu on desktop >= 1024px) ─── */}
+          {/* ─── COLUMN 4: CATEGORY MENU (56px, VERTICAL TEXT, CENTERED) ─── */}
           <div
             role="tablist"
             aria-label="Category navigation"
-            className="hidden lg:flex flex-col items-center justify-center gap-[18px] select-none h-full py-6"
-            style={{
-              maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-            }}
+            className="flex flex-col items-center justify-center gap-[16px] select-none h-full py-4 w-[56px]"
           >
             {categoryItems.map((item) => {
               const isActive = activeCategory === item.full;
@@ -561,104 +563,269 @@ export function WorkPortfolioShowcase() {
         </div>
 
         {/* ========================================================
-            MOBILE SINGLE COLUMN LAYOUT (< 700px)
-            Sequence: Counter, Heading, Device (width 92%, tilt -2deg), Tagline, Chips, Button, Horizontal Thumbnails, 3 Buttons
+            MEDIUM VIEW (1024px to 1199px):
+            Grid: 200px | minmax(0, 1fr) | 48px
+            Info placed under device in middle column
             ======================================================== */}
-        <div className="flex min-[700px]:hidden flex-col gap-5 p-5 pt-8 relative z-10">
-          {/* 1. Heading */}
-          <div>
-            <h3 className="text-2xl font-extrabold uppercase tracking-tight text-white leading-tight">
-              {currentProject.titlePrefix}{" "}
-              <span className="text-[#8FB0D6]">{currentProject.titleSuffix || ""}</span>
-            </h3>
+        <div className="hidden lg:grid xl:hidden w-full grid-cols-[200px_minmax(0,1fr)_48px] gap-6 items-center relative z-10 flex-1 py-4">
+          {/* Column 1: Rail 200px */}
+          <div className="flex flex-col items-center justify-center w-[200px]">
+            <button
+              onClick={scrollRailUp}
+              type="button"
+              aria-label="Previous project thumbnail"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer mb-2.5"
+            >
+              <ChevronUp size={18} strokeWidth={2.2} />
+            </button>
+            <div role="tablist" aria-label="Projects rail" className="flex flex-col gap-2.5 w-full">
+              {visibleRailProjects.map((item, idx) => {
+                const origIndex = filteredProjects.findIndex((p) => p.slug === item.slug);
+                const isActive = origIndex === safeIndex;
+                return (
+                  <button
+                    key={`${item.slug}-${idx}`}
+                    role="tab"
+                    type="button"
+                    aria-selected={isActive}
+                    onClick={() => setCurrentIndex(origIndex)}
+                    className={`group relative h-[88px] w-full rounded-[14px] p-2 flex items-center gap-2.5 text-left transition-all duration-300 backdrop-blur-[12px] cursor-pointer overflow-hidden ${
+                      isActive
+                        ? "border border-white/30 bg-white/[0.08] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2px] before:rounded-r before:bg-[#5F86B0]"
+                        : "border border-white/[0.12] bg-white/[0.04] opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    <div className="relative h-[50px] w-[50px] shrink-0 rounded-[10px] overflow-hidden border border-white/10 bg-[#0A0F1D]">
+                      <img
+                        src={`/projects/${item.slug}.webp`}
+                        alt={`Thumbnail for ${item.title}`}
+                        className="h-full w-full object-cover object-top"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[12px] font-semibold text-white truncate" title={item.title}>
+                        {item.title}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-[#9FB3CC] truncate">{item.category}</p>
+                      <p className="mt-0.5 text-[10px] text-[#6F86A3] font-mono">{item.year}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={scrollRailDown}
+              type="button"
+              aria-label="Next project thumbnail"
+              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer mt-2.5"
+            >
+              <ChevronDown size={18} strokeWidth={2.2} />
+            </button>
+            <div className="flex items-center justify-center gap-1.5 mt-2.5" aria-hidden="true">
+              {filteredProjects.map((p, idx) => (
+                <button
+                  key={p.slug}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`rounded-full transition-all duration-300 ${
+                    idx === safeIndex ? "h-[5px] w-[18px] bg-[#8FB0D6]" : "h-[5px] w-[5px] bg-white/25"
+                  }`}
+                  aria-label={`Go to ${p.title}`}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* 2. Device Mockup (width 92%, tilt -2deg) */}
-          <div className="flex flex-col items-center justify-center w-full my-1">
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[10px] font-medium text-[#8FB0D6] mb-2">
-              {currentProject.category}
-            </span>
-
-            <div
-              className="relative w-[92%] aspect-[4/3] rounded-[20px] border border-white/20 bg-[#0B1322] p-2 shadow-[0_16px_36px_rgba(4,9,18,0.55)] flex flex-col"
-              style={{
-                transform: isReducedMotion ? "none" : "rotate(-2deg)",
-              }}
-            >
-              <div className="relative flex-1 w-full overflow-hidden rounded-[14px] bg-[#0A0F1D] flex flex-col">
-                {/* 28px Browser Bar */}
-                <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-2.5 flex items-center justify-between z-20">
-                  <div className="flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    <div className="ml-1.5 rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-white/60 truncate max-w-[130px]">
+          {/* Middle Column: Device on Top + Info Below */}
+          <div className="flex flex-col items-center gap-6 w-full">
+            {/* Device */}
+            <div className="flex flex-col items-center w-full max-w-[500px]">
+              <div className="flex items-center justify-between w-full mb-2 px-1 select-none">
+                <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
+                  {currentProject.category}
+                </span>
+                {currentProject.liveUrl && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#E8EEF7]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
+                    Live Project
+                  </span>
+                )}
+              </div>
+              <div
+                className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col"
+                style={{ transform: isReducedMotion ? "none" : "rotate(-3deg)" }}
+              >
+                <div className="relative flex-1 w-full overflow-hidden rounded-[14px] bg-[#0A0F1D] flex flex-col">
+                  <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center gap-1.5 z-20">
+                    <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
+                    <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
+                    <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
+                    <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[200px]">
                       {currentProject.liveUrl
                         ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
                         : `${currentProject.slug}.com`}
                     </div>
                   </div>
-                  {currentProject.liveUrl && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 text-[8px] font-semibold text-emerald-400">
-                      Live
-                    </span>
-                  )}
+                  <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
                 </div>
+              </div>
+              <div aria-hidden="true" className="w-[75%] h-[14px] rounded-[100%] bg-black/45 blur-[12px] mt-2.5" />
+            </div>
 
+            {/* Info Under Device */}
+            <div className="flex flex-col items-center text-center max-w-[480px] gap-3">
+              <h2 className="text-[28px] font-semibold text-white leading-tight">
+                {currentProject.title}
+              </h2>
+              <p className="text-[14px] leading-relaxed text-[#9FB3CC] line-clamp-3">
+                {currentProject.shortDescription}
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 pt-1">
+                {currentProject.services.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[12px] rounded-full px-3 py-1 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center gap-4 pt-2">
+                <Link
+                  href={currentProject.liveUrl || `/work/${currentProject.slug}`}
+                  target={currentProject.liveUrl ? "_blank" : undefined}
+                  rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
+                  className="button-white button-small inline-flex items-center gap-2"
+                >
+                  <span>View project</span>
+                  <ArrowUpRight size={14} />
+                </Link>
+                {currentProject.liveUrl && (
+                  <a
+                    href={currentProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[13px] text-[#8FB0D6] hover:text-white"
+                  >
+                    Live site ↗
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3: Category Menu (48px) */}
+          <div
+            role="tablist"
+            aria-label="Category navigation"
+            className="flex flex-col items-center justify-center gap-[14px] select-none h-full py-4 w-[48px]"
+          >
+            {categoryItems.map((item) => {
+              const isActive = activeCategory === item.full;
+              return (
+                <button
+                  key={item.short}
+                  role="tab"
+                  type="button"
+                  aria-selected={isActive}
+                  onClick={() => handleCategoryChange(item.full)}
+                  title={item.full}
+                  aria-label={item.full}
+                  className={`text-[11px] tracking-[0.14em] font-medium uppercase py-1 ${
+                    isActive ? "text-white font-semibold relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-[2px] after:h-2.5 after:bg-[#5F86B0]" : "text-[#9FB3CC] hover:text-white"
+                  }`}
+                  style={{ writingMode: "vertical-rl" }}
+                >
+                  {item.short}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ========================================================
+            TABLET VIEW (700px to 1023px)
+            Single column stage with device on top, info under, horizontal rail under
+            ======================================================== */}
+        <div className="hidden min-[700px]:flex lg:hidden flex-col items-center gap-6 py-4 relative z-10 w-full">
+          {/* Device */}
+          <div className="flex flex-col items-center w-full max-w-[500px]">
+            <div className="flex items-center justify-between w-full mb-2 px-1 select-none">
+              <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
+                {currentProject.category}
+              </span>
+              {currentProject.liveUrl && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#E8EEF7]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
+                  Live Project
+                </span>
+              )}
+            </div>
+            <div
+              className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col"
+              style={{ transform: isReducedMotion ? "none" : "rotate(-2deg)" }}
+            >
+              <div className="relative flex-1 w-full overflow-hidden rounded-[14px] bg-[#0A0F1D] flex flex-col">
+                <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center gap-1.5 z-20">
+                  <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
+                  <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
+                  <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
+                  <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[200px]">
+                    {currentProject.liveUrl
+                      ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
+                      : `${currentProject.slug}.com`}
+                  </div>
+                </div>
                 <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
               </div>
             </div>
-
-            {/* Floor shadow */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none w-[70%] h-[12px] rounded-[100%] bg-black/40 blur-[10px] mt-2"
-            />
+            <div aria-hidden="true" className="w-[75%] h-[14px] rounded-[100%] bg-black/45 blur-[12px] mt-2.5" />
           </div>
 
-          {/* 3. Tagline */}
-          <p className="text-[14px] leading-[1.6] text-[#9FB3CC]">
-            {currentProject.shortDescription}
-          </p>
-
-          {/* 4. Chips */}
-          <div className="flex flex-wrap gap-1.5">
-            {currentProject.services.slice(0, 4).map((tag) => (
-              <span
-                key={tag}
-                className="rounded-md border border-white/[0.12] bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-[#E8EEF7]"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* 5. View project button */}
-          <div>
-            <Link
-              href={currentProject.liveUrl || `/work/${currentProject.slug}`}
-              target={currentProject.liveUrl ? "_blank" : undefined}
-              rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
-              className="group inline-flex items-center gap-2 rounded-full border border-[rgba(53,87,125,0.22)] bg-gradient-to-b from-white to-[#EEF3FB] px-3.5 py-2 text-[12px] font-semibold text-[#141E30] shadow-[0_4px_12px_rgba(4,9,18,0.25)]"
-            >
-              <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#2F8BFF] to-[#1B5FD6] text-white">
-                <svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 24 24">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              </span>
-              <span>View project</span>
-              <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full border border-[rgba(53,87,125,0.15)] bg-gradient-to-b from-white to-[#DFE7F2] text-[#141E30]">
-                <ArrowUpRight size={13} strokeWidth={2.5} />
-              </span>
-            </Link>
-          </div>
-
-          {/* 6. Horizontal Thumbnails Row with Swipe */}
-          <div className="pt-3 border-t border-white/10">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#9FB3CC] mb-2">
-              All Projects
+          {/* Info */}
+          <div className="flex flex-col items-center text-center max-w-[520px] gap-3">
+            <h2 className="text-[30px] font-semibold text-white leading-tight">
+              {currentProject.title}
+            </h2>
+            <p className="text-[15px] leading-relaxed text-[#9FB3CC] line-clamp-3">
+              {currentProject.shortDescription}
             </p>
-            <div className="flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+            <div className="flex flex-wrap justify-center gap-2 pt-1">
+              {currentProject.services.slice(0, 4).map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[12px] rounded-full px-3 py-1 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 pt-2">
+              <Link
+                href={currentProject.liveUrl || `/work/${currentProject.slug}`}
+                target={currentProject.liveUrl ? "_blank" : undefined}
+                rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
+                className="button-white button-small inline-flex items-center gap-2"
+              >
+                <span>View project</span>
+                <ArrowUpRight size={14} />
+              </Link>
+              {currentProject.liveUrl && (
+                <a
+                  href={currentProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[13px] text-[#8FB0D6] hover:text-white"
+                >
+                  Live site ↗
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Horizontal Rail of Cards */}
+          <div className="w-full pt-4 border-t border-white/10">
+            <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar justify-center">
               {filteredProjects.map((p, idx) => {
                 const isActive = idx === safeIndex;
                 return (
@@ -666,13 +833,13 @@ export function WorkPortfolioShowcase() {
                     key={p.slug}
                     type="button"
                     onClick={() => setCurrentIndex(idx)}
-                    className={`flex h-[76px] w-[160px] shrink-0 items-center gap-2.5 rounded-xl p-2 text-left transition-all ${
+                    className={`flex h-[76px] w-[170px] shrink-0 items-center gap-2.5 rounded-xl p-2 text-left transition-all ${
                       isActive
                         ? "border border-white/35 bg-white/[0.12]"
-                        : "border border-white/10 bg-white/[0.05] opacity-75"
+                        : "border border-white/10 bg-white/[0.05] opacity-75 hover:opacity-100"
                     }`}
                   >
-                    <div className="relative h-[42px] w-[48px] shrink-0 rounded-lg overflow-hidden bg-[#0A0F1D]">
+                    <div className="relative h-[44px] w-[44px] shrink-0 rounded-lg overflow-hidden bg-[#0A0F1D]">
                       <img
                         src={`/projects/${p.slug}.webp`}
                         alt={p.title}
@@ -691,47 +858,212 @@ export function WorkPortfolioShowcase() {
         </div>
 
         {/* ========================================================
-            THREE ROUND BUTTONS (Previous, Next, Open live site)
-            Bottom right inside stage with 24px from edges, 36px each, 10px gap
-            On mobile (<700px), centered below
+            MOBILE SINGLE COLUMN LAYOUT (< 700px)
+            Sequence: Counter, Device (94%, tilt -2deg), Project Name (28px),
+            Description, Chips, Buttons, Swipeable Thumbnail Row, 3 Round Buttons Centered
+            Stage padding: 20px
             ======================================================== */}
-        <div className="flex min-[700px]:absolute min-[700px]:bottom-6 min-[700px]:right-8 z-30 items-center justify-center min-[700px]:justify-end gap-[10px] p-4 min-[700px]:p-0">
-          {/* Previous Button */}
-          <button
-            onClick={handlePrev}
-            type="button"
-            aria-label="Previous project"
-            className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
-          >
-            <ChevronLeft size={17} strokeWidth={2.2} />
-          </button>
+        <div className="flex min-[700px]:hidden flex-col gap-4 relative z-10 w-full">
+          {/* Top Row: Counter & Category / Live Badges */}
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FB0D6]">
+            <span>{formattedIndex} / {formattedTotal}</span>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[10px] text-[#8FB0D6]">
+                {currentProject.category}
+              </span>
+              {currentProject.liveUrl && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[10px] text-[#E8EEF7]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
+                  Live
+                </span>
+              )}
+            </div>
+          </div>
 
-          {/* Next Button */}
-          <button
-            onClick={handleNext}
-            type="button"
-            aria-label="Next project"
-            className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
-          >
-            <ChevronRight size={17} strokeWidth={2.2} />
-          </button>
-
-          {/* Open Live Site Button */}
-          {currentProject.liveUrl && (
-            <a
-              href={currentProject.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Open live website for ${currentProject.title}`}
-              className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+          {/* Device Mockup (width 94%, tilt -2deg) */}
+          <div className="flex flex-col items-center justify-center w-full my-1">
+            <div
+              className="relative w-[94%] aspect-[4/3] rounded-[18px] border border-white/20 bg-[#0B1322] p-2 shadow-[0_16px_36px_rgba(0,0,0,0.6)] flex flex-col"
+              style={{ transform: isReducedMotion ? "none" : "rotate(-2deg)" }}
             >
-              <ExternalLink size={15} strokeWidth={2.2} />
-            </a>
-          )}
-        </div>
-      </div>
+              <div className="relative flex-1 w-full overflow-hidden rounded-[12px] bg-[#0A0F1D] flex flex-col">
+                <div className="h-[26px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-2.5 flex items-center gap-1 z-20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FF5F56]/80" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]/80" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#27C93F]/80" />
+                  <div className="ml-1.5 rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-white/60 truncate max-w-[140px]">
+                    {currentProject.liveUrl
+                      ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
+                      : `${currentProject.slug}.com`}
+                  </div>
+                </div>
+                <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
+              </div>
+            </div>
+            <div aria-hidden="true" className="w-[70%] h-[12px] rounded-[100%] bg-black/45 blur-[10px] mt-2" />
+          </div>
 
-      {/* Complete Accessible SEO Fallback for all projects */}
+          {/* Project Name (28px) */}
+          <h2 className="text-[28px] font-semibold text-white leading-tight mt-1">
+            {currentProject.title}
+          </h2>
+
+          {/* Description */}
+          <p className="text-[14px] leading-[1.65] text-[#9FB3CC]">
+            {currentProject.shortDescription}
+          </p>
+
+          {/* Chips */}
+          <div className="flex flex-wrap gap-1.5">
+            {currentProject.services.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="text-[11px] rounded-full px-2.5 py-1 bg-white/[0.06] border border-white/[0.14] text-[#E8EEF7]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Buttons: View project & Live site */}
+          <div className="flex items-center gap-3 pt-1">
+            <Link
+              href={currentProject.liveUrl || `/work/${currentProject.slug}`}
+              target={currentProject.liveUrl ? "_blank" : undefined}
+              rel={currentProject.liveUrl ? "noopener noreferrer" : undefined}
+              className="button-white button-small inline-flex items-center gap-2"
+            >
+              <span>View project</span>
+              <ArrowUpRight size={14} />
+            </Link>
+            {currentProject.liveUrl && (
+              <a
+                href={currentProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[13px] text-[#8FB0D6] hover:text-white"
+              >
+                Live site ↗
+              </a>
+            )}
+          </div>
+
+          {/* Swipeable Thumbnails Row */}
+          <div className="pt-3 border-t border-white/10 mt-2">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+              {filteredProjects.map((p, idx) => {
+                const isActive = idx === safeIndex;
+                return (
+                  <button
+                    key={p.slug}
+                    type="button"
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`flex h-[68px] w-[148px] shrink-0 items-center gap-2 rounded-xl p-2 text-left transition-all ${
+                      isActive
+                        ? "border border-white/35 bg-white/[0.12]"
+                        : "border border-white/10 bg-white/[0.05] opacity-75"
+                    }`}
+                  >
+                    <div className="relative h-[38px] w-[38px] shrink-0 rounded-lg overflow-hidden bg-[#0A0F1D]">
+                      <img
+                        src={`/projects/${p.slug}.webp`}
+                        alt={p.title}
+                        className="h-full w-full object-cover object-top"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-bold text-white truncate">{p.title}</p>
+                      <p className="text-[10px] text-[#9FB3CC] truncate">{p.category}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Centered 3 Round Buttons on Mobile */}
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <button
+              onClick={handlePrev}
+              type="button"
+              aria-label="Previous project"
+              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
+            >
+              <ChevronLeft size={18} strokeWidth={2.2} />
+            </button>
+            <button
+              onClick={handleNext}
+              type="button"
+              aria-label="Next project"
+              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] cursor-pointer"
+            >
+              <ChevronRight size={18} strokeWidth={2.2} />
+            </button>
+            {currentProject.liveUrl && (
+              <a
+                href={currentProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open live website for ${currentProject.title}`}
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16]"
+              >
+                <ExternalLink size={16} strokeWidth={2.2} />
+              </a>
+            )}
+          </div>
+        </div>
+
+        {/* ========================================================
+            BOTTOM BAR INSIDE THE STAGE (DESKTOP & TABLET >= 700px)
+            Below grid, full width, 1px top divider rgba(143,176,214,0.14), 20px padding above
+            Left: Counter "01 / 07", Right: 3 round buttons (40px, glass style)
+            Never overlaps menu or stage content
+            ======================================================== */}
+        <div className="hidden min-[700px]:flex items-center justify-between w-full mt-6 pt-5 border-t border-[rgba(143,176,214,0.14)] relative z-20">
+          {/* Counter */}
+          <div
+            aria-label={`Project ${formattedIndex} of ${formattedTotal}`}
+            className="font-mono text-[13px] font-bold tracking-[0.14em] text-[#8FB0D6] select-none"
+          >
+            {formattedIndex} / {formattedTotal}
+          </div>
+
+          {/* Three Round Buttons (Previous, Next, Open live site) */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handlePrev}
+              type="button"
+              aria-label="Previous project"
+              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
+            >
+              <ChevronLeft size={18} strokeWidth={2.2} />
+            </button>
+
+            <button
+              onClick={handleNext}
+              type="button"
+              aria-label="Next project"
+              className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer"
+            >
+              <ChevronRight size={18} strokeWidth={2.2} />
+            </button>
+
+            {currentProject.liveUrl && (
+              <a
+                href={currentProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open live website for ${currentProject.title}`}
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+              >
+                <ExternalLink size={16} strokeWidth={2.2} />
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Accessible SEO Fallback for search engines & assistive technology */}
       <div className="sr-only">
         <h2>All Portfolio Projects</h2>
         <ul>

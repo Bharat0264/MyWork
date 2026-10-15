@@ -5,6 +5,7 @@ import { ArrowUpRight, Mail, Phone, ArrowUp, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
+import { StartProjectButton } from "@/components/cta-button";
 
 const navItems = [
   { label: "Work", href: "/work", id: "work" },
@@ -254,9 +255,7 @@ export function Navbar() {
 
           {/* Right: CTA Button */}
           <div className="flex items-center justify-end min-w-[200px]">
-            <Link href="/contact" className="button button-small">
-              Start a project <ArrowUpRight size={15} />
-            </Link>
+            <StartProjectButton size="md" />
           </div>
         </div>
 
@@ -279,9 +278,7 @@ export function Navbar() {
             <span className="sr-only">Garuda Web Designer and Developer</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/contact" className="button button-small !py-2 !px-3.5 !text-xs font-semibold">
-              Start a project <ArrowUpRight size={14} />
-            </Link>
+            <StartProjectButton size="sm" />
             <button
               type="button"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -389,15 +386,9 @@ export function Footer() {
             <p className="mt-5 max-w-[340px] text-[14.5px] leading-relaxed text-[#A6AFBE]">
               We design and develop modern, high-performance websites that help businesses grow in the digital world.
             </p>
-            <Link
-              href="/contact"
-              className="group mt-6 inline-flex items-center gap-4 rounded-full border border-[#168BFF]/75 bg-[#080e1c] pl-6 pr-2 py-2 text-[15px] font-medium text-[#F5F7FA] transition-all duration-300 hover:border-[#168BFF] hover:bg-[#0c162e] hover:shadow-[0_0_16px_rgba(22,139,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#168BFF]"
-            >
-              <span>Start a project</span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#168BFF] text-white transition-transform duration-300 group-hover:scale-105 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <ArrowUpRight size={16} strokeWidth={2.5} />
-              </span>
-            </Link>
+            <div className="mt-6">
+              <StartProjectButton size="md" />
+            </div>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -543,4 +534,4 @@ export function Footer() {
     </motion.footer>
   );
 }
-export function CTA(){return <section className="wrap py-24"><div className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_75%_0%,rgba(124,108,255,.23),transparent_34%),#101014] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-.055em] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><Link className="button" href="/contact">Start a project <ArrowUpRight size={16}/></Link></div></div></section>}
+export function CTA(){return <section className="wrap py-24"><div className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_75%_0%,rgba(124,108,255,.23),transparent_34%),#101014] px-7 py-14 text-center sm:px-12"><p className="eyebrow">Let’s make it useful</p><h2 className="mt-5 text-balance text-4xl font-semibold tracking-[-.055em] sm:text-6xl">Have an idea? Let’s turn it into something people love using.</h2><div className="mt-8 flex justify-center"><StartProjectButton size="lg" /></div></div></section>}

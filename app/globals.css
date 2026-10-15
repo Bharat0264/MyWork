@@ -152,4 +152,56 @@
   }
 }
 
+/* --- PREMIUM GARUDA CTA BUTTON STYLES --- */
+.garuda-cta-capsule {
+  background: #050B18;
+  border: 1.5px solid transparent;
+  background-image: linear-gradient(#050B18, #050B18), linear-gradient(180deg, #00D4FF 0%, #168BFF 45%, #0B4BA2 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 22px rgba(22, 139, 255, 0.48), 0 0 8px rgba(0, 212, 255, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.18), inset 0 -2px 8px rgba(22, 139, 255, 0.25);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.garuda-cta-capsule:hover {
+  background-image: linear-gradient(#060E22, #060E22), linear-gradient(180deg, #38E4FF 0%, #2998FF 45%, #125BBD 100%);
+  box-shadow: 0 0 34px rgba(22, 139, 255, 0.7), 0 0 16px rgba(0, 212, 255, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.28), inset 0 -2px 10px rgba(22, 139, 255, 0.38);
+  transform: translateY(-1px);
+}
+
+.garuda-cta-capsule:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 0 14px rgba(22, 139, 255, 0.35), inset 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.garuda-cta-dial {
+  background: radial-gradient(circle at 45% 35%, #2CA6FF 0%, #168BFF 50%, #0B52BA 100%);
+  border: 1.5px solid #00D4FF;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 0 16px rgba(0, 212, 255, 0.45);
+  overflow: hidden;
+}
+
+.garuda-cta-capsule:hover .garuda-cta-dial {
+  background: radial-gradient(circle at 45% 35%, #47B4FF 0%, #2696FF 50%, #105EC9 100%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.85), 0 0 24px rgba(0, 212, 255, 0.7);
+}
+
+.garuda-cta-knurl {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpolygon points='4,0 4,4 0,4' fill='rgba(255,255,255,0.45)'/%3E%3Cpolygon points='4,0 8,4 4,4' fill='rgba(255,255,255,0.2)'/%3E%3Cpolygon points='0,4 4,4 4,8' fill='rgba(0,0,0,0.25)'/%3E%3Cpolygon points='4,4 8,4 4,8' fill='rgba(0,0,0,0.5)'/%3E%3Cpolygon points='0,0 4,0 0,4' fill='rgba(0,0,0,0.5)'/%3E%3Cpolygon points='8,0 8,4 4,0' fill='rgba(0,0,0,0.25)'/%3E%3Cpolygon points='0,8 0,4 4,8' fill='rgba(255,255,255,0.2)'/%3E%3Cpolygon points='8,8 4,8 8,4' fill='rgba(255,255,255,0.45)'/%3E%3C/svg%3E");
+  background-size: 6px 6px;
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garuda-cta-capsule,
+  .garuda-cta-dial,
+  .garuda-cta-capsule * {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+
 

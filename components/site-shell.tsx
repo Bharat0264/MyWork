@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image"; import Link from "next/link"; import { ArrowUpRight, Menu, X, Mail, Phone, MapPin, ArrowUp } from "lucide-react"; import { motion } from "framer-motion"; import { useState } from "react"; import { siteConfig } from "@/config/site";
+import Image from "next/image"; import Link from "next/link"; import { ArrowUpRight, Menu, X, Mail, Phone, ArrowUp } from "lucide-react"; import { motion } from "framer-motion"; import { useState } from "react"; import { siteConfig } from "@/config/site";
 const links = [["Work","/work"],["Services","/services"],["About","/about"],["Contact","/contact"]] as const;
 export function Navbar(){const [open,setOpen]=useState(false);return <motion.header initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050505cc] backdrop-blur-md"><nav className="wrap flex h-24 items-center justify-between"><Link href="/" aria-label="Garuda Web Designer and Developer" className="navbar-logo flex items-center shrink-0"><picture className="hidden sm:block"><source srcSet="/logo-full.webp" type="image/webp" /><img src="/logo-full.png" srcSet="/logo-full.png 1x, /logo-full.png 2x" alt="Garuda Web Designer and Developer" width={191} height={64} loading="eager" draggable={false} className="h-[52px] w-auto max-w-[280px] object-contain min-[900px]:h-[64px]" /></picture><picture className="block sm:hidden"><img src="/logo-eagle.png" srcSet="/logo-eagle.png 1x, /logo-eagle.png 2x" alt="Garuda Web Designer and Developer" width={44} height={44} loading="eager" draggable={false} className="h-[44px] w-auto object-contain" /></picture><span className="sr-only">Garuda Web Designer and Developer</span></Link><div className="hidden items-center gap-7 md:flex">{links.map(([label,href])=><Link className="nav-link" href={href} key={href}>{label}</Link>)}<Link href="/contact" className="button button-small">Start a project <ArrowUpRight size={15}/></Link></div><button aria-label="Toggle menu" className="md:hidden" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></nav>{open&&<div className="wrap flex flex-col gap-5 border-t border-white/10 py-7 md:hidden">{links.map(([label,href])=><Link onClick={()=>setOpen(false)} className="text-2xl font-semibold" href={href} key={href}>{label}</Link>)}<Link onClick={()=>setOpen(false)} href="/contact" className="button w-fit">Start a project</Link></div>}</motion.header>}
 const quickLinks = [
@@ -130,16 +130,6 @@ export function Footer() {
                 </span>
                 <span>{siteConfig.phone}</span>
               </a>
-
-              <div className="flex items-center gap-3.5">
-                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] border border-[#168BFF]/25 bg-[#091326] text-[#168BFF]">
-                  <MapPin size={18} strokeWidth={2} />
-                </span>
-                <div className="flex flex-col">
-                  <span className="text-[14.5px] font-medium text-[#F5F7FA]">Available Worldwide</span>
-                  <span className="text-[12.5px] text-[#A6AFBE]">Remote Collaboration</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

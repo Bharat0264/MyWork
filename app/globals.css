@@ -64,6 +64,7 @@
     --header-gap: 24px;
     --page-bottom-gap: 56px;
     --container-pad: 20px;
+    --text-faint: #B8C9DE;
   }
 }
 
@@ -1323,8 +1324,9 @@ h1, h2, h3, h4, h5, h6 {
   .eyebrow { font-size: 13px; letter-spacing: .16em; color: #A9C8EB; }
   main > section.wrap:not(#work):not(:first-child) { padding-top: 48px; padding-bottom: 48px; }
   main p.text-sm { font-size: 16px; line-height: 1.5; }
-  main [class*="text-[10px]"], main [class*="text-[11px]"], main [class*="text-[12px]"],
-  footer [class*="text-[11px]"], footer [class*="text-[12px]"] { font-size: 13px; }
+  main .text-xs, footer .text-xs, main [class*="text-[9px]"], main [class*="text-[10px]"],
+  main [class*="text-[11px]"], main [class*="text-[12px]"], footer [class*="text-[11px]"],
+  footer [class*="text-[12px]"], .contact-form__field > p { font-size: 13px; }
   main [class*="text-[#6F86A3]"], footer [class*="text-[#6F86A3]"] { color: #B8C9DE; }
   .button, .button-white, .button-primary, .button-secondary,
   .btn-liquid:not(.btn-liquid--navbar-mobile), .btn-view-project, .contact-form__submit {
@@ -1335,6 +1337,8 @@ h1, h2, h3, h4, h5, h6 {
   .contact-form { padding: 20px; border-radius: 24px; }
   .contact-form__control { height: 52px; }
   .contact-form__textarea-control { height: auto; }
+  .contact-form__control input::placeholder, .contact-form__control textarea::placeholder,
+  .contact-form__select-control select[data-placeholder="true"] { color: #B8C9DE; }
   .contact-form__submit { transition: transform .25s ease-out; }
   footer a[aria-label^="Garuda on"] { min-width: 44px; min-height: 44px; }
   footer button[aria-label="Back to top"] { min-height: 44px; }

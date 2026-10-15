@@ -1,16 +1,10 @@
 import { Navbar, Footer } from "@/components/site-shell";
+import { AboutCardStack } from "@/components/about-card-stack";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About | Garuda Web Designer and Developer",
   description: "I work across product design, development, business workflows, automation, SEO and digital presence.",
-};
-
-const groups = {
-  Frontend: ["React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS", "HTML / CSS"],
-  Backend: ["Node.js", "Express", "REST APIs", "Authentication"],
-  Data: ["MongoDB", "SQL", "Cloud databases"],
-  "Tools & Growth": ["Git / GitHub", "Vercel", "Render", "SEO", "Analytics", "Payment integration"],
 };
 
 export default function About() {
@@ -19,33 +13,22 @@ export default function About() {
       <Navbar />
       <main className="pt-36">
         <section className="wrap pb-14 sm:pb-20">
-          <p className="eyebrow">About</p>
-          <h1 className="hero-heading mt-5 max-w-4xl font-semibold">
-            I build digital experiences that solve real business problems.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-[var(--text-muted)]">
-            I work across product design, development, business workflows, automation, SEO and digital presence—bringing the pieces together into work that looks clear and works hard.
-          </p>
+          {/* HEADER */}
+          <div className="max-w-[1200px]">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#8FB0D6]">
+              About
+            </p>
+            <h1 className="mt-5 max-w-[760px] text-white font-semibold text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.12] tracking-[-0.02em]">
+              I build digital experiences that solve real business problems.
+            </h1>
+            <p className="mt-7 max-w-[560px] text-[17px] leading-[1.65] text-[#9FB3CC]">
+              I work across product design, development, business workflows, automation, SEO and digital presence—bringing the pieces together into work that looks clear and works hard.
+            </p>
+          </div>
 
-          <div className="mt-20 grid gap-8 sm:grid-cols-2">
-            {Object.entries(groups).map(([name, items]) => (
-              <section
-                key={name}
-                className="rounded-[var(--radius-card)] border border-[var(--border)] bg-gradient-to-br from-[#1B2B45]/60 to-[#141E30]/70 p-7 sm:p-8 shadow-[var(--shadow-soft)]"
-              >
-                <h2 className="card-heading text-[var(--text)]">{name}</h2>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {items.map((x) => (
-                    <span
-                      className="rounded-full border border-[var(--border)] bg-[#141E30]/80 px-3.5 py-1.5 text-sm text-[var(--text)] transition-colors hover:border-[var(--border-strong)] hover:bg-[#1B2B45]"
-                      key={x}
-                    >
-                      {x}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            ))}
+          {/* THE STAGE: Interactive Stacked Cards */}
+          <div className="mt-14">
+            <AboutCardStack />
           </div>
         </section>
       </main>

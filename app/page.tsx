@@ -103,10 +103,11 @@ export default function Home() {
                 <p className="home-hero__description text-[#B8C9DE]">
                   We design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.
                 </p>
-                <div className="home-hero__actions flex flex-col items-stretch sm:flex-row sm:flex-wrap sm:items-center">
-                  <StartProjectButton className="home-hero__primary w-full sm:w-auto sm:max-w-[320px]" label="Start your project" />
+                <div className="home-hero__actions">
+                  <StartProjectButton className="home-hero__primary" label="Start your project" />
                   <Link className="home-hero__secondary button-secondary" href="/work" prefetch={true}>
-                    View our work <ArrowUpRight size={16} />
+                    <span>View our work</span>
+                    <ArrowUpRight size={16} />
                   </Link>
                 </div>
                 <p className="home-hero__trust text-[#C3D5EA]">{heroTrustLine}</p>

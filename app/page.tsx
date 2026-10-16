@@ -22,26 +22,26 @@ const heroTrustLine = "Free consultation · Reply within 24 hours";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Garuda · Freelance Web Designer & Developer",
+    absolute: "Garuda · Web Design & Development Studio",
   },
   description:
-    "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
+    "We design and build fast, mobile-friendly websites for businesses and startups. Based in Chennai, working worldwide.",
   alternates: {
     canonical: "https://my-work-umber.vercel.app",
   },
   openGraph: {
-    title: "Garuda · Freelance Web Designer & Developer",
+    title: "Garuda · Web Design & Development Studio",
     description:
-      "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
+      "We design and build fast, mobile-friendly websites for businesses and startups. Based in Chennai, working worldwide.",
     url: "https://my-work-umber.vercel.app",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda · Freelance Web Designer & Developer" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda · Web Design & Development Studio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Garuda · Freelance Web Designer & Developer",
+    title: "Garuda · Web Design & Development Studio",
     description:
-      "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
+      "We design and build fast, mobile-friendly websites for businesses and startups. Based in Chennai, working worldwide.",
     images: ["/og-image.png"],
   },
 };
@@ -54,12 +54,12 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "Garuda Web Designer and Developer",
+    name: "Garuda Web Design & Development Studio",
     url: "https://my-work-umber.vercel.app",
     image: "https://my-work-umber.vercel.app/og-image.png",
     logo: "https://my-work-umber.vercel.app/logo-full.png",
     description:
-      "I design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.",
+      "A tight-knit web design & development studio. We design and build fast, mobile-friendly websites for businesses and startups.",
     telephone: siteConfig.phone,
     email: siteConfig.email,
     priceRange: "$$",
@@ -95,18 +95,18 @@ export default function Home() {
               <div className="home-hero__content flex min-w-0 flex-col justify-center">
                 <p className="eyebrow flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
-                  Freelance web designer &amp; developer
+                  Web design &amp; development studio
                 </p>
                 <h1 className="hero-heading font-semibold text-white">
                   Websites that look premium and bring you customers.
                 </h1>
                 <p className="home-hero__description text-[#B8C9DE]">
-                  I design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.
+                  We design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.
                 </p>
                 <div className="home-hero__actions flex flex-col items-stretch sm:flex-row sm:flex-wrap sm:items-center">
                   <StartProjectButton className="home-hero__primary w-full sm:w-auto sm:max-w-[320px]" label="Start your project" />
                   <Link className="home-hero__secondary button-secondary" href="/work" prefetch={true}>
-                    View my work <ArrowUpRight size={16} />
+                    View our work <ArrowUpRight size={16} />
                   </Link>
                 </div>
                 <p className="home-hero__trust text-[#C3D5EA]">{heroTrustLine}</p>
@@ -305,17 +305,17 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            5. WHY WORK WITH ME
+            5. WHY WORK WITH US
             ======================================================== */}
         <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60 py-[calc(var(--section-gap)/2)]">
           <Container className="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-16 items-center">
             <div>
-              <p className="eyebrow text-[#8FB0D6]">Why work with me</p>
+              <p className="eyebrow text-[#8FB0D6]">Why work with us</p>
               <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
                 Your website is your first impression.
               </h2>
               <p className="mt-4 max-w-md text-base leading-7 text-[#B8C9DE]">
-                Customers check your website before they call you. I build sites that look credible, load fast and make it easy to contact you.
+                Customers check your website before they call you. We build sites that look credible, load fast and make it easy to contact you.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">

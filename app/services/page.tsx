@@ -13,24 +13,24 @@ const ServicesGlassShowcase = dynamic(
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Web Design & Development Services · Garuda",
+    absolute: "Web Design & Development Services · Garuda Studio",
   },
   description:
-    "Website design, redesign, full-stack development, e-commerce and SEO services.",
+    "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
   alternates: {
     canonical: "https://my-work-umber.vercel.app/services",
   },
   openGraph: {
-    title: "Web Design & Development Services · Garuda",
-    description: "Website design, redesign, full-stack development, e-commerce and SEO services.",
+    title: "Web Design & Development Services · Garuda Studio",
+    description: "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
     url: "https://my-work-umber.vercel.app/services",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Design & Development Services" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Studio Web Design & Development Services" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design & Development Services · Garuda",
-    description: "Website design, redesign, full-stack development, e-commerce and SEO services.",
+    title: "Web Design & Development Services · Garuda Studio",
+    description: "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
     images: ["/og-image.png"],
   },
 };

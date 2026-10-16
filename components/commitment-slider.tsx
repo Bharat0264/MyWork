@@ -5,13 +5,13 @@ import { Clock3, ScanLine, Smartphone, Gauge, MessagesSquare, RefreshCw, HeartHa
 
 // Edit the promises here; the cards, dots, and labels update together.
 const commitments = [
-  { title: "On-time delivery", promise: "I agree on a deadline and stick to it.", tag: "Commitment", icon: Clock3 },
+  { title: "On-time delivery", promise: "We agree on a deadline and stick to it.", tag: "Commitment", icon: Clock3 },
   { title: "Pixel-perfect quality", promise: "Every spacing, font and color is checked before launch.", tag: "Quality", icon: ScanLine },
   { title: "Mobile-first", promise: "Optimized on real phones so you look great on every device.", tag: "User Experience", icon: Smartphone },
   { title: "Fast and SEO-ready", promise: "Built for speed so customers and Google both stay.", tag: "Performance", icon: Gauge },
   { title: "Clear Communication", promise: "Regular updates, simple process, no surprises.", tag: "Collaboration", icon: MessagesSquare },
-  { title: "Free revisions", promise: "I keep improving until you are happy.", tag: "Satisfaction", icon: RefreshCw },
-  { title: "After-launch support", promise: "I stay with you after the website goes live.", tag: "Care", icon: HeartHandshake },
+  { title: "Free revisions", promise: "We keep improving until you are happy.", tag: "Satisfaction", icon: RefreshCw },
+  { title: "After-launch support", promise: "We stay with you after the website goes live.", tag: "Care", icon: HeartHandshake },
 ] as const;
 
 const AUTOPLAY_MS = 3500;
@@ -52,7 +52,7 @@ export function CommitmentSlider() {
   return (
     <div
       className="commitment-slider"
-      aria-label="My commitments"
+      aria-label="Our commitments"
       onMouseEnter={() => { if (window.matchMedia("(hover: hover)").matches) setPaused(true); }}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}

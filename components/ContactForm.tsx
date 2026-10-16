@@ -243,7 +243,7 @@ export function ContactForm() {
           role="status"
           aria-live="polite"
         >
-          Thanks! Your message is on its way. I&apos;ll reply within 24 hours.
+          Thanks! Your message is on its way. We&apos;ll reply within 24 hours.
         </p>
       )}
 

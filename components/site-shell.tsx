@@ -361,7 +361,7 @@ export function Footer() {
               </picture>
             </Link>
             <p className="mt-3 max-w-[340px] text-[15px] leading-[1.65] text-[#B8C9DE] sm:mt-4">
-              Freelance web designer and developer building fast, modern websites.
+              Web design and development studio building fast, modern websites.
             </p>
           </div>
 

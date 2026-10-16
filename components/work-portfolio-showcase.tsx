@@ -185,7 +185,7 @@ export function WorkPortfolioShowcase() {
               Websites built to perform.
             </h1>
             <p className="mt-4 max-w-[560px] text-[16px] leading-[1.6] text-[#B8C9DE] md:text-[17px] md:leading-[1.7] md:text-[#9FB3CC]">
-              A selection of websites and web apps I designed and developed, each built around a real business goal.
+              A selection of websites and web apps we designed and developed, each built around a real business goal.
             </p>
           </div>
 

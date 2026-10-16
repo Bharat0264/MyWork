@@ -5,19 +5,19 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://my-work-umber.vercel.app"),
-  title: { default: "Garuda Web Designer and Developer", template: "%s · Garuda" },
-  description: "Web design, development and digital growth for businesses, startups and growing brands.",
-  keywords: ["freelance web developer", "website designer", "full stack developer", "website redesign", "e-commerce development"],
+  title: { default: "Garuda Web Design & Development Studio", template: "%s · Garuda Studio" },
+  description: "Web design and development studio building fast, modern websites for businesses and startups.",
+  keywords: ["web design studio", "web development studio", "website designers", "full stack development", "website redesign", "e-commerce development"],
   openGraph: {
     type: "website",
-    title: "Garuda Web Designer and Developer",
-    description: "Websites that look better, work smarter and grow faster.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Designer and Developer" }],
+    title: "Garuda Web Design & Development Studio",
+    description: "We design and build fast, modern websites that help businesses turn visitors into customers.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Design & Development Studio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Garuda Web Designer and Developer",
-    description: "Websites that look better, work smarter and grow faster.",
+    title: "Garuda Web Design & Development Studio",
+    description: "We design and build fast, modern websites that help businesses turn visitors into customers.",
     images: ["/og-image.png"],
   },
   other: {

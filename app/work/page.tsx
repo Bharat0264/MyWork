@@ -12,24 +12,24 @@ const WorkPortfolioShowcase = dynamic(
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Web Design Projects · Garuda",
+    absolute: "Web Design Projects · Garuda Studio",
   },
   description:
-    "See websites and web apps designed and developed by Garuda for real businesses.",
+    "Explore websites and web apps designed and developed by our studio for real businesses.",
   alternates: {
     canonical: "https://my-work-umber.vercel.app/work",
   },
   openGraph: {
-    title: "Web Design Projects · Garuda",
-    description: "See websites and web apps designed and developed by Garuda for real businesses.",
+    title: "Web Design Projects · Garuda Studio",
+    description: "Explore websites and web apps designed and developed by our studio for real businesses.",
     url: "https://my-work-umber.vercel.app/work",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Design Projects" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Studio Web Design Projects" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design Projects · Garuda",
-    description: "See websites and web apps designed and developed by Garuda for real businesses.",
+    title: "Web Design Projects · Garuda Studio",
+    description: "Explore websites and web apps designed and developed by our studio for real businesses.",
     images: ["/og-image.png"],
   },
 };

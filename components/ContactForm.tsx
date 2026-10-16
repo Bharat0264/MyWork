@@ -51,6 +51,7 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   function update(field: Field, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -95,6 +96,7 @@ export function ContactForm() {
     }
 
     setStatus("sending");
+    setErrorMessage("");
 
     try {
       const response = await fetch("/api/contact", {
@@ -103,14 +105,25 @@ export function ContactForm() {
         body: JSON.stringify({ ...values, website: honeypot }),
       });
 
+      const result = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
       if (!response.ok) {
-        throw new Error("Unable to send contact enquiry");
+        throw new Error(
+          result?.error || "Unable to send contact enquiry. Please try again."
+        );
       }
 
       setValues(emptyValues);
       setHoneypot("");
       setStatus("success");
-    } catch {
+    } catch (err) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.";
+      setErrorMessage(msg);
       setStatus("error");
     }
   }
@@ -199,6 +212,7 @@ export function ContactForm() {
         />
       </div>
 
+      {/* Honeypot field - invisible to humans, filled by bots */}
       <div aria-hidden="true" className="contact-form__honeypot">
         <label htmlFor="contact-website">Website</label>
         <input
@@ -212,20 +226,34 @@ export function ContactForm() {
         />
       </div>
 
-      <button className="contact-form__submit" disabled={status === "sending"} type="submit">
-        {status === "sending" && <span aria-hidden="true" className="contact-form__spinner" />}
+      <button
+        className="contact-form__submit"
+        disabled={status === "sending"}
+        type="submit"
+      >
+        {status === "sending" && (
+          <span aria-hidden="true" className="contact-form__spinner" />
+        )}
         <span>{status === "sending" ? "Sending…" : "Let’s build something"}</span>
       </button>
 
       {status === "success" && (
-        <p className="contact-form__feedback contact-form__feedback--success" role="status">
+        <p
+          className="contact-form__feedback contact-form__feedback--success"
+          role="status"
+          aria-live="polite"
+        >
           Thanks! Your message is on its way. I&apos;ll reply within 24 hours.
         </p>
       )}
 
       {status === "error" && (
-        <div className="contact-form__feedback contact-form__feedback--error" role="alert">
-          <span>Something went wrong. Please try again.</span>
+        <div
+          className="contact-form__feedback contact-form__feedback--error"
+          role="alert"
+          aria-live="polite"
+        >
+          <span>{errorMessage || "Something went wrong. Please try again."}</span>
           <button onClick={() => setStatus("idle")} type="button">
             Try again
           </button>
@@ -326,13 +354,28 @@ function SelectField({
             {placeholder}
           </option>
           {options.map((option) => (
-            <option key={option} value={option} className="bg-[#141E30] text-[#E8EEF7]">
+            <option
+              key={option}
+              value={option}
+              className="bg-[#141E30] text-[#E8EEF7]"
+            >
               {option}
             </option>
           ))}
         </select>
-        <svg aria-hidden="true" className="contact-form__chevron" viewBox="0 0 16 16">
-          <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" />
+        <svg
+          aria-hidden="true"
+          className="contact-form__chevron"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="m4 6 4 4 4-4"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.75"
+          />
         </svg>
       </div>
       {error && <p id={errorId}>{error}</p>}
@@ -350,7 +393,15 @@ interface TextAreaFieldProps {
   value: string;
 }
 
-function TextAreaField({ error, field, label, onChange, placeholder, required = false, value }: TextAreaFieldProps) {
+function TextAreaField({
+  error,
+  field,
+  label,
+  onChange,
+  placeholder,
+  required = false,
+  value,
+}: TextAreaFieldProps) {
   const id = `contact-${field}`;
   const errorId = `${id}-error`;
 

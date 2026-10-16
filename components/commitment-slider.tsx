@@ -7,9 +7,9 @@ import { Clock3, ScanLine, Smartphone, Gauge, MessagesSquare, RefreshCw, HeartHa
 const commitments = [
   { title: "On-time delivery", promise: "We agree on a deadline and stick to it.", tag: "Commitment", icon: Clock3 },
   { title: "Pixel-perfect quality", promise: "Every spacing, font and color is checked before launch.", tag: "Quality", icon: ScanLine },
-  { title: "Mobile-first", promise: "Tested on real phones, not only on desktop.", tag: "Experience", icon: Smartphone },
+  { title: "Mobile-first", promise: "Optimized on real phones so you look great on every device.", tag: "User Experience", icon: Smartphone },
   { title: "Fast and SEO-ready", promise: "Built for speed so customers and Google both stay.", tag: "Performance", icon: Gauge },
-  { title: "Clear communication", promise: "Regular updates, simple language, no surprises.", tag: "Trust", icon: MessagesSquare },
+  { title: "Clear Communication", promise: "Regular updates, simple process, no surprises.", tag: "Collaboration", icon: MessagesSquare },
   { title: "Free revisions", promise: "We keep improving until you are happy.", tag: "Satisfaction", icon: RefreshCw },
   { title: "After-launch support", promise: "We stay with you after the website goes live.", tag: "Care", icon: HeartHandshake },
 ] as const;
@@ -83,9 +83,7 @@ export function CommitmentSlider() {
                 tabIndex={visible ? 0 : -1}
                 onClick={() => setActive(index)}
                 style={{
-                  transform: `translate3d(calc(-50% + ${offset * 63}%), -50%, 0) rotateY(${-offset * 24}deg) scale(${offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.81 : 0.68})`,
-                  opacity: visible ? (offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.82 : 0.12) : 0,
-                  zIndex: 5 - Math.abs(offset),
+                  opacity: visible ? (offset === 0 ? 1 : 0.92) : 0,
                   pointerEvents: visible ? "auto" : "none",
                 }}
               >

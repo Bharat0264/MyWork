@@ -316,22 +316,28 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
 }
 
-/* Hero promises: a fixed stage keeps all seven slides from shifting layout. */
+/* Three complete cards share the stage; only their edges overlap. */
 .commitment-slider { width: 100%; min-width: 0; }
-.commitment-frame { position: relative; isolation: isolate; width: 100%; aspect-ratio: 1.1 / 1; min-height: 0; overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; perspective: 1000px; mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
-.commitment-glow { position: absolute; left: 50%; top: 48%; width: 62%; height: 62%; transform: translate(-50%,-50%); border-radius: 50%; background: #527cae; filter: blur(70px); opacity: .24; pointer-events: none; }
-.commitment-stage { position: absolute; inset: 0 0 34px; perspective: 1000px; }
-.commitment-card { position: absolute; top: 50%; left: 50%; display: flex; width: 59%; height: 76%; min-height: 0; flex-direction: column; align-items: flex-start; padding: 20px; overflow: hidden; border: 1px solid rgba(160,192,229,.18); border-radius: 24px; background: linear-gradient(155deg, rgba(44,69,104,.72), rgba(13,28,49,.78) 68%, rgba(17,32,55,.75)); box-shadow: inset 0 1px rgba(225,241,255,.12), 0 14px 32px rgba(0,8,22,.28); backdrop-filter: blur(14px) saturate(110%); -webkit-backdrop-filter: blur(14px) saturate(110%); color: #fff; text-align: left; cursor: pointer; backface-visibility: hidden; transition: transform 500ms ease-out, opacity 500ms ease-out, filter 500ms ease-out; }
-.commitment-card[data-active="true"] { border-color: rgba(180,211,246,.25); background: linear-gradient(155deg, rgba(49,78,117,.93), rgba(19,39,67,.95) 65%, rgba(17,33,57,.95)); box-shadow: inset 0 1px rgba(238,248,255,.16), 0 18px 40px rgba(0,9,24,.3), 0 0 30px rgba(86,139,202,.1); }
-.commitment-card:not([data-active="true"]) { filter: saturate(.78); }
-.commitment-card[data-position="-1"] { clip-path: inset(0 35% 0 0); }
-.commitment-card[data-position="1"] { clip-path: inset(0 0 0 35%); }
+.commitment-frame { position: relative; isolation: isolate; width: 100%; height: clamp(340px, 32vw, 460px); overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.commitment-glow { position: absolute; left: 50%; top: 45%; width: 62%; height: 62%; transform: translate(-50%,-50%); border-radius: 50%; background: #527cae; filter: blur(70px); opacity: .24; pointer-events: none; }
+.commitment-stage { position: absolute; inset: 0 0 38px; perspective: 1000px; }
+.commitment-card { position: absolute; top: 50%; left: 36%; z-index: 1; display: flex; width: 28%; height: auto; min-height: 0; flex-direction: column; align-items: flex-start; padding: clamp(10px, 1.3vw, 20px); overflow: visible; border: 1px solid rgba(160,192,229,.18); border-radius: 24px; background: linear-gradient(155deg, rgba(44,69,104,.82), rgba(13,28,49,.86) 68%, rgba(17,32,55,.84)); box-shadow: inset 0 1px rgba(225,241,255,.12), 0 14px 32px rgba(0,8,22,.28); backdrop-filter: blur(14px) saturate(110%); -webkit-backdrop-filter: blur(14px) saturate(110%); color: #fff; text-align: left; cursor: pointer; backface-visibility: hidden; transform: translateY(-50%) scale(.94); transition: left 500ms ease-out, width 500ms ease-out, transform 500ms ease-out, opacity 500ms ease-out, filter 500ms ease-out; }
+.commitment-card[data-position="-1"] { left: 0; z-index: 2; width: 31%; transform: translateY(-50%) rotateY(7deg); }
+.commitment-card[data-position="1"] { left: 69%; z-index: 2; width: 31%; transform: translateY(-50%) rotateY(-7deg); }
+.commitment-card[data-active="true"] { left: 28.5%; z-index: 3; width: 43%; transform: translateY(-50%); border-color: rgba(180,211,246,.25); background: linear-gradient(155deg, rgba(49,78,117,.93), rgba(19,39,67,.95) 65%, rgba(17,33,57,.95)); box-shadow: inset 0 1px rgba(238,248,255,.16), 0 18px 40px rgba(0,9,24,.3), 0 0 30px rgba(86,139,202,.1); }
+.commitment-card:not([data-active="true"]) { filter: saturate(.9); }
 .commitment-promise-pill { display: inline-flex; min-height: 27px; align-items: center; gap: 7px; padding: 2px 10px; border: 1px solid rgba(141,231,181,.35); border-radius: 999px; background: rgba(36,103,70,.46); color: #D9FFE7; font-size: 13px; font-weight: 600; }
 .commitment-pulse { width: 7px; height: 7px; border-radius: 50%; background: #77E3A6; box-shadow: 0 0 0 0 rgba(119,227,166,.5); animation: commitmentPulse 2.4s infinite; }
-.commitment-icon { display: grid; width: 66px; height: 66px; flex: 0 0 auto; place-items: center; margin-top: auto; border: 1px solid rgba(210,232,255,.3); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.17), rgba(255,255,255,.04)); color: #D1E6FF; box-shadow: inset 0 1px rgba(255,255,255,.2); }
+.commitment-icon { display: grid; width: 66px; height: 66px; flex: 0 0 auto; place-items: center; margin-top: 22px; border: 1px solid rgba(210,232,255,.3); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.17), rgba(255,255,255,.04)); color: #D1E6FF; box-shadow: inset 0 1px rgba(255,255,255,.2); }
 .commitment-card-title { display: block; margin-top: 16px; font-size: clamp(17px, 1.7vw, 22px); font-weight: 600; line-height: 1.2; letter-spacing: -.02em; }
-.commitment-card-copy { display: block; min-height: 3.8em; margin-top: 8px; color: #DFEAF7; font-size: 14px; line-height: 1.45; }
-.commitment-card-bottom { display: flex; width: 100%; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; }
+.commitment-card-copy { display: block; min-height: 0; margin-top: 8px; color: #DFEAF7; font-size: 14px; line-height: 1.45; }
+.commitment-card-bottom { display: flex; width: 100%; align-items: center; justify-content: space-between; margin-top: 24px; }
+.commitment-card:not([data-active="true"]) .commitment-icon { width: clamp(28px, 3.5vw, 52px); height: clamp(28px, 3.5vw, 52px); margin-top: 18px; border-radius: 16px; }
+.commitment-card:not([data-active="true"]) .commitment-icon svg { width: 58%; height: 58%; }
+.commitment-card:not([data-active="true"]) .commitment-card-title { margin-top: 12px; font-size: clamp(9px, 1.15vw, 17px); overflow-wrap: anywhere; }
+.commitment-card:not([data-active="true"]) .commitment-card-copy { margin-top: 6px; font-size: clamp(9px, .9vw, 13px); }
+.commitment-card:not([data-active="true"]) .commitment-card-bottom { margin-top: 18px; }
+.commitment-card:not([data-active="true"]) .commitment-tag { font-size: clamp(9px, .9vw, 12px); }
 .commitment-tag { color: #BDDAFA; font-size: 13px; font-weight: 600; }
 .commitment-check { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid rgba(178,232,199,.65); border-radius: 50%; color: #C2F7D4; animation: commitmentDraw 500ms ease-out both; }
 .commitment-frame-label { position: absolute; bottom: 17px; left: 50%; transform: translateX(-50%); width: max-content; color: #B8CFEA; font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; }
@@ -342,20 +348,24 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes commitmentPulse { 60% { box-shadow: 0 0 0 7px rgba(119,227,166,0); } 100% { box-shadow: 0 0 0 0 rgba(119,227,166,0); } }
 @keyframes commitmentDraw { from { opacity: 0; transform: scale(.5) rotate(-35deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
 @media (max-width: 1023px) {
-  .commitment-frame { aspect-ratio: 4 / 3; min-height: 0; }
-  .commitment-card { width: 52%; height: 77%; }
-  .commitment-card-title { font-size: clamp(16px, 3vw, 22px); }
+  .commitment-frame { height: clamp(280px, 45vw, 380px); }
+  .commitment-card-title { font-size: clamp(15px, 2.4vw, 20px); }
 }
 @media (max-width: 639px) {
   .commitment-card { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .commitment-stage { bottom: 26px; }
-  .commitment-card { height: 95%; padding: 10px; border-radius: 20px; }
-  .commitment-icon { width: 34px; height: 34px; border-radius: 11px; }
+  .commitment-stage { bottom: 30px; }
+  .commitment-card { padding: 9px; border-radius: 16px; }
+  .commitment-icon { width: 34px; height: 34px; margin-top: 10px; border-radius: 11px; }
   .commitment-icon svg { width: 22px; height: 22px; }
-  .commitment-card-title { margin-top: 5px; font-size: clamp(14px, 4vw, 17px); }
-  .commitment-card-copy { min-height: 0; margin-top: 4px; font-size: 13px; line-height: 1.2; }
-  .commitment-card-bottom { padding-top: 5px; }
-  .commitment-promise-pill { min-height: 23px; padding: 1px 7px; font-size: 13px; }
+  .commitment-card-title { margin-top: 8px; font-size: clamp(13px, 3.4vw, 16px); }
+  .commitment-card-copy { margin-top: 5px; font-size: 11px; line-height: 1.3; }
+  .commitment-card-bottom { margin-top: 12px; }
+  .commitment-promise-pill { min-height: 20px; padding: 1px 5px; font-size: 10px; }
+  .commitment-card:not([data-active="true"]) .commitment-icon { width: 26px; height: 26px; margin-top: 9px; border-radius: 9px; }
+  .commitment-card:not([data-active="true"]) .commitment-card-title { margin-top: 7px; font-size: clamp(9px, 2.3vw, 11px); }
+  .commitment-card:not([data-active="true"]) .commitment-card-copy { margin-top: 4px; font-size: 9px; line-height: 1.25; }
+  .commitment-card:not([data-active="true"]) .commitment-card-bottom { margin-top: 10px; }
+  .commitment-card:not([data-active="true"]) .commitment-tag { font-size: 9px; }
   .commitment-frame-label { bottom: 10px; font-size: 13px; letter-spacing: .08em; }
 }
 @media (prefers-reduced-motion: reduce) {

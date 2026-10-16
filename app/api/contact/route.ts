@@ -185,7 +185,7 @@ export async function POST(request: Request) {
                 <img
                   src="https://my-work-umber.vercel.app/email-logo.png"
                   width="240"
-                  alt="Garuda Web Designer and Developer"
+                  alt="Garuda Web Design & Development Studio"
                   border="0"
                   style="display: block; width: 240px; max-width: 100%; height: auto; border: 0; outline: none; margin: 0 auto;"
                 />

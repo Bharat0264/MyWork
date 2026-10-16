@@ -4,7 +4,7 @@ import { Navbar, Footer } from "@/components/site-shell";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Page Not Found · Garuda Web Designer and Developer",
+  title: "Page Not Found · Garuda Web Design & Development Studio",
   description: "The page you are looking for doesn't exist or has been moved.",
 };
 

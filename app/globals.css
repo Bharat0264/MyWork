@@ -329,10 +329,8 @@ h1, h2, h3, h4, h5, h6 {
 .home-hero__content { min-width: 0; }
 .home-hero__content .eyebrow { margin-bottom: 20px; font-size: 13px; }
 .home-hero__description { max-width: 46ch; margin-top: 24px; font-size: clamp(1.05rem, 1.35vw, 1.45rem); line-height: 1.6; }
-.home-hero__actions { gap: 16px; margin-top: 32px; }
-.home-hero__primary, .home-hero__secondary { min-height: 56px; }
-.home-hero__primary .btn-chrome__face { height: 50px; }
-.home-hero__secondary { min-width: 210px; justify-content: center; }
+.home-hero__primary { height: 44px; }
+.home-hero__secondary { min-height: 44px; min-width: 210px; justify-content: center; }
 .home-hero__trust { margin-top: 16px; font-size: 14px; line-height: 1.5; }
 .home-hero__deck { width: 100%; max-width: 640px; margin-inline: auto; }
 .home-hero__scroll { bottom: 16px; }
@@ -570,8 +568,8 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 639px) {
   .hero-heading { font-size: clamp(2.3rem, 9vw, 3rem); }
   .home-hero__actions { max-width: 320px; }
-  .home-hero__primary, .home-hero__secondary { min-height: 48px; width: 100%; }
-  .home-hero__primary .btn-chrome__face { height: 42px; }
+  .home-hero__primary { height: 38px; width: 100%; }
+  .home-hero__secondary { min-height: 44px; width: 100%; }
   .commitment-slider { --deck-scale: 0.95; }
   .commitment-card[data-active="true"] { transform: translate(-50%, -50%) scale(.85); }
   .commitment-card[data-position="-1"] { transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(.748); }
@@ -890,15 +888,31 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(0.98);
 }
 
-/* --- START A PROJECT: LIQUID CHROME / POLISHED METAL PILL --- */
+/* ==========================================================================
+   START YOUR PROJECT: PREMIUM SILVER-GLASS PILL (.btn-chrome, .btn-liquid)
+   Matches the bright, clean, premium silver-glass pill reference:
+   - Rim: 2px padding, silver metallic gradient, 1px solid rgba(255,255,255,0.6) border
+   - Face: Crisp light silver-white gradient (#FFFFFF -> #F0F3F7 -> #E0E5EB)
+   - Inner depth: inset 0 1px 1px rgba(255,255,255,0.95), inset 0 -2px 4px rgba(70,78,90,0.10)
+   - Subtle bottom-right specular glint, no dark left crescent
+   - Drop shadow: 0 4px 12px rgba(4, 9, 18, 0.25)
+   - Desktop height 44px (40px in navbar), mobile 38px
+   - Horizontal padding: 22px on desktop, 16px on mobile
+   - Typography: site font, weight 500, 15px (14px navbar/mobile), color #14264A, -0.01em
+   - Arrow icon: 16px, clean stroke (2px), color #14264A
+   - Hover: soft white sheen sweep (0.7s), arrow nudges 3px right
+   - Active: scale(0.97) tactile spring feedback
+   - Focus-visible: 2px solid #8FB0D6 with 3px offset
+   ========================================================================== */
 .btn-chrome,
 .btn-liquid {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  padding: 4px;
+  height: 44px;
+  border-radius: 9999px;
+  padding: 2px;
   isolation: isolate;
   text-decoration: none;
   cursor: pointer;
@@ -906,79 +920,62 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
 
-  /* Outer Rim: Chrome bevel gradient + dark mirror reflection on left edge */
-  background:
-    radial-gradient(55% 140% at 0% 50%, rgba(8, 10, 14, 0.95) 0%, rgba(8, 10, 14, 0.55) 35%, transparent 70%),
-    linear-gradient(180deg, #FFFFFF 0%, #C4CAD1 22%, #7E858D 48%, #4B5158 56%, #B9BFC6 78%, #F2F4F6 100%);
+  /* Outer Rim: Subtle silver metallic gradient, 1px outer border */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, #D8DDE3 50%, #B4BBC3 100%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 
-  /* Outer edge */
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  /* Clean soft shadow, no colored glow */
+  box-shadow: 0 4px 12px rgba(4, 9, 18, 0.25);
 
-  /* Neutral depth shadows only - no colored glow */
-  box-shadow: 0 10px 22px rgba(4, 9, 18, 0.5), 0 2px 4px rgba(4, 9, 18, 0.35);
-
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.25s ease;
 }
 
-/* Polished Dome Face */
+/* Bright Silver-White Glass Face */
 .btn-chrome__face {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  height: 48px;
-  padding: 0 28px;
-  border-radius: 999px;
+  gap: 8px;
+  height: 100%;
+  padding: 0 22px;
+  border-radius: 9999px;
   overflow: hidden;
   width: 100%;
 
-  /* Face background: soft white bloom at top-left + silver body gradient */
-  background:
-    radial-gradient(45% 80% at 20% 18%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 70%),
-    linear-gradient(180deg, #FBFCFD 0%, #DDE1E6 34%, #BCC2C9 64%, #E9ECF0 100%);
+  /* Crisp, bright, light silver-white gradient */
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0F3F7 55%, #E0E5EB 100%);
 
-  /* Inner depth */
+  /* Delicate inner depth: top rim highlight & subtle soft bottom shadow */
   box-shadow:
-    inset 0 2px 3px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(70, 78, 90, 0.35),
-    inset 6px 0 10px rgba(20, 24, 30, 0.35);
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(70, 78, 90, 0.10);
 
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.25s ease;
 }
 
-/* Left reflection crescent */
+/* Remove dark left crescent completely */
 .btn-chrome__face::before {
-  content: "";
-  position: absolute;
-  left: 8px;
-  top: 14%;
-  bottom: 14%;
-  width: 16%;
-  border-radius: 50%;
-  background: radial-gradient(70% 100% at 0% 50%, rgba(10, 12, 16, 0.55), rgba(10, 12, 16, 0) 75%);
-  filter: blur(1px);
-  pointer-events: none;
-  z-index: 1;
+  display: none !important;
 }
 
-/* Bright specular oval */
+/* Subtle bottom-right specular glint (polished metal / glass feel) */
 .btn-chrome__face::after {
   content: "";
   position: absolute;
-  right: 12px;
-  bottom: 8px;
-  width: 16px;
-  height: 9px;
+  right: 14px;
+  bottom: 5px;
+  width: 13px;
+  height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.98);
-  transform: rotate(-32deg);
-  filter: blur(0.4px);
+  background: rgba(255, 255, 255, 0.95);
+  transform: rotate(-28deg);
+  filter: blur(0.3px);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Top edge 1px highlight line */
+/* Top edge 1px reflection line */
 .btn-chrome__top-line {
   position: absolute;
   top: 0;
@@ -990,17 +987,17 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 2;
 }
 
-/* Diagonal reflection sweep on hover */
+/* Diagonal reflection sheen sweep on hover (once, 0.7s, transform only) */
 .btn-chrome__sheen {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: -80%;
-  width: 35%;
+  left: -100%;
+  width: 45%;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.6) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   transform: skewX(-20deg);
@@ -1011,8 +1008,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-chrome:hover .btn-chrome__sheen,
 .btn-liquid:hover .btn-chrome__sheen {
-  opacity: 1;
-  animation: chromeSheenSweep 0.8s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: chromeSheenSweep 0.7s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 @keyframes chromeSheenSweep {
@@ -1021,10 +1017,10 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0;
   }
   15% {
-    opacity: 1;
+    opacity: 0.6;
   }
   85% {
-    opacity: 1;
+    opacity: 0.6;
   }
   100% {
     transform: translateX(450%) skewX(-20deg);
@@ -1038,13 +1034,13 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   z-index: 3;
   font-family: var(--font-sans), "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 15px;
   line-height: 1;
-  color: #0E1A33;
+  color: #14264A;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  text-shadow: none !important;
 }
 
 /* Arrow icon */
@@ -1052,10 +1048,10 @@ h1, h2, h3, h4, h5, h6 {
 .btn-liquid__arrow {
   position: relative;
   z-index: 3;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
-  color: #0E1A33;
+  color: #14264A;
   transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
@@ -1065,19 +1061,18 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(3px);
 }
 
-/* Pressed state: scale(0.97) with spring release, inner shadows deepen */
+/* Pressed state: scale(0.97) for tactile spring feedback */
 .btn-chrome:active,
 .btn-liquid:active {
   transform: scale(0.97);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 0.15s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.btn-chrome:active .btn-chrome__face {
+.btn-chrome:active .btn-chrome__face,
+.btn-liquid:active .btn-chrome__face {
   box-shadow:
-    inset 0 2px 3px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(70, 78, 90, 0.45),
-    inset 6px 0 10px rgba(20, 24, 30, 0.4),
-    inset 0 3px 6px rgba(70, 78, 90, 0.4);
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 3px rgba(70, 78, 90, 0.18);
 }
 
 /* Keyboard focus-visible */
@@ -1087,100 +1082,96 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: 3px;
 }
 
-/* --- NAVBAR VARIANTS --- */
+/* --- NAVBAR DESKTOP VARIANT (Height 40px) --- */
 .btn-chrome--navbar,
 .btn-liquid--navbar {
-  padding: 3px;
+  height: 40px;
+  padding: 2px;
 }
 
 .btn-chrome--navbar .btn-chrome__face,
 .btn-liquid--navbar .btn-chrome__face {
-  height: 40px;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 0 16px;
+  gap: 8px;
 }
 
 .btn-chrome--navbar .btn-chrome__label,
 .btn-liquid--navbar .btn-liquid__label {
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .btn-chrome--navbar .btn-chrome__arrow,
 .btn-liquid--navbar .btn-liquid__arrow {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 
 .btn-chrome--navbar .btn-chrome__face::after {
-  right: 10px;
-  bottom: 6px;
-  width: 14px;
-  height: 7px;
+  right: 11px;
+  bottom: 4px;
+  width: 11px;
+  height: 5px;
 }
 
-.btn-chrome--navbar .btn-chrome__face::before {
-  left: 6px;
-}
-
-/* Mobile navbar (below 640px) */
+/* --- MOBILE HEADER VARIANT (Height 38px) --- */
 .btn-chrome--navbar-mobile,
 .btn-liquid--navbar-mobile {
-  padding: 3px;
+  height: 38px;
+  padding: 2px;
 }
 
 .btn-chrome--navbar-mobile .btn-chrome__face,
 .btn-liquid--navbar-mobile .btn-chrome__face {
-  height: 38px;
-  padding: 0 18px;
-  gap: 8px;
+  padding: 0 14px;
+  gap: 6px;
 }
 
 .btn-chrome--navbar-mobile .btn-chrome__label,
 .btn-liquid--navbar-mobile .btn-liquid__label {
   font-size: 14px;
+  font-weight: 500;
 }
 
 .btn-chrome--navbar-mobile .btn-chrome__arrow,
 .btn-liquid--navbar-mobile .btn-liquid__arrow {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 .btn-chrome--navbar-mobile .btn-chrome__face::after {
-  right: 8px;
-  bottom: 5px;
-  width: 13px;
-  height: 6px;
+  right: 9px;
+  bottom: 4px;
+  width: 9px;
+  height: 5px;
 }
 
-.btn-chrome--navbar-mobile .btn-chrome__face::before {
-  left: 5px;
-}
-
+/* --- MOBILE VIEWPORTS (<=639px): Height 38px, horizontal padding 16px --- */
 @media (max-width: 639px) {
-  .btn-chrome--navbar {
-    padding: 3px;
-  }
-  .btn-chrome--navbar .btn-chrome__face {
+  .btn-chrome,
+  .btn-liquid {
     height: 38px;
-    padding: 0 18px;
-    gap: 8px;
+    padding: 2px;
   }
-  .btn-chrome--navbar .btn-chrome__label {
+  .btn-chrome .btn-chrome__face,
+  .btn-liquid .btn-chrome__face {
+    padding: 0 16px;
+    gap: 7px;
+  }
+  .btn-chrome .btn-chrome__label,
+  .btn-liquid .btn-liquid__label {
     font-size: 14px;
   }
-  .btn-chrome--navbar .btn-chrome__arrow {
-    width: 16px;
-    height: 16px;
+  .btn-chrome .btn-chrome__arrow,
+  .btn-liquid .btn-liquid__arrow {
+    width: 15px;
+    height: 15px;
   }
-  .btn-chrome--navbar .btn-chrome__face::after {
-    right: 8px;
-    bottom: 5px;
-    width: 13px;
-    height: 6px;
-  }
-  .btn-chrome--navbar .btn-chrome__face::before {
-    left: 5px;
+  .btn-chrome .btn-chrome__face::after {
+    right: 9px;
+    bottom: 4px;
+    width: 9px;
+    height: 5px;
   }
 }
 
@@ -2169,9 +2160,11 @@ h1, h2, h3, h4, h5, h6 {
   main [class*="text-[11px]"], main [class*="text-[12px]"], footer [class*="text-[11px]"],
   footer [class*="text-[12px]"], .contact-form__field > p { font-size: 14px; }
   main [class*="text-[#6F86A3]"], footer [class*="text-[#6F86A3]"], [class*="text-[#6F86A3]"] { color: #B8C9DE !important; }
-  .button, .button-white, .button-primary, .button-secondary,
-  .btn-chrome:not(.btn-chrome--navbar-mobile), .btn-liquid:not(.btn-liquid--navbar-mobile), .contact-form__submit {
+  .button, .button-white, .button-primary, .button-secondary, .contact-form__submit {
     width: 100%; min-height: 52px; border-radius: 999px;
+  }
+  .btn-chrome:not(.btn-chrome--navbar-mobile), .btn-liquid:not(.btn-liquid--navbar-mobile) {
+    width: 100%; height: 38px; min-height: 38px; border-radius: 9999px;
   }
   .button:active, .button-white:active, .button-primary:active, .button-secondary:active,
   .btn-chrome:active, .btn-liquid:active, .contact-form__submit:active { transform: scale(.97); }

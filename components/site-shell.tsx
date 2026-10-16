@@ -143,7 +143,7 @@ export function Navbar() {
             <Link
               href="/"
               onClick={handleLogoClick}
-              aria-label="Garuda Web Designer and Developer"
+              aria-label="Garuda Web Design & Development Studio"
               className="navbar-logo flex items-center shrink-0"
             >
               <picture>
@@ -151,7 +151,7 @@ export function Navbar() {
                 <img
                   src="/logo-full.png"
                   srcSet="/logo-full.png 1x, /logo-full.png 2x"
-                  alt="Garuda Web Designer and Developer"
+                  alt="Garuda Web Design & Development Studio"
                   width={191}
                   height={64}
                   loading="eager"
@@ -159,7 +159,7 @@ export function Navbar() {
                   className="h-[52px] w-auto max-w-full object-contain min-[1024px]:h-[64px]"
                 />
               </picture>
-              <span className="sr-only">Garuda Web Designer and Developer</span>
+              <span className="sr-only">Garuda Web Design & Development Studio</span>
             </Link>
           </div>
 
@@ -221,7 +221,7 @@ export function Navbar() {
           <Link
             href="/"
             onClick={handleLogoClick}
-            aria-label="Garuda Web Designer and Developer"
+            aria-label="Garuda Web Design & Development Studio"
             className="navbar-logo flex items-center shrink-0"
           >
             <picture>
@@ -229,15 +229,15 @@ export function Navbar() {
               <img
                 src="/logo-full.png"
                 srcSet="/logo-full.png 1x, /logo-full.png 2x"
-                alt="Garuda Web Designer and Developer"
+                alt="Garuda Web Design & Development Studio"
                 width={191}
                 height={64}
                 loading="eager"
                 draggable={false}
-                className="h-[44px] w-auto max-w-[200px] object-contain"
+                className="h-[46px] w-auto max-w-[200px] object-contain"
               />
             </picture>
-            <span className="sr-only">Garuda Web Designer and Developer</span>
+            <span className="sr-only">Garuda Web Design & Development Studio</span>
           </Link>
           <div className="flex items-center gap-3">
             <StartProjectButton variant="navbar-mobile" />
@@ -297,7 +297,7 @@ export function Footer() {
           <div className="flex flex-col items-start text-left sm:items-center sm:text-center md:items-start md:text-left md:col-start-1 md:row-start-1 lg:col-start-1 lg:row-start-1">
             <Link
               href="/"
-              aria-label="Garuda Web Designer and Developer"
+              aria-label="Garuda Web Design & Development Studio"
               className="inline-block shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
               style={{ WebkitTapHighlightColor: "transparent" }}
             >
@@ -306,7 +306,7 @@ export function Footer() {
                 <img
                   src="/logo-full.png"
                   srcSet="/logo-full.png 1x, /logo-full.png 2x"
-                  alt="Garuda Web Designer and Developer"
+                  alt="Garuda Web Design & Development Studio"
                   width={200}
                   height={67}
                   loading="lazy"

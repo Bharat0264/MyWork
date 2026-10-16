@@ -1578,8 +1578,11 @@ h1, h2, h3, h4, h5, h6 {
 .liquid-mobile-bar {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
-  left: 16px;
-  right: 16px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  max-width: 480px;
+  width: calc(100% - 32px);
   z-index: 50;
   display: flex;
   align-items: center;
@@ -1607,6 +1610,13 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform, backdrop-filter;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+}
+
+/* 1. Mobile only: show nav only when viewport width <= 768px */
+@media (min-width: 769px) {
+  .liquid-mobile-bar {
+    display: none !important;
+  }
 }
 
 /* Gradient border overlay */
@@ -1638,6 +1648,7 @@ h1, h2, h3, h4, h5, h6 {
 .liquid-mobile-lens {
   position: absolute;
   top: 6px;
+  left: 0;
   height: calc(100% - 12px);
   border-radius: 999px;
   pointer-events: auto;

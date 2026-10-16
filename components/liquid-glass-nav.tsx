@@ -31,7 +31,7 @@ import {
    Adjust these to fine-tune blur strength, lens size, and spring physics.
    ======================================================================== */
 export const BLUR_STRENGTH = 18;      // px — backdrop blur strength on the glass bar (e.g. 12 - 24)
-export const LENS_SIZE = 1.35;        // multiplier — lens width relative to individual tab width (~1.1 - 1.5)
+export const LENS_SIZE = 1.0;         // multiplier — lens width matches active tab width (1.0 = exact)
 export const SPRING_STIFFNESS = 300;  // spring physics stiffness for slide & snap (e.g. 200 - 450)
 
 /* Internal motion constants */
@@ -40,7 +40,7 @@ const MAGNIFICATION = 1.12;           // convex magnification scale factor (1.12
 const DRAG_STRETCH_MAX = 1.2;         // maximum squash/stretch along drag velocity axis
 const HAPTIC_MS = 8;                  // duration in ms for tab-switch haptic tick
 const SCROLL_COMPRESS = 0.96;         // scale factor when user scrolls page
-const LENS_INSET = 6;                 // px — lens boundary inset from bar edges
+const LENS_INSET = 6;                 // px — lens boundary inset from bar top/bottom
 
 export interface TabItem {
   label: string;
@@ -62,6 +62,22 @@ export interface LiquidGlassNavProps {
   onChange?: (index: number) => void;
 }
 
+/* ── 1. useMediaQuery Hook (<= 768px only) ────────────────────────────── */
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
+
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [query]);
+
+  return matches;
+}
+
 /* ── Route matching helper ────────────────────────────────────────────── */
 function getActiveFromPath(path: string, items: readonly TabItem[]): number {
   const exact = items.findIndex((t) => t.href === path);
@@ -80,22 +96,28 @@ function triggerHaptic() {
       navigator.vibrate(HAPTIC_MS);
     }
   } catch {
-    /* Ignore on browsers that disallow vibrate without user gesture */
+    /* Ignore on browsers without vibration */
   }
+}
+
+interface Geometry {
+  barWidth: number;
+  barHeight: number;
+  tabLeft: number;
+  tabWidth: number;
 }
 
 /**
  * iOS 26 Liquid Glass Mobile Bottom Navigation Bar
- * Features:
- * - Floating glass pill with 1px gradient border & deep shadow
- * - Draggable magnifying glass lens with refraction & specular rim
- * - Opaque gradient base preventing double-rendering of tabs underneath
- * - Full bar-width clone row with translateX(-lensX) & translateY(-lensTop) for exact alignment
- * - Magnification (scale 1.12) centered on the lens wrapper
- * - Lens position & clone offset driven from the exact same spring value
- * - Inset constraint (6px) keeping the lens fully inside the bar
- * - Page scroll compression (scale 0.96) and blur intensification
- * - Full accessibility: role="tablist", role="tab", aria-selected, arrow navigation, reduced motion
+ * Updates:
+ * 1. Mobile only: unmounts when viewport > 768px via useMediaQuery & CSS query.
+ *    Max-width 480px, centered at bottom with safe-area padding.
+ * 2. JS measurement via getBoundingClientRect() of bar and active tab:
+ *    - Lens width = tab.width, translateX = tab.left - bar.left
+ *    - Clone row width = bar.width, translateX = -(tab.left - bar.left)
+ *    - Recalculates on mount, resize, and tab change
+ *    - Real active tab is hidden (opacity: 0) to eliminate doubling
+ *    - Magnification scale(1.12) applied on centered wrapper inside lens
  */
 export function LiquidGlassNav({
   items = DEFAULT_TABS,
@@ -104,73 +126,78 @@ export function LiquidGlassNav({
 }: LiquidGlassNavProps = {}) {
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [mounted, setMounted] = useState(false);
+
   const tabList = items;
   const tabCount = tabList.length;
 
   const routeActiveIndex = getActiveFromPath(pathname, tabList);
   const currentActiveIndex = active !== undefined ? active : routeActiveIndex;
 
-  /* ── DOM & Measurement refs ─────────────────────────────────────────── */
+  /* ── DOM refs ───────────────────────────────────────────────────────── */
   const barRef = useRef<HTMLElement>(null);
   const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const prevActiveRef = useRef<number>(currentActiveIndex);
 
-  const [tabMeta, setTabMeta] = useState<{ cx: number; w: number }[]>([]);
-  const [barSize, setBarSize] = useState<{ width: number; height: number }>({
-    width: 0,
-    height: 72,
+  /* ── 2. JS Measurement via getBoundingClientRect ────────────────────── */
+  const [geometry, setGeometry] = useState<Geometry>({
+    barWidth: 0,
+    barHeight: 72,
+    tabLeft: 0,
+    tabWidth: 0,
   });
 
   const measure = useCallback(() => {
     if (!barRef.current) return;
     const barRect = barRef.current.getBoundingClientRect();
-    setBarSize({ width: barRect.width, height: barRect.height || 72 });
-    const meta = tabRefs.current.map((el) => {
-      if (!el) return { cx: 0, w: 0 };
-      const r = el.getBoundingClientRect();
-      return {
-        cx: r.left - barRect.left + r.width / 2,
-        w: r.width,
-      };
+    const activeTabEl = tabRefs.current[currentActiveIndex];
+
+    if (!activeTabEl) {
+      setGeometry((prev) => ({
+        ...prev,
+        barWidth: barRect.width,
+        barHeight: barRect.height || 72,
+      }));
+      return;
+    }
+
+    const tabRect = activeTabEl.getBoundingClientRect();
+    setGeometry({
+      barWidth: barRect.width,
+      barHeight: barRect.height || 72,
+      tabLeft: tabRect.left - barRect.left,
+      tabWidth: tabRect.width,
     });
-    setTabMeta(meta);
-  }, []);
+  }, [currentActiveIndex]);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Recalculate on mount, resize, fonts ready, and tab change
+  useEffect(() => {
+    if (!mounted || !isMobile) return;
     measure();
     window.addEventListener("resize", measure);
     if (typeof document !== "undefined" && document.fonts) {
       document.fonts.ready.then(measure);
     }
     return () => window.removeEventListener("resize", measure);
-  }, [measure]);
-
-  /* ── Dynamic lens width ─────────────────────────────────────────────── */
-  const avgTabW = tabMeta.length > 0
-    ? tabMeta.reduce((sum, t) => sum + t.w, 0) / tabMeta.length
-    : 64;
-  const baseLensW = Math.max(54, avgTabW * LENS_SIZE);
-
-  /* ── Helper to calculate lens left edge position clamped within 6px inset ─ */
-  const calcTargetLeft = useCallback(
-    (tabIndex: number) => {
-      const cx = tabMeta[tabIndex]?.cx ?? (barSize.width > 0 ? barSize.width / 2 : 50);
-      const minLeft = LENS_INSET;
-      const maxLeft = Math.max(LENS_INSET, barSize.width - baseLensW - LENS_INSET);
-      return Math.max(minLeft, Math.min(maxLeft, cx - baseLensW / 2));
-    },
-    [tabMeta, barSize.width, baseLensW]
-  );
+  }, [mounted, isMobile, measure]);
 
   /* ── Spring-driven lens position & clone offset ──────────────────────── */
-  const rawLensX = useMotionValue(calcTargetLeft(currentActiveIndex));
-
   const springConfig = prefersReducedMotion
     ? { stiffness: 900, damping: 50, mass: 0.5 }
     : { stiffness: SPRING_STIFFNESS, damping: SPRING_DAMPING, mass: 1 };
 
-  // Single spring driving both lens position and clone offset
+  const rawLensX = useMotionValue(geometry.tabLeft);
+  const rawLensW = useMotionValue(geometry.tabWidth || 64);
+
   const lensX = useSpring(rawLensX, springConfig);
+  const lensW = useSpring(rawLensW, springConfig);
+
+  // Clone row translateX = -(tab.left - bar.left)
   const cloneX = useTransform(lensX, (val) => -val);
 
   // Velocity-driven squash & stretch along X
@@ -182,16 +209,17 @@ export function LiquidGlassNav({
   );
   const squashY = useTransform(stretchX, (s) => (prefersReducedMotion ? 1 : 2 - s));
 
-  // Sync lens to active tab
+  // Sync lens to measured geometry on active tab change
   useEffect(() => {
-    if (tabMeta.length === 0) return;
-    const targetLeft = calcTargetLeft(currentActiveIndex);
-    rawLensX.set(targetLeft);
-    if (prevActiveRef.current !== currentActiveIndex) {
-      triggerHaptic();
-      prevActiveRef.current = currentActiveIndex;
+    if (geometry.tabWidth > 0) {
+      rawLensX.set(geometry.tabLeft);
+      rawLensW.set(geometry.tabWidth);
+      if (prevActiveRef.current !== currentActiveIndex) {
+        triggerHaptic();
+        prevActiveRef.current = currentActiveIndex;
+      }
     }
-  }, [currentActiveIndex, tabMeta, calcTargetLeft, rawLensX]);
+  }, [geometry, currentActiveIndex, rawLensX, rawLensW]);
 
   /* ── Page scroll compression ────────────────────────────────────────── */
   const [scrolling, setScrolling] = useState(false);
@@ -210,7 +238,7 @@ export function LiquidGlassNav({
     };
   }, []);
 
-  /* ── Long press / Drag interaction ──────────────────────────────────── */
+  /* ── Long press & Drag interaction ──────────────────────────────────── */
   const [isPressHolding, setIsPressHolding] = useState(false);
   const [liveHoverIdx, setLiveHoverIdx] = useState<number | null>(null);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -224,12 +252,15 @@ export function LiquidGlassNav({
   };
 
   const findNearestTab = useCallback(
-    (x: number) => {
-      if (tabMeta.length === 0) return 0;
+    (currentCenter: number) => {
       let closest = 0;
       let minDiff = Infinity;
-      tabMeta.forEach((t, i) => {
-        const diff = Math.abs(t.cx - x);
+      tabRefs.current.forEach((el, i) => {
+        if (!el || !barRef.current) return;
+        const bRect = barRef.current.getBoundingClientRect();
+        const tRect = el.getBoundingClientRect();
+        const tabCenter = tRect.left - bRect.left + tRect.width / 2;
+        const diff = Math.abs(tabCenter - currentCenter);
         if (diff < minDiff) {
           minDiff = diff;
           closest = i;
@@ -237,7 +268,7 @@ export function LiquidGlassNav({
       });
       return closest;
     },
-    [tabMeta]
+    []
   );
 
   const handlePanStart = () => {
@@ -248,17 +279,14 @@ export function LiquidGlassNav({
     dragVelocity.set(info.velocity.x);
     const curr = lensX.get();
 
-    // Rubber-band resistance at boundary edges (6px inset)
     const minBound = LENS_INSET;
-    const maxBound = Math.max(LENS_INSET, barSize.width - baseLensW - LENS_INSET);
+    const maxBound = Math.max(LENS_INSET, geometry.barWidth - geometry.tabWidth - LENS_INSET);
     let nextX = curr + info.delta.x;
     if (nextX < minBound) nextX = minBound + (nextX - minBound) * 0.28;
     if (nextX > maxBound) nextX = maxBound + (nextX - maxBound) * 0.28;
     rawLensX.set(nextX);
 
-    // Live highlight as lens sweeps past tabs
-    const lensCenter = nextX + baseLensW / 2;
-    const nearest = findNearestTab(lensCenter);
+    const nearest = findNearestTab(nextX + geometry.tabWidth / 2);
     if (nearest !== liveHoverIdx) {
       setLiveHoverIdx(nearest);
       triggerHaptic();
@@ -270,10 +298,7 @@ export function LiquidGlassNav({
     dragVelocity.set(0);
 
     const currentX = rawLensX.get();
-    const lensCenter = currentX + baseLensW / 2;
-    const nearest = findNearestTab(lensCenter);
-    const snapTarget = calcTargetLeft(nearest);
-    rawLensX.set(snapTarget);
+    const nearest = findNearestTab(currentX + geometry.tabWidth / 2);
     setLiveHoverIdx(null);
 
     if (nearest !== currentActiveIndex) {
@@ -283,6 +308,8 @@ export function LiquidGlassNav({
       if (targetAnchor) {
         targetAnchor.click();
       }
+    } else {
+      rawLensX.set(geometry.tabLeft);
     }
   };
 
@@ -324,20 +351,23 @@ export function LiquidGlassNav({
     }
   };
 
-  /* ── Derived values ─────────────────────────────────────────────────── */
+  // 1. Mobile only: unmount if viewport > 768px or not mounted yet
+  if (!mounted || !isMobile) {
+    return null;
+  }
+
   const currentBarScale = scrolling && !prefersReducedMotion ? SCROLL_COMPRESS : 1;
   const currentBarBlur = scrolling ? BLUR_STRENGTH + 8 : BLUR_STRENGTH;
 
   return (
     <>
-      {/* ── Inline SVG Refraction & Chromatic Aberration Filters ─────── */}
+      {/* ── Inline SVG Refraction Filter (Chromium) ─────────────────── */}
       <svg
         aria-hidden="true"
         className="sr-only"
         style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", pointerEvents: "none" }}
       >
         <defs>
-          {/* Liquid Glass Refraction Filter (Chromium) */}
           <filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%">
             <feTurbulence
               type="fractalNoise"
@@ -360,7 +390,7 @@ export function LiquidGlassNav({
         </defs>
       </svg>
 
-      {/* ── The Floating Glass Bar ───────────────────────────────────── */}
+      {/* ── 1. The Floating Glass Bar (max-width 480px, centered, fixed at bottom) */}
       <motion.nav
         ref={barRef}
         role="tablist"
@@ -375,14 +405,14 @@ export function LiquidGlassNav({
             ? { duration: 0.1 }
             : { type: "spring", stiffness: 450, damping: 32 }
         }
-        className="liquid-mobile-bar min-[1024px]:hidden"
+        className="liquid-mobile-bar"
       >
-        {/* ── Active Lens Indicator (Draggable Glass Pill) ────────────── */}
+        {/* ── 2. Lens: width = tab width, translateX = tab.left - bar.left ── */}
         <motion.div
           className="liquid-mobile-lens"
           style={{
-            left: lensX,
-            width: baseLensW,
+            x: lensX,
+            width: lensW,
             scaleX: stretchX,
             scaleY: squashY,
           }}
@@ -403,10 +433,10 @@ export function LiquidGlassNav({
           onPointerCancel={cancelHold}
           aria-hidden="true"
         >
-          {/* Top specular rim light reflection */}
+          {/* Specular top rim light */}
           <div className="liquid-mobile-lens__rim" aria-hidden="true" />
 
-          {/* Magnification wrapper around the lens center (scale 1.12) */}
+          {/* Magnification wrapper (scale 1.12) centered around lens center */}
           <div
             className="liquid-mobile-lens__mag-wrapper"
             style={{
@@ -420,15 +450,15 @@ export function LiquidGlassNav({
             }}
             aria-hidden="true"
           >
-            {/* Clone row: same width & height as the bar, offset by -lensX and -lensTop (-6px) */}
+            {/* Clone row: width = bar width, translateX = -(tab.left - bar.left) */}
             <motion.div
               className="liquid-mobile-lens__clone-row"
               style={{
                 position: "absolute",
                 top: 0,
                 left: 0,
-                width: barSize.width > 0 ? barSize.width : "100%",
-                height: barSize.height > 0 ? barSize.height : 72,
+                width: geometry.barWidth > 0 ? geometry.barWidth : "100%",
+                height: geometry.barHeight > 0 ? geometry.barHeight : 72,
                 x: cloneX,
                 y: -LENS_INSET,
                 display: "flex",
@@ -458,7 +488,7 @@ export function LiquidGlassNav({
           </div>
         </motion.div>
 
-        {/* ── Base Tab Items (Underneath the lens) ────────────────────── */}
+        {/* ── Base Tab Items (Underneath lens) ─────────────────────────── */}
         {tabList.map((item, idx) => {
           const Icon = item.icon;
           const isActive = idx === currentActiveIndex;
@@ -478,40 +508,23 @@ export function LiquidGlassNav({
               onClick={(e) => handleTabClick(e, idx, item.href)}
               data-active={isActive}
               data-highlight={isHighlighted}
+              style={{
+                /* Hide the real active tab (opacity 0) so only the lens copy shows */
+                opacity: isActive ? 0 : 1,
+                transition: "opacity 0.15s ease",
+              }}
               className={`liquid-mobile-tab ${
                 isActive || isHighlighted
                   ? "liquid-mobile-tab--active"
                   : "liquid-mobile-tab--inactive"
               }`}
             >
-              <motion.span
-                className="liquid-mobile-tab__icon"
-                animate={{
-                  y: isActive && !prefersReducedMotion ? -3 : 0,
-                  scale: isActive ? 1.08 : 1,
-                }}
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0.1 }
-                    : { type: "spring", stiffness: 500, damping: 22 }
-                }
-              >
+              <span className="liquid-mobile-tab__icon">
                 <Icon size={20} strokeWidth={isActive ? 2.4 : 1.8} />
-              </motion.span>
-              <motion.span
-                className="liquid-mobile-tab__label"
-                animate={{
-                  y: isActive && !prefersReducedMotion ? -1 : 0,
-                  fontWeight: isActive ? 700 : 500,
-                }}
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0.1 }
-                    : { type: "spring", stiffness: 500, damping: 22 }
-                }
-              >
+              </span>
+              <span className="liquid-mobile-tab__label">
                 {item.label}
-              </motion.span>
+              </span>
             </Link>
           );
         })}

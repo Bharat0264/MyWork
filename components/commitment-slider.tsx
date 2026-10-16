@@ -80,10 +80,11 @@ export function CommitmentSlider() {
                 data-active={offset === 0}
                 aria-label={`Show ${item.title} commitment`}
                 aria-pressed={offset === 0}
+                aria-hidden={!visible}
                 tabIndex={visible ? 0 : -1}
                 onClick={() => setActive(index)}
                 style={{
-                  opacity: visible ? (offset === 0 ? 1 : 0.92) : 0,
+                  opacity: visible ? 1 : 0,
                   pointerEvents: visible ? "auto" : "none",
                 }}
               >

@@ -64,7 +64,6 @@ export function CommitmentSlider() {
         onTouchEnd={(event) => onTouchEnd(event.changedTouches[0].clientX)}
         onTouchCancel={() => { touchX.current = null; setPaused(false); }}
       >
-        <div className="commitment-glow" aria-hidden="true" />
         <div className="commitment-stage">
           {commitments.map((item, index) => {
             const raw = (index - active + commitments.length) % commitments.length;
@@ -83,18 +82,14 @@ export function CommitmentSlider() {
                 aria-hidden={!visible}
                 tabIndex={visible ? 0 : -1}
                 onClick={() => setActive(index)}
-                style={{
-                  opacity: visible ? 1 : 0,
-                  pointerEvents: visible ? "auto" : "none",
-                }}
               >
                 <span className="commitment-promise-pill"><span className="commitment-pulse" />Promise</span>
-                <span className="commitment-icon"><Icon size={36} strokeWidth={1.5} aria-hidden="true" /></span>
+                <span className="commitment-icon"><Icon aria-hidden="true" /></span>
                 <span className="commitment-card-title">{item.title}</span>
                 <span className="commitment-card-copy">{item.promise}</span>
                 <span className="commitment-card-bottom">
                   <span className="commitment-tag">{item.tag}</span>
-                  {offset === 0 && <span className="commitment-check" key={active} aria-hidden="true"><Check size={15} strokeWidth={2.4} /></span>}
+                  {offset === 0 && <span className="commitment-check" key={active} aria-hidden="true"><Check strokeWidth={2.4} /></span>}
                 </span>
               </button>
             );

@@ -75,37 +75,36 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main id="content" className="page-transition bg-transparent">
+      <main id="content" className="home-main page-transition bg-transparent">
         {/* ========================================================
             1. HERO SECTION
             ======================================================== */}
-        <section className="grid-bg relative overflow-hidden pb-12 sm:pb-16">
-          <div className="absolute -right-32 top-8 hidden h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none md:block" />
-          <Container className="relative">
-            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-[clamp(32px,5vw,96px)]">
-              <div className="flex min-w-0 flex-col justify-center">
+        <section className="home-hero grid-bg relative">
+          <Container className="home-hero__container relative">
+            <div className="home-hero__grid">
+              <div className="home-hero__content flex min-w-0 flex-col justify-center">
                 <p className="eyebrow flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
                   {siteConfig.availability}
                 </p>
-                <h1 className="hero-heading mt-3 font-semibold text-white">
-                  Websites built to{" "}
-                  <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
-                  work smarter, and grow faster.
+                <h1 className="hero-heading font-semibold text-white">
+                  Websites built to <br className="hidden lg:block" />
+                  <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}work <br className="hidden lg:block" />
+                  smarter, and grow faster.
                 </h1>
-                <p className="mt-5 max-w-[62ch] text-[clamp(1rem,1.25vw,1.35rem)] leading-[1.6] text-[#B8C9DE] md:mt-4 md:leading-[1.6] md:text-[var(--text-muted)]">
+                <p className="home-hero__description text-[#B8C9DE] md:text-[var(--text-muted)]">
                   I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
                 </p>
-                <div className="mt-[var(--header-gap)] flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-                  <StartProjectButton className="w-full sm:w-auto sm:max-w-[320px]" />
-                  <Link className="button-secondary" href="/work" prefetch={true}>
+                <div className="home-hero__actions flex flex-col items-stretch sm:flex-row sm:flex-wrap sm:items-center">
+                  <StartProjectButton className="home-hero__primary w-full sm:w-auto sm:max-w-[320px]" />
+                  <Link className="home-hero__secondary button-secondary" href="/work" prefetch={true}>
                     View my work <ArrowUpRight size={16} />
                   </Link>
                 </div>
-                <p className="mt-4 text-[13px] leading-relaxed text-[#C3D5EA]">{heroTrustLine}</p>
+                <p className="home-hero__trust text-[#C3D5EA]">{heroTrustLine}</p>
               </div>
 
-              <div className="relative w-full min-w-0">
+              <div className="home-hero__deck relative w-full min-w-0">
                 <CommitmentSlider />
               </div>
             </div>
@@ -113,7 +112,7 @@ export default function Home() {
             <a
               href="#featured-project"
               aria-label="Scroll to featured project"
-              className="hidden lg:flex absolute bottom-2 left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
+              className="home-hero__scroll hidden lg:flex absolute left-1/2 -translate-x-1/2 text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
             >
               <ArrowDown size={18} />
             </a>
@@ -123,7 +122,7 @@ export default function Home() {
         {/* ========================================================
             2. TRUST / MARQUEE STRIP
             ======================================================== */}
-        <section className="border-y border-[var(--border)] bg-[#141E30]/40 py-5">
+        <section className="home-marquee border-y border-[var(--border)] bg-[#141E30]/40 py-5">
           <Container className="flex flex-wrap justify-between gap-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
             <span>Strategy</span>
             <span>Design</span>

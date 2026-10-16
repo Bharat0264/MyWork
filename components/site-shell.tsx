@@ -143,10 +143,10 @@ export function Navbar() {
 
       {/* FIXED TOP HEADER */}
       <header className="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-[var(--border)] bg-[#0B1322]/85 backdrop-blur-md pt-[env(safe-area-inset-top)]">
-        {/* DESKTOP (900px and above) */}
-        <Container className="hidden h-full items-center justify-between min-[900px]:flex">
+        {/* DESKTOP (1024px and above) */}
+        <Container className="hidden h-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center min-[1024px]:grid">
           {/* Left: Garuda Logo Lockup */}
-          <div className="flex items-center min-w-[200px]">
+          <div className="flex min-w-0 items-center">
             <Link
               href="/"
               onClick={handleLogoClick}
@@ -163,7 +163,7 @@ export function Navbar() {
                   height={64}
                   loading="eager"
                   draggable={false}
-                  className="h-[52px] w-auto max-w-[280px] object-contain min-[900px]:h-[64px]"
+                  className="h-[52px] w-auto max-w-full object-contain min-[1024px]:h-[64px]"
                 />
               </picture>
               <span className="sr-only">Garuda Web Designer and Developer</span>
@@ -218,13 +218,13 @@ export function Navbar() {
           </nav>
 
           {/* Right: CTA Button */}
-          <div className="flex items-center justify-end min-w-[200px]">
+          <div className="flex min-w-0 items-center justify-end">
             <StartProjectButton variant="navbar" />
           </div>
         </Container>
 
-        {/* MOBILE TOP BAR (below 900px) */}
-        <Container className="flex h-full items-center justify-between min-[900px]:hidden">
+        {/* MOBILE TOP BAR (below 1024px) */}
+        <Container className="flex h-full items-center justify-between min-[1024px]:hidden">
           <Link
             href="/"
             onClick={handleLogoClick}
@@ -252,10 +252,10 @@ export function Navbar() {
         </Container>
       </header>
 
-      {/* MOBILE BOTTOM TAB BAR (below 900px, 5 items with House icon for Home) */}
+      {/* MOBILE BOTTOM TAB BAR (below 1024px, 5 items with House icon for Home) */}
       <nav
         aria-label="Mobile Navigation"
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-5 right-5 z-50 flex h-[68px] items-center justify-around rounded-full border border-white/20 bg-[#182942]/85 p-1 backdrop-blur-xl shadow-[0_12px_36px_rgba(3,9,20,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] min-[900px]:hidden"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-5 right-5 z-50 flex h-[68px] items-center justify-around rounded-full border border-white/20 bg-[#182942]/85 p-1 backdrop-blur-xl shadow-[0_12px_36px_rgba(3,9,20,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] min-[1024px]:hidden"
       >
         {mobileTabItems.map((item, idx) => {
           const isActive = activeSection === idx;
@@ -324,7 +324,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 min-[900px]:pb-8 min-[900px]:pt-16">
+    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 min-[1024px]:pb-8 min-[1024px]:pt-16">
       <Container>
         <div className="relative w-full overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 p-5 shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[28px] sm:p-8 sm:supports-[backdrop-filter]:bg-[#1B2B45]/45 sm:backdrop-blur-[18px] lg:p-[40px_44px]">
         {/* FAINT WATERMARK */}
@@ -417,7 +417,7 @@ export function Footer() {
           </div>
 
           {/* Column 3: Get in touch (30%) */}
-          <div className="w-full min-w-0 flex flex-col items-start sm:min-w-[260px] sm:items-center md:items-start md:col-start-2 md:row-start-1 lg:col-start-3 lg:row-start-1">
+          <div className="w-full min-w-0 flex flex-col items-start sm:items-center md:items-start md:col-start-2 md:row-start-1 lg:col-start-3 lg:row-start-1">
             <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
               Get in touch
             </h3>

@@ -470,7 +470,7 @@ export function AboutCardStack() {
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onMouseEnter={handleStageMouseEnter}
-      className="relative mx-auto w-full max-w-[1100px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-b from-[#1B2B45] via-[#141E30] to-[#0B1322] shadow-[0_24px_60px_rgba(4,9,18,0.5)] sm:rounded-[32px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] select-none [-webkit-tap-highlight-color:transparent]"
+      className="relative mx-auto w-full min-w-0 overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-b from-[#1B2B45] via-[#141E30] to-[#0B1322] shadow-[0_24px_60px_rgba(4,9,18,0.5)] sm:rounded-[32px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] select-none [-webkit-tap-highlight-color:transparent]"
     >
       {/* Subtle top ambient glow & grain overlay */}
       <div
@@ -529,7 +529,7 @@ export function AboutCardStack() {
                   transformPerspective: 1000,
                 }
           }
-          className="relative flex w-full max-w-[640px] flex-col items-center gap-[10px]"
+          className="relative flex w-full max-w-[760px] flex-col items-center gap-[10px]"
         >
           {skillGroups.map((group, index) => {
             const isActive = index === activeIndex;

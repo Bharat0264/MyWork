@@ -19,11 +19,11 @@
   /* --- SPACING TOKENS --- */
   --nav-h: 84px;
   --page-top-gap: 40px;
-  --section-gap: 80px;
+  --section-gap: clamp(56px, 7vw, 120px);
   --header-gap: 32px;
   --page-bottom-gap: 80px;
-  --container: 1200px;
-  --container-pad: 1.25rem;
+  --container-max: 1680px;
+  --gutter: clamp(20px, 4.5vw, 88px);
 
   /* --- NAVY MIRAGE DESIGN TOKENS --- */
   --bg-deep: #0B1322;
@@ -49,18 +49,6 @@
   --surface-elevated: var(--navy-mid);
   --fg: var(--text);
   --muted: var(--text-muted);
-}
-
-@media (min-width: 640px) {
-  :root {
-    --container-pad: 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --container-pad: 3rem;
-  }
 }
 
 @media (max-width: 899px) {
@@ -226,6 +214,10 @@ body {
   min-height: 100dvh;
 }
 
+img { max-width: 100%; }
+
+.grid > *, .flex > * { min-width: 0; }
+
 .stat-rail { scrollbar-width: none; }
 .stat-rail::-webkit-scrollbar { display: none; }
 
@@ -277,14 +269,13 @@ a {
   transition: color 0.25s ease;
 }
 
+.container,
 .wrap,
 .container-custom {
   width: 100%;
-  max-width: var(--container);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--container-pad);
-  padding-right: var(--container-pad);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
   box-sizing: border-box;
 }
 
@@ -319,14 +310,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-heading {
-  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+  max-width: 20ch;
+  font-size: clamp(2.6rem, 4.6vw, 5.2rem);
   letter-spacing: -0.025em;
   line-height: 1.1;
 }
 
 /* Hero promises: a fixed stage keeps all seven slides from shifting layout. */
 .commitment-slider { width: 100%; min-width: 0; }
-.commitment-frame { position: relative; isolation: isolate; width: 100%; aspect-ratio: 1 / 1; min-height: 420px; overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; perspective: 1000px; mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
+.commitment-frame { position: relative; isolation: isolate; width: 100%; aspect-ratio: 1.1 / 1; min-height: 0; overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; perspective: 1000px; mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
 .commitment-glow { position: absolute; left: 50%; top: 48%; width: 62%; height: 62%; transform: translate(-50%,-50%); border-radius: 50%; background: #527cae; filter: blur(70px); opacity: .24; pointer-events: none; }
 .commitment-stage { position: absolute; inset: 0 0 34px; perspective: 1000px; }
 .commitment-card { position: absolute; top: 50%; left: 50%; display: flex; width: 59%; height: 76%; min-height: 0; flex-direction: column; align-items: flex-start; padding: 20px; overflow: hidden; border: 1px solid rgba(160,192,229,.18); border-radius: 24px; background: linear-gradient(155deg, rgba(44,69,104,.72), rgba(13,28,49,.78) 68%, rgba(17,32,55,.75)); box-shadow: inset 0 1px rgba(225,241,255,.12), 0 14px 32px rgba(0,8,22,.28); backdrop-filter: blur(14px) saturate(110%); -webkit-backdrop-filter: blur(14px) saturate(110%); color: #fff; text-align: left; cursor: pointer; backface-visibility: hidden; transition: transform 500ms ease-out, opacity 500ms ease-out, filter 500ms ease-out; }
@@ -1246,7 +1238,7 @@ h1, h2, h3, h4, h5, h6 {
 /* --- CONTACT ENQUIRY FORM --- */
 .contact-form {
   width: 100%;
-  max-width: 600px;
+  max-width: 100%;
   border: 1px solid rgba(143, 176, 214, 0.18);
   border-radius: 28px;
   background: rgba(27, 43, 69, 0.92);
@@ -1566,7 +1558,6 @@ h1, h2, h3, h4, h5, h6 {
     --section-gap: 56px;
     --header-gap: 24px;
     --page-bottom-gap: 56px;
-    --container-pad: 20px;
   }
 
   html, body { overflow-x: hidden; }

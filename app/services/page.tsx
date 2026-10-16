@@ -47,7 +47,7 @@ export default function Services() {
           <h2 className="section-heading mt-3 max-w-2xl font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
             Less guesswork. More momentum.
           </h2>
-          <div className="mt-[var(--header-gap)] grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-[var(--header-gap)] grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4 sm:gap-6">
             {[
               ["01", "Understand", "Business, audience, requirements and goals."],
               ["02", "Plan", "Structure, journey, direction and technology."],

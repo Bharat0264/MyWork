@@ -82,8 +82,8 @@ export default function Home() {
         <section className="grid-bg relative overflow-hidden pb-12 sm:pb-16">
           <div className="absolute -right-32 top-8 hidden h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none md:block" />
           <Container className="relative">
-            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
-              <div className="flex flex-col justify-center">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-[clamp(32px,5vw,96px)]">
+              <div className="flex min-w-0 flex-col justify-center">
                 <p className="eyebrow flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
                   {siteConfig.availability}
@@ -93,7 +93,7 @@ export default function Home() {
                   <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
                   work smarter, and grow faster.
                 </h1>
-                <p className="mt-5 max-w-[52ch] text-[16px] leading-[1.6] text-[#B8C9DE] md:mt-4 md:text-lg md:leading-8 md:text-[var(--text-muted)]">
+                <p className="mt-5 max-w-[62ch] text-[clamp(1rem,1.25vw,1.35rem)] leading-[1.6] text-[#B8C9DE] md:mt-4 md:leading-[1.6] md:text-[var(--text-muted)]">
                   I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
                 </p>
                 <div className="mt-[var(--header-gap)] flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -241,9 +241,9 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="stat-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
+            <div className="stat-rail grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3 sm:gap-6">
               {/* Tile 1: Projects */}
-              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <FolderGit2 size={22} strokeWidth={2} />
                 </div>
@@ -259,7 +259,7 @@ export default function Home() {
               </div>
 
               {/* Tile 2: Services */}
-              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <Sparkles size={22} strokeWidth={2} />
                 </div>
@@ -275,7 +275,7 @@ export default function Home() {
               </div>
 
               {/* Tile 3: Technologies */}
-              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <Cpu size={22} strokeWidth={2} />
                 </div>
@@ -308,7 +308,7 @@ export default function Home() {
                 It is where people check whether you are credible, understand what you offer and decide whether to contact or buy from you—often before they speak to anyone.
               </p>
             </div>
-            <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-8 gap-y-6">
               {[
                 ["Always discoverable", "Give customers a clear place to find you, understand your services and make contact."],
                 ["Build trust faster", "A polished, current experience signals care, reliability and professionalism."],

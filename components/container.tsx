@@ -8,7 +8,7 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 /**
  * Universal Container Component
- * Strict specifications: max-w 1200px, centered (mx-auto), px-5 / sm:px-8 / lg:px-12
+ * Shared fluid page width and gutters are defined in app/globals.css.
  * Used in header, every page section, and the footer to guarantee identical left/right edges.
  */
 export function Container({
@@ -19,7 +19,7 @@ export function Container({
 }: ContainerProps) {
   return (
     <Component
-      className={`mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-12 ${className}`.trim()}
+      className={`container ${className}`.trim()}
       {...props}
     >
       {children}

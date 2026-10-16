@@ -34,7 +34,7 @@ export default function Contact() {
         id="content"
         className="page-transition bg-transparent"
       >
-        <Container className="grid grid-cols-1 items-center justify-items-center min-[900px]:justify-items-stretch min-[900px]:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] gap-12 min-[900px]:gap-[56px]">
+        <Container className="grid grid-cols-1 items-center justify-items-center min-[900px]:justify-items-stretch min-[900px]:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] gap-12 min-[900px]:gap-[clamp(32px,5vw,96px)]">
           {/* LEFT COLUMN: Enquiry Form Card */}
           <section aria-label="Project enquiry form" className="flex w-full flex-col items-start">
             <p className="eyebrow">Contact</p>
@@ -49,7 +49,7 @@ export default function Contact() {
 
           {/* RIGHT COLUMN: Garuda Eagle Delivering Message Artwork */}
           <section aria-label="Garuda eagle artwork" className="flex w-full items-center justify-center min-[900px]:justify-end">
-            <div className="w-full max-w-[320px] min-[900px]:max-w-[520px]">
+            <div className="w-full max-w-[320px] min-[900px]:max-w-[640px]">
               <div className="block w-full">
                 <Image
                   src="/contact-eagle.webp"
@@ -57,7 +57,7 @@ export default function Contact() {
                   width={1400}
                   height={1209}
                   loading="lazy"
-                  sizes="(max-width: 899px) 320px, 520px"
+                  sizes="(max-width: 899px) 320px, (max-width: 1680px) 45vw, 640px"
                   className="contact-eagle-floating h-auto w-full object-contain"
                 />
               </div>

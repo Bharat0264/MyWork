@@ -245,7 +245,7 @@ export function WorkPortfolioShowcase() {
 
       {/* ========================================================
           2. THE STAGE (MAIN SHOWCASE CONTAINER)
-          Max-width 1200px, radius 32px, min-height 640px, padding 36px
+          Fluid container width, radius 32px, min-height 640px, padding 36px
           Background: linear-gradient(145deg, #1B2B45 0%, #141E30 60%, #0F1829 100%)
           1px border rgba(143,176,214,0.18), shadow 0 24px 60px rgba(4,9,18,0.5), faint grain overlay 0.03
           ======================================================== */}
@@ -259,7 +259,7 @@ export function WorkPortfolioShowcase() {
         aria-label="Project showcase environment"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative mx-auto w-full max-w-[1200px] overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45] via-[#141E30] to-[#0F1829] p-5 sm:rounded-[32px] sm:p-7 lg:p-9 shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px] flex flex-col justify-between"
+        className="relative mx-auto w-full min-w-0 overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45] via-[#141E30] to-[#0F1829] p-5 sm:rounded-[32px] sm:p-7 lg:p-9 shadow-[0_24px_60px_rgba(4,9,18,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] min-h-[640px] flex flex-col justify-between"
       >
         {/* Faint grain overlay (0.03) */}
         <div
@@ -285,7 +285,7 @@ export function WorkPortfolioShowcase() {
             Grid: 232px | minmax(280px, 340px) | minmax(0, 1fr) | 56px
             Gap: 32px, align-items: center
             ======================================================== */}
-        <div className="hidden xl:grid w-full grid-cols-[232px_minmax(280px,340px)_minmax(0,1fr)_56px] gap-8 items-center relative z-10 flex-1 py-4">
+        <div className="hidden xl:grid w-full grid-cols-[232px_minmax(280px,340px)_minmax(0,1fr)_56px] gap-[clamp(20px,2vw,32px)] items-center relative z-10 flex-1 py-4">
           
           {/* ─── COLUMN 1: THE RAIL (232px) ─── */}
           <div className="flex flex-col items-center justify-center w-[232px]">
@@ -428,10 +428,10 @@ export function WorkPortfolioShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* ─── COLUMN 3: THE DEVICE (Tablet / Browser Mockup, centered, min 420px) ─── */}
-          <div className="flex flex-col items-center justify-center w-full min-w-[420px]" style={{ perspective: "1000px" }}>
+          {/* ─── COLUMN 3: THE DEVICE (Tablet / Browser Mockup, centered and fluid) ─── */}
+          <div className="flex min-w-0 flex-col items-center justify-center w-full" style={{ perspective: "1000px" }}>
             {/* Top Corners: Category Chip (Left) & Live Project Chip (Right) OUT of the screen */}
-            <div className="flex items-center justify-between w-[90%] max-w-[560px] mb-2.5 px-1 select-none">
+            <div className="flex items-center justify-between w-[90%] max-w-[700px] mb-2.5 px-1 select-none">
               {/* Category chip above top-left corner */}
               <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
                 {currentProject.category}
@@ -454,7 +454,7 @@ export function WorkPortfolioShowcase() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
                 transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                className="relative w-[90%] max-w-[560px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_24px_50px_rgba(0,0,0,0.6)] flex flex-col"
+                className="relative w-[90%] max-w-[700px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_24px_50px_rgba(0,0,0,0.6)] flex flex-col"
                 style={{
                   transform: isReducedMotion ? "none" : "rotate(-3deg)",
                 }}

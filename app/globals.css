@@ -581,15 +581,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 @media (max-width: 768px) {
   .commitment-stage {
-    --side-offset: 62%;
+    --side-offset: 58%;
     aspect-ratio: auto;
-    min-height: 390px;
+    min-height: 300px;
   }
   .commitment-card {
-    width: min(78vw, 320px);
-    min-height: 340px;
+    width: min(68vw, 270px);
+    min-height: 0;
     height: auto;
-    padding: 22px 20px 24px;
+    padding: 18px 16px;
+    border-radius: 22px;
   }
   .commitment-card[data-active="true"] {
     z-index: 2;
@@ -597,26 +598,33 @@ h1, h2, h3, h4, h5, h6 {
   }
   .commitment-card[data-position="-1"] {
     z-index: 1;
-    opacity: 0.7;
-    transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(0.86);
+    opacity: 0.65;
+    transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(0.88);
   }
   .commitment-card[data-position="1"] {
     z-index: 1;
-    opacity: 0.7;
-    transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(0.86);
+    opacity: 0.65;
+    transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(0.88);
+  }
+  .commitment-icon {
+    width: 44px;
+    height: 44px;
   }
   .commitment-card-title {
     height: auto;
     min-height: 0;
     overflow: visible;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1.25;
     padding-bottom: 0.12em;
   }
   .commitment-card-copy {
     overflow: visible;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
+  }
+  .commitment-card-bottom {
+    margin-top: 14px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

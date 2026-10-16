@@ -578,6 +578,146 @@ h1, h2, h3, h4, h5, h6 {
   .commitment-pulse, .commitment-check { animation: none !important; }
 }
 
+/* ==========================================================================
+   HOME CAPABILITY STRIP (.home-strip)
+   - Height 56px, top and bottom borders, dark surface background
+   - Desktop (>900px): 1 evenly spaced row (01 STRATEGY -> 05 SYSTEMS)
+   - Mobile & tablet (<=900px): Continuous 28s marquee with edge fade & touch/hover pause
+   - Prefers-reduced-motion: Centered wrapped layout
+   ========================================================================== */
+.home-strip {
+  position: relative;
+  height: 56px;
+  min-height: 56px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: rgba(20, 30, 48, 0.45);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  user-select: none;
+}
+
+.home-strip__desktop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.home-strip__mobile {
+  display: none;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.home-strip__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  animation: homeStripScroll 28s linear infinite;
+}
+
+.home-strip:hover .home-strip__track,
+.home-strip:active .home-strip__track {
+  animation-play-state: paused;
+}
+
+.home-strip__group {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-right: 40px;
+}
+
+.home-strip__item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans), "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.home-strip__num {
+  font-size: 11px !important;
+  color: #6F86A3 !important;
+  margin-right: 8px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.home-strip__dot {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background-color: #6F86A3 !important;
+  flex-shrink: 0;
+}
+
+@keyframes homeStripScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 900px) {
+  .home-strip__desktop {
+    display: none !important;
+  }
+  .home-strip__mobile {
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-strip {
+    height: auto;
+    min-height: 56px;
+    padding-block: 14px;
+  }
+  .home-strip__mobile {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    overflow: visible;
+  }
+  .home-strip__track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .home-strip__group:nth-child(2) {
+    display: none !important;
+  }
+  .home-strip__group {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding-right: 0;
+  }
+}
+
+/* Fixed bottom navigation bar clearance on mobile */
+@media (max-width: 1023px) {
+  footer {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
 .section-heading {
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3vw, 2.5rem);

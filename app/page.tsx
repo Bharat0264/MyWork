@@ -128,16 +128,51 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            2. TRUST / MARQUEE STRIP
+            2. CAPABILITY STRIP (ORDERED: 01 STRATEGY -> 05 SYSTEMS)
             ======================================================== */}
-        <section className="home-marquee border-y border-[var(--border)] bg-[#141E30]/40 py-5">
-          <Container className="flex flex-wrap justify-between gap-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-faint)]">
-            <span>Strategy</span>
-            <span>Design</span>
-            <span>Development</span>
-            <span>Growth</span>
-            <span>Systems</span>
+        <section className="home-strip" aria-label="Capabilities">
+          {/* Desktop (> 900px): One evenly spaced row in exact order */}
+          <Container className="home-strip__desktop">
+            <span className="home-strip__item"><span className="home-strip__num">01</span>STRATEGY</span>
+            <span className="home-strip__dot" aria-hidden="true" />
+            <span className="home-strip__item"><span className="home-strip__num">02</span>DESIGN</span>
+            <span className="home-strip__dot" aria-hidden="true" />
+            <span className="home-strip__item"><span className="home-strip__num">03</span>DEVELOPMENT</span>
+            <span className="home-strip__dot" aria-hidden="true" />
+            <span className="home-strip__item"><span className="home-strip__num">04</span>GROWTH</span>
+            <span className="home-strip__dot" aria-hidden="true" />
+            <span className="home-strip__item"><span className="home-strip__num">05</span>SYSTEMS</span>
           </Container>
+
+          {/* Mobile & Tablet (<= 900px): Single continuous 28s marquee */}
+          <div className="home-strip__mobile">
+            <div className="home-strip__track">
+              <div className="home-strip__group">
+                <span className="home-strip__item"><span className="home-strip__num">01</span>STRATEGY</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">02</span>DESIGN</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">03</span>DEVELOPMENT</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">04</span>GROWTH</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">05</span>SYSTEMS</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+              </div>
+              <div className="home-strip__group" aria-hidden="true">
+                <span className="home-strip__item"><span className="home-strip__num">01</span>STRATEGY</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">02</span>DESIGN</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">03</span>DEVELOPMENT</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">04</span>GROWTH</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+                <span className="home-strip__item"><span className="home-strip__num">05</span>SYSTEMS</span>
+                <span className="home-strip__dot" aria-hidden="true" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* ========================================================

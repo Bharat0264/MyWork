@@ -484,14 +484,7 @@ export function AboutCardStack() {
 
 
       {/* Center Stage: Constant height reserved, tilting subtly towards pointer */}
-      <div className="relative z-10 flex min-h-0 w-full flex-col items-center justify-center px-4 pb-5 pt-16 sm:min-h-[560px] sm:px-8 sm:py-20 md:min-h-[580px] md:py-24">
-        <div role="tablist" aria-label="Skill categories" className="mb-5 grid w-full grid-cols-2 gap-1 rounded-[18px] border border-white/10 bg-[#0B1322]/70 p-1 sm:hidden">
-          {skillGroups.map((group, index) => (
-            <button key={group.name} type="button" role="tab" aria-selected={activeIndex === index} aria-controls="about-main-panel" onClick={() => { stopAutoplay(); selectGroup(index); }} className={`min-h-11 rounded-[14px] px-2 text-[13px] font-medium leading-tight transition-all duration-200 active:scale-[0.97] ${activeIndex === index ? "bg-[#35577D] text-white shadow-sm" : "text-[#C3D2E5]"}`}>
-              {group.name}
-            </button>
-          ))}
-        </div>
+      <div className="relative z-10 flex min-h-0 w-full flex-col items-center justify-center px-3 py-6 sm:min-h-[560px] sm:px-8 sm:py-20 md:min-h-[580px] md:py-24">
         <motion.div
           role="tablist"
           aria-label="Skill categories"
@@ -664,7 +657,7 @@ export function AboutCardStack() {
                   </div>
 
                   {/* Slider with spring-gliding thumb and filled track */}
-                  <div className="my-5 hidden sm:block sm:my-6">
+                  <div className="my-5 block sm:my-6">
                     <div
                       ref={sliderTrackRef}
                       onClick={handleSliderClick}
@@ -817,7 +810,7 @@ export function AboutCardStack() {
                   opacity: pillOpacity,
                   scale: 1,
                 }}
-                className="hidden w-full justify-center sm:flex"
+                className="flex w-full justify-center"
               >
                 <motion.button
                   type="button"
@@ -836,7 +829,7 @@ export function AboutCardStack() {
                       : undefined
                   }
                   whileTap={!prefersReducedMotion ? { scale: 0.97 } : undefined}
-                  className="group flex h-[40px] md:h-[44px] items-center justify-between rounded-full border border-[rgba(143,176,214,0.2)] bg-[#0E1626] px-4 md:px-5 text-left transition-colors hover:border-[rgba(143,176,214,0.38)] hover:bg-[#141F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer select-none"
+                  className="group flex h-[42px] sm:h-[40px] md:h-[44px] items-center justify-between rounded-full border border-[rgba(143,176,214,0.2)] bg-[#0E1626] px-4 md:px-5 text-left transition-colors hover:border-[rgba(143,176,214,0.38)] hover:bg-[#141F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] cursor-pointer select-none"
                   style={{
                     width: `${pillWidthPercent}%`,
                     WebkitTapHighlightColor: "transparent",

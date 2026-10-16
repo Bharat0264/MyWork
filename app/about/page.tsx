@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Check, Users } from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { Container } from "@/components/container";
-import { teamMembers } from "@/data/team";
+import { teamMembers } from "@/config/team";
 
 const AboutCardStack = dynamic(
   () => import("@/components/about-card-stack").then((mod) => mod.AboutCardStack),
@@ -122,36 +122,42 @@ export default function About() {
               Meet the team
             </h2>
             <p className="mt-4 text-[#B8C9DE] text-base leading-relaxed">
-              We are a close-knit group of friends building great digital experiences. When you work with us, you collaborate directly with the people designing and coding your site.
+              Two developers, one focus: websites that look sharp and work well.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
             {teamMembers.map((member) => (
               <div
                 key={member.id}
                 className="group relative flex flex-col justify-between rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/85 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(143,176,214,0.35)] hover:shadow-[0_20px_40px_rgba(4,9,18,0.5)]"
               >
                 <div>
-                  {/* Photo placeholder / avatar frame */}
-                  <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-[rgba(143,176,214,0.25)] bg-gradient-to-br from-[#273F63] to-[#141F32] shadow-inner overflow-hidden text-[#E8EEF7]">
-                    {member.avatar ? (
-                      <Image
-                        src={member.avatar}
-                        alt={member.name}
-                        width={80}
-                        height={80}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center justify-center">
-                        <span className="font-mono text-xl font-bold tracking-wider text-[#A9C8EB]">
-                          {member.initials}
-                        </span>
-                      </div>
-                    )}
-                    {/* Subtle status dot */}
-                    <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full border-2 border-[#141E30] bg-emerald-400" aria-hidden="true" />
+                  <div className="flex items-start justify-between gap-4 mb-5">
+                    {/* Photo placeholder / avatar frame */}
+                    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-[rgba(143,176,214,0.25)] bg-gradient-to-br from-[#273F63] to-[#141F32] shadow-inner overflow-hidden text-[#E8EEF7]">
+                      {member.avatar ? (
+                        <Image
+                          src={member.avatar}
+                          alt={member.name}
+                          width={80}
+                          height={80}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center">
+                          <span className="font-mono text-2xl font-bold tracking-wider text-[#A9C8EB]">
+                            {member.initials}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Availability Badge */}
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[12px] font-medium text-emerald-300">
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                      <span>{member.availability?.label || "Available for select projects"}</span>
+                    </div>
                   </div>
 
                   {/* Name & Role */}
@@ -169,11 +175,11 @@ export default function About() {
                 </div>
 
                 {/* Optional Social Links */}
-                {(member.github || member.linkedin) && (
+                {(member.links.github || member.links.linkedin) && (
                   <div className="mt-6 flex items-center gap-2.5 pt-4 border-t border-[rgba(143,176,214,0.14)]">
-                    {member.github && (
+                    {member.links.github && (
                       <a
-                        href={member.github}
+                        href={member.links.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${member.name} on GitHub`}
@@ -182,9 +188,9 @@ export default function About() {
                         <GithubIcon />
                       </a>
                     )}
-                    {member.linkedin && (
+                    {member.links.linkedin && (
                       <a
-                        href={member.linkedin}
+                        href={member.links.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${member.name} on LinkedIn`}

@@ -315,19 +315,19 @@ h1, h2, h3, h4, h5, h6 {
 .hero-heading {
   max-width: 15ch;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-size: clamp(2.8rem, 5vw, 5.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.04;
   font-weight: 600;
 }
 
 /* Home hero: first-screen layout and a fully contained, proportional card deck. */
 .home-main { padding-top: var(--nav-h); padding-bottom: 0; }
 .home-hero { min-height: calc(100svh - var(--nav-h) - var(--marquee-h)); box-sizing: border-box; }
-.home-hero__container { display: flex; min-height: inherit; flex-direction: column; justify-content: center; padding-block: clamp(24px, 2.2vw, 32px); }
-.home-hero__grid { display: grid; width: 100%; min-width: 0; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; column-gap: clamp(48px, 4.5vw, 88px); }
+.home-hero__container { display: flex; min-height: inherit; flex-direction: column; justify-content: center; padding-block: clamp(24px, 1.5vw, 28px); }
+.home-hero__grid { display: grid; width: 100%; min-width: 0; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; column-gap: clamp(32px, 4vw, 80px); }
 .home-hero__content { min-width: 0; }
-.home-hero__content .eyebrow { margin-bottom: 20px; font-size: 14px; }
+.home-hero__content .eyebrow { margin-bottom: 20px; font-size: 13px; }
 .home-hero__description { max-width: 46ch; margin-top: 24px; font-size: clamp(1.05rem, 1.35vw, 1.45rem); line-height: 1.6; }
 .home-hero__actions { gap: 16px; margin-top: 32px; }
 .home-hero__primary, .home-hero__secondary { min-height: 56px; }
@@ -353,12 +353,13 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 .commitment-stage {
-  --side-offset: calc(54.6px * var(--deck-scale));
+  --side-offset: 29cqw;
   position: relative;
   isolation: isolate;
-  width: calc(400px * var(--deck-scale));
-  height: calc(288px * var(--deck-scale));
-  max-width: 100%;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 5 / 4.4;
   margin-inline: auto;
   perspective: 1000px;
 }
@@ -369,8 +370,8 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 0;
   display: flex;
   box-sizing: border-box;
-  width: calc(232px * var(--deck-scale));
-  height: calc(268px * var(--deck-scale));
+  width: 46cqw;
+  height: 67cqw;
   flex-direction: column;
   align-items: flex-start;
   padding: calc(20.8px * var(--deck-scale));
@@ -390,15 +391,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .commitment-card[data-position="-1"] {
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.8;
   pointer-events: auto;
-  transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(0.9);
+  transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(0.88);
 }
 .commitment-card[data-position="1"] {
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.8;
   pointer-events: auto;
-  transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(0.9);
+  transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(0.88);
 }
 .commitment-card[data-active="true"] {
   z-index: 2;
@@ -461,7 +462,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  font-size: calc(19.2px * var(--deck-scale));
+  font-size: clamp(1.35rem, 1.8vw, 1.9rem);
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -474,7 +475,7 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   color: #DFEAF7;
-  font-size: calc(12px * var(--deck-scale));
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
   line-height: 1.55;
 }
 .commitment-card-bottom {
@@ -511,7 +512,7 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   width: max-content;
   max-width: 100%;
-  margin: 32px auto 0;
+  margin: 28px auto 0;
   color: #B8CFEA;
   font-size: 14px;
   font-weight: 600;
@@ -523,7 +524,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: center;
   gap: 0;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 .commitment-dots button {
   display: grid;
@@ -570,6 +571,9 @@ h1, h2, h3, h4, h5, h6 {
   .home-hero__primary, .home-hero__secondary { min-height: 48px; width: 100%; }
   .home-hero__primary .btn-chrome__face { height: 42px; }
   .commitment-slider { --deck-scale: 0.95; }
+  .commitment-card[data-active="true"] { transform: translate(-50%, -50%) scale(.85); }
+  .commitment-card[data-position="-1"] { transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(.748); }
+  .commitment-card[data-position="1"] { transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(.748); }
   .commitment-frame-label { margin-top: 24px; font-size: 14px; letter-spacing: 0.08em; }
   .commitment-dots { margin-top: 14px; }
 }

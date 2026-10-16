@@ -1647,97 +1647,58 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Glass lens indicator ────────────────────────────────────────────── */
 .liquid-mobile-lens {
   position: absolute;
-  top: 6px;
+  top: 5px;
   left: 0;
-  height: calc(100% - 12px);
-  border-radius: 999px;
-  pointer-events: auto;
+  height: calc(100% - 10px);
+  border-radius: 9999px;
+  pointer-events: none;
   z-index: 1;
-  cursor: grab;
   transform-origin: center center;
-  will-change: left, transform;
-  /* Opaque gradient base hiding the real tab underneath completely */
+  will-change: transform, width;
+  /* Light, clear glass material */
   background: linear-gradient(
-    145deg,
-    #253A5A 0%,
-    #17263D 55%,
-    #0E1828 100%
+    180deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 100%
   );
-  backdrop-filter: blur(14px) saturate(160%) brightness(1.15);
-  -webkit-backdrop-filter: blur(14px) saturate(160%) brightness(1.15);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-top-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px) saturate(160%) brightness(1.12);
+  -webkit-backdrop-filter: blur(10px) saturate(160%) brightness(1.12);
+  border: 0.5px solid rgba(255, 255, 255, 0.28);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-    0 6px 20px rgba(3, 9, 20, 0.5),
-    0 2px 6px rgba(3, 9, 20, 0.3);
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 4px 14px rgba(0, 0, 0, 0.18);
   overflow: hidden;
   isolation: isolate;
+  transition: background 0.2s ease;
 }
 
-.liquid-mobile-lens:active {
-  cursor: grabbing;
+.liquid-mobile-lens--pressed {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
 }
 
-@supports (backdrop-filter: url(#liquid-glass)) {
-  .liquid-mobile-lens {
-    backdrop-filter: url(#liquid-glass) blur(8px) saturate(180%) brightness(1.15);
-    -webkit-backdrop-filter: url(#liquid-glass) blur(8px) saturate(180%) brightness(1.15);
-  }
-}
-
-/* Specular rim highlight */
+/* Thin specular rim highlight along top edge only (subtle, not glowing) */
 .liquid-mobile-lens__rim {
   position: absolute;
   top: 0;
-  left: 12%;
-  right: 12%;
+  left: 15%;
+  right: 15%;
   height: 1px;
-  border-radius: 999px;
+  border-radius: 9999px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.6) 25%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0.6) 75%,
+    rgba(255, 255, 255, 0.4) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0.4) 70%,
     transparent 100%
   );
   pointer-events: none;
-  z-index: 5;
-}
-
-/* Chromatic aberration fringes */
-.liquid-mobile-lens::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 999px;
-  pointer-events: none;
-  box-shadow:
-    inset 1px 0 2px rgba(255, 80, 80, 0.12),
-    inset -1px 0 2px rgba(80, 130, 255, 0.12),
-    -1px 0 3px rgba(255, 80, 80, 0.06),
-    1px 0 3px rgba(80, 130, 255, 0.06);
-  z-index: 6;
-}
-
-/* Magnification wrapper centered on lens & clone row */
-.liquid-mobile-lens__mag-wrapper {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  overflow: hidden;
-  pointer-events: none;
-  transform-origin: center center;
-}
-
-.liquid-mobile-lens__clone-row {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  user-select: none;
+  z-index: 2;
 }
 
 /* ── Tab styling ─────────────────────────────────────────────────────── */
@@ -1750,17 +1711,17 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   flex: 1;
   min-width: 0;
-  min-height: 48px;
-  gap: 2px;
+  height: 100%;
+  gap: 3px;
   padding: 4px 2px;
   text-decoration: none;
-  border-radius: 999px;
+  border-radius: 9999px;
   -webkit-tap-highlight-color: transparent;
   transition: color 0.2s ease;
 }
 
 .liquid-mobile-tab--active {
-  color: #E8EEF7;
+  color: #FFFFFF;
 }
 
 .liquid-mobile-tab--inactive {
@@ -1771,17 +1732,12 @@ h1, h2, h3, h4, h5, h6 {
   color: #B8C9DE;
 }
 
-.liquid-mobile-tab--mag {
-  color: #FFFFFF;
-  pointer-events: none;
-}
-
 .liquid-mobile-tab__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   will-change: transform;
 }
 
@@ -1796,7 +1752,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .liquid-mobile-tab--active .liquid-mobile-tab__label {
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .liquid-mobile-tab:focus-visible {
@@ -1810,10 +1766,7 @@ h1, h2, h3, h4, h5, h6 {
     transition: none !important;
   }
   .liquid-mobile-lens {
-    transition: left 0.15s ease !important;
-  }
-  .liquid-mobile-lens::after {
-    display: none;
+    transition: transform 0.15s ease, width 0.15s ease !important;
   }
   .liquid-mobile-tab__icon,
   .liquid-mobile-tab__label {

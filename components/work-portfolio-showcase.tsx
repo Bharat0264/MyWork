@@ -13,6 +13,7 @@ import {
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { projects, Project } from "@/data/projects";
 import { ViewProjectLiquidButton } from "@/components/view-project-button";
+import { Container } from "@/components/container";
 
 // Short category labels as requested: All, Creation, Redesign, Full-stack, E-commerce, SEO, Marketing
 const categoryItems = [
@@ -160,7 +161,7 @@ export function WorkPortfolioShowcase() {
   const totalCategoriesCount = categoryItems.length - 1;
 
   return (
-    <section id="work" className="wrap pt-0 pb-0">
+    <Container as="section" id="work" className="pt-0 pb-0">
 
       {/* ========================================================
           1. HEADER (LEFT-ALIGNED BLOCK, NO LOGO, REAL STATS ON RIGHT)
@@ -419,21 +420,9 @@ export function WorkPortfolioShowcase() {
                   ))}
                 </div>
 
-                {/* Buttons: "View project" liquid glass pill + secondary "Live site ↗" */}
+                {/* Button: "View project" liquid glass pill */}
                 <div className="flex flex-wrap items-center gap-4 pt-3">
                   <ViewProjectLiquidButton project={currentProject} />
-
-                  {currentProject.liveUrl && (
-                    <a
-                      href={currentProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#8FB0D6] transition-colors hover:text-white focus-visible:outline-none focus-visible:underline"
-                    >
-                      <span>Live site</span>
-                      <ArrowUpRight size={14} strokeWidth={2} />
-                    </a>
-                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -666,16 +655,6 @@ export function WorkPortfolioShowcase() {
               </div>
               <div className="flex items-center gap-4 pt-2">
                 <ViewProjectLiquidButton project={currentProject} />
-                {currentProject.liveUrl && (
-                  <a
-                    href={currentProject.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[13px] text-[#8FB0D6] hover:text-white"
-                  >
-                    Live site ↗
-                  </a>
-                )}
               </div>
             </div>
           </div>
@@ -768,16 +747,6 @@ export function WorkPortfolioShowcase() {
             </div>
             <div className="flex items-center gap-4 pt-2">
               <ViewProjectLiquidButton project={currentProject} />
-              {currentProject.liveUrl && (
-                <a
-                  href={currentProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[13px] text-[#8FB0D6] hover:text-white"
-                >
-                  Live site ↗
-                </a>
-              )}
             </div>
           </div>
 
@@ -869,19 +838,9 @@ export function WorkPortfolioShowcase() {
             ))}
           </div>
 
-          {/* Buttons: View project & Live site */}
-          <div className="flex flex-col items-stretch gap-3 pt-1">
+          {/* Button: View project */}
+          <div className="flex items-center justify-center gap-3 pt-1">
             <ViewProjectLiquidButton project={currentProject} />
-            {currentProject.liveUrl && (
-              <a
-                href={currentProject.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-11 items-center justify-center rounded-full border border-white/15 text-[13px] text-[#B8D4F2] hover:text-white"
-              >
-                Live site ↗
-              </a>
-            )}
           </div>
 
           {/* Swipeable Thumbnails Row */}
@@ -1019,7 +978,7 @@ export function WorkPortfolioShowcase() {
           ))}
         </ul>
       </div>
-    </section>
+    </Container>
   );
 }
 

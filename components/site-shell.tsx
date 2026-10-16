@@ -324,7 +324,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 sm:pb-8 sm:pt-16">
+    <footer className="relative w-full border-t border-[rgba(143,176,214,0.16)] bg-gradient-to-b from-[#141E30] to-[#0B1322] pb-[calc(112px+env(safe-area-inset-bottom))] pt-12 min-[900px]:pb-8 min-[900px]:pt-16">
       <Container>
         <div className="relative w-full overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-[#1B2B45]/90 p-5 shadow-[0_16px_40px_rgba(4,9,18,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[28px] sm:p-8 sm:supports-[backdrop-filter]:bg-[#1B2B45]/45 sm:backdrop-blur-[18px] lg:p-[40px_44px]">
         {/* FAINT WATERMARK */}

@@ -13,9 +13,9 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  max-width: var(--container);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--container-pad) calc(var(--section-gap) / 2);
+  padding-bottom: calc(var(--section-gap) / 2);
 }
 
 .glassSlab {
@@ -378,8 +378,9 @@
 
 @media (max-width: 900px) {
   .scene {
-    width: min(100%, calc(100% - 32px));
-    padding: 120px 0 64px;
+    width: 100%;
+    padding-top: 0;
+    padding-bottom: calc(var(--section-gap) / 2);
   }
 
   .glassSlab {
@@ -474,7 +475,8 @@
   .scene {
     width: 100%;
     max-width: var(--container);
-    padding: 0 var(--container-pad) calc(var(--section-gap) / 2);
+    padding-top: 0;
+    padding-bottom: calc(var(--section-gap) / 2);
   }
 
   .glassSlab {
@@ -541,12 +543,12 @@
 }
 
 @media (max-width: 699px) {
-  .scene { width: 100%; padding: 0 0 28px; }
+  .scene { width: 100%; padding-top: 0; padding-bottom: 28px; }
   .scene > .sphere, .glassSlab { display: none; }
   .mobileShowcase { display: block; }
-  .mobileEyebrow { margin: 0 20px; color: #A9C8EB; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
-  .mobileHeading { margin: 12px 20px 28px; max-width: 390px; color: white; font-size: clamp(36px, 9vw, 40px); line-height: 1.1; font-weight: 600; letter-spacing: -.025em; }
-  .mobileCarousel { display: flex; gap: 12px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; padding: 0 20px 8px; scrollbar-width: none; }
+  .mobileEyebrow { margin: 0; color: #A9C8EB; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+  .mobileHeading { margin: 12px 0 28px; max-width: 390px; color: white; font-size: clamp(36px, 9vw, 40px); line-height: 1.1; font-weight: 600; letter-spacing: -.025em; }
+  .mobileCarousel { display: flex; gap: 12px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--container-pad); margin-inline: calc(-1 * var(--container-pad)); padding: 0 var(--container-pad) 8px; scrollbar-width: none; }
   .mobileCarousel::-webkit-scrollbar { display: none; }
   .mobileCard { flex: 0 0 calc(100% - 48px); min-width: 0; scroll-snap-align: start; border: 1px solid rgba(143,176,214,.22); border-radius: 24px; background: linear-gradient(145deg, #263b58, #15243a); box-shadow: inset 0 1px rgba(255,255,255,.12), 0 12px 28px rgba(4,9,18,.3); padding: 24px 20px; }
   .mobileNumber { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .14em; color: #A9C8EB; }

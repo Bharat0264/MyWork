@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Check } from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
+import { Container } from "@/components/container";
 
 const AboutCardStack = dynamic(
   () => import("@/components/about-card-stack").then((mod) => mod.AboutCardStack),
@@ -38,7 +39,7 @@ export default function About() {
     <>
       <Navbar />
       <main id="content" className="page-transition bg-transparent">
-        <section className="wrap pt-0 pb-[calc(var(--section-gap)/2)]">
+        <Container as="section" className="pt-0 pb-[calc(var(--section-gap)/2)]">
           {/* HEADER */}
           <div className="max-w-[1200px]">
             <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-[#A9C8EB] md:text-[12px] md:tracking-[0.2em] md:text-[#8FB0D6]">
@@ -56,10 +57,10 @@ export default function About() {
           <div className="mt-[var(--header-gap)]">
             <AboutCardStack />
           </div>
-        </section>
+        </Container>
 
         {/* WHY WORK TOGETHER: Design thinking with a builder's mindset */}
-        <section className="wrap pt-[calc(var(--section-gap)/2)] pb-0 border-t border-[rgba(143,176,214,0.18)]">
+        <Container as="section" className="pt-[calc(var(--section-gap)/2)] pb-0 border-t border-[rgba(143,176,214,0.18)]">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
               <p className="eyebrow text-[#8FB0D6]">Why work together</p>
@@ -89,7 +90,7 @@ export default function About() {
               ))}
             </div>
           </div>
-        </section>
+        </Container>
       </main>
       <Footer />
     </>

@@ -5,10 +5,13 @@ import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react
 import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
 import { Container } from "@/components/container";
+import { CommitmentSlider } from "@/components/commitment-slider";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
+
+const heroTrustLine = "Free first consultation · Reply within 24 hours";
 
 export const metadata: Metadata = {
   title: "Garuda Web Designer and Developer | High-Performance Modern Websites",
@@ -78,7 +81,7 @@ export default function Home() {
         <section className="grid-bg relative overflow-hidden pb-12 sm:pb-16">
           <div className="absolute -right-32 top-8 hidden h-96 w-96 rounded-full bg-[rgba(53,87,125,0.22)] blur-[120px] pointer-events-none md:block" />
           <Container className="relative">
-            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
               <div className="flex flex-col justify-center">
                 <p className="eyebrow flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
@@ -89,36 +92,20 @@ export default function Home() {
                   <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}
                   work smarter, and grow faster.
                 </h1>
-                <p className="mt-5 max-w-xl text-[16px] leading-[1.6] text-[#B8C9DE] md:mt-4 md:text-lg md:leading-8 md:text-[var(--text-muted)]">
+                <p className="mt-5 max-w-[52ch] text-[16px] leading-[1.6] text-[#B8C9DE] md:mt-4 md:text-lg md:leading-8 md:text-[var(--text-muted)]">
                   I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
                 </p>
                 <div className="mt-[var(--header-gap)] flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-                  <Link className="button" href="/work" prefetch={true}>
+                  <StartProjectButton className="w-full sm:w-auto sm:max-w-[320px]" />
+                  <Link className="button-secondary" href="/work" prefetch={true}>
                     View my work <ArrowUpRight size={16} />
                   </Link>
-                  <StartProjectButton className="w-full sm:w-auto sm:max-w-[320px]" />
                 </div>
+                <p className="mt-4 text-[13px] leading-relaxed text-[#C3D5EA]">{heroTrustLine}</p>
               </div>
 
-              {/* 3D PERSPECTIVE GRAPHIC (Visual column 0.85fr) */}
-              <div className="relative hidden w-full lg:block" aria-hidden="true">
-                <div className="perspective relative h-[420px] w-full overflow-hidden rounded-[24px] border border-[rgba(143,176,214,0.14)] bg-gradient-to-br from-[#1B2B45]/40 to-[#141E30]/60 p-6 shadow-[0_16px_40px_rgba(4,9,18,0.35)] backdrop-blur-sm">
-                  {/* Floating Card strictly inside right column box */}
-                  <div className="floating-plane left-6 top-8">
-                    <p className="p-6 text-xs font-medium tracking-wider text-[var(--text-muted)]">
-                      DIGITAL EXPERIENCE
-                    </p>
-                    <div className="mx-6 h-px bg-[var(--border)]" />
-                    <p className="p-6 text-2xl xl:text-3xl font-semibold text-[var(--text)]">
-                      Built to feel<br />ahead of now.
-                    </p>
-                  </div>
-                  {/* Floating Sphere strictly inside right column box */}
-                  <div className="floating-orb bottom-6 right-6" />
-                  <div className="absolute bottom-5 left-6 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mist)]">
-                    Design × Technology
-                  </div>
-                </div>
+              <div className="relative w-full min-w-0">
+                <CommitmentSlider />
               </div>
             </div>
 
@@ -261,9 +248,9 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 sm:gap-6">
+            <div className="stat-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
               {/* Tile 1: Projects */}
-              <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <FolderGit2 size={22} strokeWidth={2} />
                 </div>
@@ -279,7 +266,7 @@ export default function Home() {
               </div>
 
               {/* Tile 2: Services */}
-              <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <Sparkles size={22} strokeWidth={2} />
                 </div>
@@ -295,7 +282,7 @@ export default function Home() {
               </div>
 
               {/* Tile 3: Technologies */}
-              <div className="rounded-[20px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-3 sm:rounded-[24px] sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+              <div className="w-[76%] shrink-0 snap-start rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:w-auto sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
                   <Cpu size={22} strokeWidth={2} />
                 </div>

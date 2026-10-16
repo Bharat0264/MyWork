@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Footer, Navbar } from "@/components/site-shell";
+import { Container } from "@/components/container";
 
 const ServicesGlassShowcase = dynamic(
   () => import("@/components/services-glass-showcase").then((mod) => mod.ServicesGlassShowcase),
@@ -41,7 +42,7 @@ export default function Services() {
         <ServicesGlassShowcase />
 
         {/* A DELIBERATE PROCESS: 6-Step cards */}
-        <section className="wrap pt-[calc(var(--section-gap)/2)] pb-0">
+        <Container as="section" className="pt-[calc(var(--section-gap)/2)] pb-0">
           <p className="eyebrow text-[#8FB0D6]">A deliberate process</p>
           <h2 className="section-heading mt-3 max-w-2xl font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
             Less guesswork. More momentum.
@@ -65,7 +66,7 @@ export default function Services() {
               </article>
             ))}
           </div>
-        </section>
+        </Container>
       </main>
       <Footer />
     </>

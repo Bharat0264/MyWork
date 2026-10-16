@@ -19,10 +19,12 @@ export function ViewProjectLiquidButton({
   const prefersReducedMotion = useReducedMotion() ?? false;
   const [travelDistance, setTravelDistance] = useState(142);
 
-  const containerRef = useRef<HTMLButtonElement | null>(null);
+  const containerRef = useRef<HTMLAnchorElement | null>(null);
   const orbRef = useRef<HTMLSpanElement | null>(null);
   const discRef = useRef<HTMLSpanElement | null>(null);
   const unavailableTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const animTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Measure exact pixel distance between the left orb and right arrow disc
   const measureDistance = useCallback(() => {
@@ -30,10 +32,15 @@ export function ViewProjectLiquidButton({
       const orbBox = orbRef.current.getBoundingClientRect();
       const discBox = discRef.current.getBoundingClientRect();
       const dist = discBox.left - orbBox.left;
-      if (dist > 50) {
+      if (dist > 40) {
         setTravelDistance(dist);
       }
     }
+  }, []);
+
+  const resetState = useCallback(() => {
+    setIsAnimating(false);
+    setIsUnavailable(false);
   }, []);
 
   useEffect(() => {
@@ -42,26 +49,38 @@ export function ViewProjectLiquidButton({
     return () => window.removeEventListener("resize", measureDistance);
   }, [measureDistance]);
 
-  // Clean up timer on unmount
+  // Handle bfcache (pageshow), visibilitychange, and clean up all listeners and timers
   useEffect(() => {
-    return () => {
-      if (unavailableTimerRef.current) {
-        clearTimeout(unavailableTimerRef.current);
+    const handlePageShow = (event: PageTransitionEvent) => {
+      // Reset state when page is shown, especially from browser back-forward cache (event.persisted)
+      resetState();
+    };
+
+    const handleVisibilityChange = () => {
+      // Reset state when user navigates back to this tab
+      if (document.visibilityState === "visible") {
+        resetState();
       }
     };
-  }, []);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    window.addEventListener("pageshow", handlePageShow);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Prevent multiple clicks while the animation is running
-    if (isAnimating) return;
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (unavailableTimerRef.current) clearTimeout(unavailableTimerRef.current);
+      if (animTimerRef.current) clearTimeout(animTimerRef.current);
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+  }, [resetState]);
 
-    measureDistance();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const liveUrl = project.liveUrl;
 
     // Unavailable state: do not redirect, show feedback
     if (!liveUrl) {
+      e.preventDefault();
       setIsUnavailable(true);
       if (unavailableTimerRef.current) clearTimeout(unavailableTimerRef.current);
       unavailableTimerRef.current = setTimeout(() => {
@@ -70,32 +89,54 @@ export function ViewProjectLiquidButton({
       return;
     }
 
-    // Available state: run animation then redirect
-    setIsAnimating(true);
-
-    if (prefersReducedMotion) {
-      setTimeout(() => {
-        window.location.href = liveUrl;
-      }, 320);
+    // Prevent multiple triggers while animation is running
+    if (isAnimating) {
+      e.preventDefault();
       return;
     }
 
-    // Premium liquid animation completes at ~800ms, then redirect to project.liveUrl
-    setTimeout(() => {
-      window.location.href = liveUrl;
-    }, 820);
+    measureDistance();
+    setIsAnimating(true);
+
+    if (prefersReducedMotion) {
+      window.open(liveUrl, "_blank", "noopener,noreferrer");
+      resetState();
+      return;
+    }
+
+    e.preventDefault();
+
+    // Clear any previous timers
+    if (animTimerRef.current) clearTimeout(animTimerRef.current);
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+
+    // Liquid glass animation runs (~780ms), then open in new tab and reset
+    animTimerRef.current = setTimeout(() => {
+      window.open(liveUrl, "_blank", "noopener,noreferrer");
+
+      // Timeout fallback reset
+      fallbackTimerRef.current = setTimeout(() => {
+        resetState();
+      }, 350);
+    }, 780);
+
+    // Global safety fallback timeout
+    fallbackTimerRef.current = setTimeout(() => {
+      resetState();
+    }, 1500);
   };
 
   return (
-    <motion.button
+    <motion.a
       ref={containerRef}
-      type="button"
+      href={project.liveUrl || "#"}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={handleClick}
-      disabled={isAnimating}
       aria-label={
         isUnavailable
           ? "Live preview unavailable"
-          : `View ${project.title} live project`
+          : `View ${project.title} live project (opens in new tab)`
       }
       aria-busy={isAnimating}
       animate={
@@ -103,19 +144,22 @@ export function ViewProjectLiquidButton({
           ? { x: [0, -4, 4, -3, 3, -1, 1, 0], transition: { duration: 0.4 } }
           : isAnimating
           ? {
-              scale: [1, 1, 1.025, 1],
-              transition: { duration: 0.8, times: [0, 0.65, 0.82, 1] },
+              scale: [1, 1, 1.02, 1],
+              transition: { duration: 0.78, times: [0, 0.65, 0.82, 1] },
             }
           : { scale: 1, x: 0 }
       }
       whileHover={!isAnimating ? { y: -1 } : undefined}
-      whileTap={!isAnimating ? { scale: 0.98 } : undefined}
+      whileTap={!isAnimating ? { scale: 0.97 } : undefined}
       className={`btn-view-project group ${className}`.trim()}
     >
       {/* Top Half Glossy Highlight Pill */}
       <span className="btn-view-project__gloss" aria-hidden="true" />
 
-      {/* Liquid Sheen Sweep (sweeps across on travel) */}
+      {/* Soft light sweep on hover */}
+      <span className="btn-view-project__hover-sweep" aria-hidden="true" />
+
+      {/* Liquid Animation Sheen (sweeps across on travel) */}
       <motion.span
         className="btn-view-project__sheen"
         aria-hidden="true"
@@ -130,7 +174,7 @@ export function ViewProjectLiquidButton({
         }
       />
 
-      {/* Liquid Wake & Refraction Wave (trails behind traveling orb) */}
+      {/* Liquid Refraction Wave (trails behind traveling orb) */}
       <motion.span
         className="btn-view-project__ripple"
         aria-hidden="true"
@@ -149,7 +193,7 @@ export function ViewProjectLiquidButton({
         }
       />
 
-      {/* LEFT: Blue Circular Play Button (Orb) */}
+      {/* LEFT: Liquid Glass Circular Play Button (Orb) */}
       <motion.span
         ref={orbRef}
         className="btn-view-project__orb"
@@ -158,13 +202,13 @@ export function ViewProjectLiquidButton({
           isAnimating
             ? {
                 x: [0, travelDistance],
-                scaleX: [1, 1.25, 1.15, 0.92, 1],
-                scaleY: [1, 0.85, 0.92, 1.08, 1],
+                scaleX: [1, 1.22, 1.12, 0.94, 1],
+                scaleY: [1, 0.88, 0.94, 1.06, 1],
                 boxShadow: [
-                  "inset 0 1.5px 2px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,25,80,0.45), 0 2px 8px rgba(26,115,232,0.4)",
-                  "inset 0 1.5px 2px rgba(255,255,255,0.95), inset 0 -2px 4px rgba(0,25,80,0.35), 0 0 26px rgba(47,139,255,0.9), 0 0 12px rgba(143,204,255,1)",
-                  "inset 0 1.5px 2px rgba(255,255,255,0.95), inset 0 -2px 4px rgba(0,25,80,0.35), 0 0 28px rgba(47,139,255,0.95), 0 0 14px rgba(143,204,255,1)",
-                  "inset 0 1.5px 2px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,25,80,0.45), 0 4px 16px rgba(26,115,232,0.5)",
+                  "inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(0,25,80,0.45), 0 2px 10px rgba(47,139,255,0.45)",
+                  "inset 0 1.5px 2px rgba(255,255,255,1), inset 0 -2px 4px rgba(0,25,80,0.35), 0 0 28px rgba(79,163,255,0.95), 0 0 14px rgba(185,225,255,1)",
+                  "inset 0 1.5px 2px rgba(255,255,255,1), inset 0 -2px 4px rgba(0,25,80,0.35), 0 0 30px rgba(79,163,255,0.95), 0 0 16px rgba(185,225,255,1)",
+                  "inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(0,25,80,0.45), 0 4px 16px rgba(47,139,255,0.5)",
                 ],
                 transition: {
                   duration: 0.78,
@@ -176,7 +220,7 @@ export function ViewProjectLiquidButton({
       >
         <motion.svg
           viewBox="0 0 24 24"
-          className="h-[13px] w-[13px] fill-current ml-[1px]"
+          className="h-[13px] w-[13px] fill-current ml-[1.5px]"
           animate={
             isAnimating
               ? {
@@ -187,7 +231,7 @@ export function ViewProjectLiquidButton({
               : { opacity: 1, scale: 1 }
           }
         >
-          {/* Rounded play triangle */}
+          {/* Play triangle */}
           <path d="M8 5.5v13a1 1 0 0 0 1.55.83l10-6.5a1 1 0 0 0 0-1.66l-10-6.5A1 1 0 0 0 8 5.5z" />
         </motion.svg>
       </motion.span>
@@ -204,7 +248,7 @@ export function ViewProjectLiquidButton({
               transition={{ duration: 0.2 }}
               className="btn-view-project__unavailable"
             >
-              <AlertCircle size={13} className="shrink-0 text-amber-500" />
+              <AlertCircle size={13} className="shrink-0 text-amber-300" />
               <span>Live preview unavailable</span>
             </motion.span>
           ) : (
@@ -228,7 +272,7 @@ export function ViewProjectLiquidButton({
         </AnimatePresence>
       </div>
 
-      {/* RIGHT: Circular Arrow Button */}
+      {/* RIGHT: Glass Circular Disc with Arrow */}
       <span ref={discRef} className="btn-view-project__disc" aria-hidden="true">
         <motion.span
           className="flex items-center justify-center"
@@ -237,19 +281,19 @@ export function ViewProjectLiquidButton({
               ? {
                   rotate: [0, 0, 45, 90, 45],
                   scale: [1, 1, 1.25, 1],
-                  color: ["#14264A", "#14264A", "#1B6DF5", "#14264A"],
+                  color: ["#FFFFFF", "#FFFFFF", "#8FB0D6", "#FFFFFF"],
                   transition: {
-                    duration: 0.8,
+                    duration: 0.78,
                     times: [0, 0.45, 0.72, 0.88, 1],
                     ease: "easeInOut",
                   },
                 }
-              : { rotate: 0, scale: 1, color: "#14264A" }
+              : { rotate: 0, scale: 1, color: "#FFFFFF" }
           }
         >
           <ArrowUpRight size={15} strokeWidth={2.4} />
         </motion.span>
       </span>
-    </motion.button>
+    </motion.a>
   );
 }

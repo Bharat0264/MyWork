@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { services } from "@/data/services";
+import { Container } from "@/components/container";
 import styles from "./services-glass-showcase.module.css";
 
 const AUTO_ADVANCE_DELAY = 7200;
@@ -95,7 +96,8 @@ export function ServicesGlassShowcase() {
     const carousel = mobileCarouselRef.current;
     const card = carousel?.children[index] as HTMLElement | undefined;
     if (carousel && card) {
-      carousel.scrollTo({ left: card.offsetLeft - carousel.offsetLeft - 20, behavior: reducedMotion ? "instant" : "smooth" });
+      const inset = parseFloat(getComputedStyle(carousel).paddingLeft);
+      carousel.scrollTo({ left: card.offsetLeft - carousel.offsetLeft - inset, behavior: reducedMotion ? "instant" : "smooth" });
     }
   };
 
@@ -138,7 +140,7 @@ export function ServicesGlassShowcase() {
 
   return (
     <section className={styles.servicesPage} aria-labelledby="services-heading">
-      <div className={styles.scene}>
+      <Container className={styles.scene}>
         <div className={styles.mobileShowcase}>
           <p className={styles.mobileEyebrow}>Services</p>
           <h1 className={styles.mobileHeading}>A sharper digital presence starts here.</h1>
@@ -269,7 +271,7 @@ export function ServicesGlassShowcase() {
             })}
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

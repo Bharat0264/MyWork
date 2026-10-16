@@ -182,10 +182,10 @@ export function WorkPortfolioShowcase() {
               <span>SELECTED WORK</span>
             </p>
             <h1 className="mt-3 font-semibold text-white tracking-[-0.02em] leading-[1.1] text-[clamp(36px,9vw,40px)] md:text-[clamp(2.2rem,4.4vw,3.4rem)]">
-              Websites and products <span className="text-[#8FB0D6]">built to perform.</span>
+              Websites built to perform.
             </h1>
-            <p className="mt-4 max-w-[560px] text-[16px] leading-[1.55] text-[#B8C9DE] md:text-[17px] md:leading-[1.7] md:text-[#9FB3CC]">
-              A curated selection of websites, platforms and digital experiences, each shaped around a real business goal and the people who use it.
+            <p className="mt-4 max-w-[560px] text-[16px] leading-[1.6] text-[#B8C9DE] md:text-[17px] md:leading-[1.7] md:text-[#9FB3CC]">
+              A selection of websites and web apps I designed and developed, each built around a real business goal.
             </p>
           </div>
 
@@ -212,8 +212,8 @@ export function WorkPortfolioShowcase() {
         </div>
       </motion.div>
 
-      {/* HORIZONTAL CATEGORY MENU (SHOWN ABOVE STAGE FOR <1024px) */}
-      <div className="mb-6 lg:hidden">
+      {/* HORIZONTAL CATEGORY MENU (CLEAN, READABLE TABS ACROSS ALL SCREENS) */}
+      <div className="mb-6 w-full">
         <div
           role="tablist"
           aria-label="Filter projects"
@@ -230,10 +230,10 @@ export function WorkPortfolioShowcase() {
                 onClick={() => handleCategoryChange(item.full)}
                 title={item.full}
                 aria-label={item.full}
-                className={`min-h-11 rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] active:scale-[0.97] ${
+                className={`min-h-11 rounded-full px-4 py-2 text-[14px] font-medium transition-colors duration-200 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] active:scale-[0.97] ${
                   isActive
                     ? "bg-white text-[#141E30] font-semibold border border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
-                    : "border border-white/[0.12] bg-[#141E30]/70 text-[#9FB3CC] hover:border-white/25 hover:text-white"
+                    : "border border-white/[0.12] bg-[#141E30]/70 text-[#B8C9DE] hover:border-white/25 hover:text-white"
                 }`}
               >
                 {item.short}
@@ -267,25 +267,12 @@ export function WorkPortfolioShowcase() {
           aria-hidden="true"
         />
 
-        {/* GHOST WORD (OPACITY 0.035, FONT-SIZE ~220px, CLIPPED, BEHIND EVERYTHING) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-[56%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none z-0 whitespace-nowrap leading-none transition-opacity duration-500 ease-out text-white/[0.035] font-extrabold tracking-[-0.03em] hidden sm:block overflow-hidden"
-          style={{
-            writingMode: "vertical-rl",
-            transform: "rotate(180deg)",
-            fontSize: "clamp(140px, 16vw, 220px)",
-          }}
-        >
-          {ghostWord}
-        </div>
-
         {/* ========================================================
             DESKTOP LAYOUT (>= 1200px):
-            Grid: 232px | minmax(280px, 340px) | minmax(0, 1fr) | 56px
+            Grid: 232px | minmax(280px, 360px) | minmax(0, 1fr)
             Gap: 32px, align-items: center
             ======================================================== */}
-        <div className="hidden xl:grid w-full grid-cols-[232px_minmax(280px,340px)_minmax(0,1fr)_56px] gap-[clamp(20px,2vw,32px)] items-center relative z-10 flex-1 py-4">
+        <div className="hidden xl:grid w-full grid-cols-[232px_minmax(280px,360px)_minmax(0,1fr)] gap-[clamp(20px,2vw,32px)] items-center relative z-10 flex-1 py-4">
           
           {/* ─── COLUMN 1: THE RAIL (232px) ─── */}
           <div className="flex flex-col items-center justify-center w-[232px]">
@@ -488,46 +475,14 @@ export function WorkPortfolioShowcase() {
               className="pointer-events-none w-[75%] h-[16px] rounded-[100%] bg-black/45 blur-[14px] mt-3"
             />
           </div>
-
-          {/* ─── COLUMN 4: CATEGORY MENU (56px, VERTICAL TEXT, CENTERED) ─── */}
-          <div
-            role="tablist"
-            aria-label="Category navigation"
-            className="flex flex-col items-center justify-center gap-[16px] select-none h-full py-4 w-[56px]"
-          >
-            {categoryItems.map((item) => {
-              const isActive = activeCategory === item.full;
-              return (
-                <button
-                  key={item.short}
-                  role="tab"
-                  type="button"
-                  aria-selected={isActive}
-                  onClick={() => handleCategoryChange(item.full)}
-                  title={item.full}
-                  aria-label={item.full}
-                  className={`text-[12px] tracking-[0.14em] font-medium uppercase transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] py-1 ${
-                    isActive
-                      ? "text-white font-semibold relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-[2px] after:h-3 after:bg-[#5F86B0]"
-                      : "text-[#9FB3CC] hover:text-white"
-                  }`}
-                  style={{
-                    writingMode: "vertical-rl",
-                  }}
-                >
-                  {item.short}
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* ========================================================
             MEDIUM VIEW (1024px to 1199px):
-            Grid: 200px | minmax(0, 1fr) | 48px
+            Grid: 200px | minmax(0, 1fr)
             Info placed under device in middle column
             ======================================================== */}
-        <div className="hidden lg:grid xl:hidden w-full grid-cols-[200px_minmax(0,1fr)_48px] gap-6 items-center relative z-10 flex-1 py-4">
+        <div className="hidden lg:grid xl:hidden w-full grid-cols-[200px_minmax(0,1fr)] gap-6 items-center relative z-10 flex-1 py-4">
           {/* Column 1: Rail 200px */}
           <div className="flex flex-col items-center justify-center w-[200px]">
             <button
@@ -658,34 +613,6 @@ export function WorkPortfolioShowcase() {
               </div>
             </div>
           </div>
-
-          {/* Column 3: Category Menu (48px) */}
-          <div
-            role="tablist"
-            aria-label="Category navigation"
-            className="flex flex-col items-center justify-center gap-[14px] select-none h-full py-4 w-[48px]"
-          >
-            {categoryItems.map((item) => {
-              const isActive = activeCategory === item.full;
-              return (
-                <button
-                  key={item.short}
-                  role="tab"
-                  type="button"
-                  aria-selected={isActive}
-                  onClick={() => handleCategoryChange(item.full)}
-                  title={item.full}
-                  aria-label={item.full}
-                  className={`text-[11px] tracking-[0.14em] font-medium uppercase py-1 ${
-                    isActive ? "text-white font-semibold relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-[2px] after:h-2.5 after:bg-[#5F86B0]" : "text-[#9FB3CC] hover:text-white"
-                  }`}
-                  style={{ writingMode: "vertical-rl" }}
-                >
-                  {item.short}
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* ========================================================
@@ -795,20 +722,17 @@ export function WorkPortfolioShowcase() {
             Stage padding: 20px
             ======================================================== */}
         <div className="flex min-[700px]:hidden flex-col gap-4 relative z-10 w-full">
-          {/* Top Row: Counter & Category / Live Badges */}
-          <div className="flex items-center justify-between text-[13px] font-mono text-[#A9C8EB]">
-            <span>{formattedIndex} / {formattedTotal}</span>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[13px] text-[#A9C8EB]">
-                {currentProject.category}
+          {/* Top Row: Category & Live Badges */}
+          <div className="flex items-center justify-between text-[13px] text-[#A9C8EB]">
+            <span className="rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[13px] text-[#A9C8EB]">
+              {currentProject.category}
+            </span>
+            {currentProject.liveUrl && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[13px] text-[#E8EEF7]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
+                Live Project
               </span>
-              {currentProject.liveUrl && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2 py-0.5 text-[13px] text-[#E8EEF7]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#5BD6A0]" />
-                  Live
-                </span>
-              )}
-            </div>
+            )}
           </div>
 
           {/* Clean mobile screenshot */}
@@ -915,18 +839,9 @@ export function WorkPortfolioShowcase() {
         {/* ========================================================
             BOTTOM BAR INSIDE THE STAGE (DESKTOP & TABLET >= 700px)
             Below grid, full width, 1px top divider rgba(143,176,214,0.14), 20px padding above
-            Left: Counter "01 / 07", Right: 3 round buttons (40px, glass style)
-            Never overlaps menu or stage content
+            Right: 3 round buttons (40px, glass style)
             ======================================================== */}
-        <div className="hidden min-[700px]:flex items-center justify-between w-full mt-6 pt-5 border-t border-[rgba(143,176,214,0.14)] relative z-20">
-          {/* Counter */}
-          <div
-            aria-label={`Project ${formattedIndex} of ${formattedTotal}`}
-            className="font-mono text-[13px] font-bold tracking-[0.14em] text-[#8FB0D6] select-none"
-          >
-            {formattedIndex} / {formattedTotal}
-          </div>
-
+        <div className="hidden min-[700px]:flex items-center justify-end w-full mt-6 pt-5 border-t border-[rgba(143,176,214,0.14)] relative z-20">
           {/* Three Round Buttons (Previous, Next, Open live site) */}
           <div className="flex items-center gap-2.5">
             <button

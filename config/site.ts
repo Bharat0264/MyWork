@@ -2,13 +2,13 @@ import { socialConfig } from "./social";
 
 export const siteConfig = {
   name: "Garuda Web Designer and Developer",
-  professionalTitle: "Web Developer & Digital Growth Partner",
+  professionalTitle: "Freelance Web Designer & Developer",
   description:
-    "I design, build, redesign and grow digital experiences that help businesses look better, work better and sell better.",
+    "I design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.",
   email: "bharathsaipulipati@gmail.com",
   phone: "+91 8688964531",
-  location: "India · Working worldwide",
-  availability: "Available for freelance projects",
+  location: "Chennai, India · Working worldwide",
+  availability: "Freelance web designer & developer",
   github: socialConfig.github,
   linkedin: socialConfig.linkedin,
   instagram: socialConfig.instagram,

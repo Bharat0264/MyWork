@@ -330,7 +330,7 @@ export function Footer() {
         {/* FAINT WATERMARK */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-8 sm:-bottom-12 md:-bottom-16 lg:-bottom-20 left-1/2 -translate-x-1/2 select-none text-[clamp(110px,16vw,200px)] font-[800] tracking-[-0.02em] text-white/[0.04] leading-none whitespace-nowrap hidden sm:block"
+          className="pointer-events-none absolute -bottom-8 sm:-bottom-12 md:-bottom-16 lg:-bottom-20 left-1/2 -translate-x-1/2 select-none text-[clamp(110px,16vw,200px)] font-[800] tracking-[-0.02em] text-white/[0.025] leading-none whitespace-nowrap hidden sm:block"
         >
           GARUDA
         </div>
@@ -360,8 +360,8 @@ export function Footer() {
                 />
               </picture>
             </Link>
-            <p className="mt-3 max-w-[340px] text-[14px] leading-[1.6] text-[#B8C9DE] sm:mt-4 sm:text-[15px] sm:leading-[1.7]">
-              We design and develop modern, high-performance websites that help businesses grow in the digital world.
+            <p className="mt-3 max-w-[340px] text-[15px] leading-[1.65] text-[#B8C9DE] sm:mt-4">
+              Freelance web designer and developer building fast, modern websites.
             </p>
           </div>
 
@@ -369,18 +369,18 @@ export function Footer() {
           <div className="w-full max-w-sm md:max-w-none md:col-span-2 md:row-start-2 lg:col-span-1 lg:col-start-2 lg:row-start-1">
             <div className="space-y-1 sm:hidden">
               <details className="border-t border-white/10 py-1 group">
-                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[13px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Quick Links <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
-                <nav aria-label="Mobile footer quick links" className="grid grid-cols-2 gap-2 pb-3">{quickLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[13px] text-[#E8EEF7]">{label}</Link>)}</nav>
+                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[14px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Quick Links <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
+                <nav aria-label="Mobile footer quick links" className="grid grid-cols-2 gap-2 pb-3">{quickLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[14px] text-[#E8EEF7]">{label}</Link>)}</nav>
               </details>
               <details className="border-y border-white/10 py-1 group">
-                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[13px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Our Services <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
-                <nav aria-label="Mobile footer services" className="grid grid-cols-2 gap-2 pb-3">{serviceLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[13px] text-[#E8EEF7]">{label}</Link>)}</nav>
+                <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[14px] font-semibold uppercase tracking-[0.12em] text-[#B8D4F2]">Services <span aria-hidden="true" className="text-lg group-open:rotate-45 transition-transform">+</span></summary>
+                <nav aria-label="Mobile footer services" className="grid grid-cols-2 gap-2 pb-3">{serviceLinks.map(([label, href]) => <Link key={label} href={href} className="flex min-h-11 items-center text-[14px] text-[#E8EEF7]">{label}</Link>)}</nav>
               </details>
             </div>
             <div className="hidden grid-cols-2 gap-8 text-center sm:grid sm:gap-12 md:text-left">
               {/* Sub-column 1: Quick Links */}
               <div>
-                <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
+                <h3 className="text-[14px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
                   Quick Links
                 </h3>
                 <nav aria-label="Footer Quick Links" className="mt-4 flex flex-col gap-3">
@@ -388,7 +388,7 @@ export function Footer() {
                     <Link
                       key={label}
                       href={href}
-                      className="inline-block w-fit mx-auto md:mx-0 rounded-sm text-[15px] text-[#E8EEF7]/75 transition-all duration-200 ease-out hover:text-white hover:translate-x-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                      className="inline-block w-fit mx-auto md:mx-0 rounded-sm text-[15px] text-[#E8EEF7]/85 transition-all duration-200 ease-out hover:text-white hover:translate-x-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
                     >
                       {label}
                     </Link>
@@ -396,17 +396,17 @@ export function Footer() {
                 </nav>
               </div>
 
-              {/* Sub-column 2: Our Services */}
+              {/* Sub-column 2: Services */}
               <div>
-                <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
-                  Our Services
+                <h3 className="text-[14px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
+                  Services
                 </h3>
-                <nav aria-label="Footer Our Services" className="mt-4 flex flex-col gap-3">
+                <nav aria-label="Footer Services" className="mt-4 flex flex-col gap-3">
                   {serviceLinks.map(([label, href]) => (
                     <Link
                       key={label}
                       href={href}
-                      className="inline-block w-fit mx-auto md:mx-0 rounded-sm text-[15px] text-[#E8EEF7]/75 transition-all duration-200 ease-out hover:text-white hover:translate-x-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
+                      className="inline-block w-fit mx-auto md:mx-0 rounded-sm text-[15px] text-[#E8EEF7]/85 transition-all duration-200 ease-out hover:text-white hover:translate-x-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
                     >
                       {label}
                     </Link>
@@ -418,19 +418,19 @@ export function Footer() {
 
           {/* Column 3: Get in touch (30%) */}
           <div className="w-full min-w-0 flex flex-col items-start sm:items-center md:items-start md:col-start-2 md:row-start-1 lg:col-start-3 lg:row-start-1">
-            <h3 className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
+            <h3 className="text-[14px] font-semibold uppercase tracking-[0.18em] text-[#8FB0D6]">
               Get in touch
             </h3>
             <div className="mt-3 flex flex-col gap-2 w-full items-start sm:mt-4 sm:gap-3.5 sm:items-center md:items-start">
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-xl text-[13px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] sm:gap-3.5 sm:text-[15px]"
+                className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-xl text-[15px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
               >
                 <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] border border-[rgba(143,176,214,0.18)] bg-white/[0.05] text-[#8FB0D6] transition-colors duration-200 group-hover:border-[rgba(143,176,214,0.32)] group-hover:bg-white/[0.08]">
                   <Mail size={18} strokeWidth={2} />
                 </span>
                 <span
-                  className="min-w-0 truncate font-normal text-[13px] sm:text-[15px]"
+                  className="min-w-0 truncate font-normal text-[15px]"
                 >
                   {siteConfig.email}
                 </span>
@@ -438,13 +438,13 @@ export function Footer() {
 
               <a
                 href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="group inline-flex min-h-11 items-center gap-3 rounded-xl text-[13px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6] sm:gap-3.5 sm:text-[15px]"
+                className="group inline-flex min-h-11 items-center gap-3 rounded-xl text-[15px] text-[#E8EEF7]/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
               >
                 <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] border border-[rgba(143,176,214,0.18)] bg-white/[0.05] text-[#8FB0D6] transition-colors duration-200 group-hover:border-[rgba(143,176,214,0.32)] group-hover:bg-white/[0.08]">
                   <Phone size={18} strokeWidth={2} />
                 </span>
                 <span
-                  className="font-normal text-[13px] sm:text-[15px]"
+                  className="font-normal text-[15px]"
                 >
                   {siteConfig.phone}
                 </span>
@@ -461,9 +461,6 @@ export function Footer() {
           <div>
             <p className="text-[14px] font-medium text-[#E8EEF7]">
               © {currentYear} Garuda. All rights reserved.
-            </p>
-            <p className="mt-1 text-[13px] text-[#6F86A3]">
-              Built with intention. Designed for a better web.
             </p>
           </div>
 

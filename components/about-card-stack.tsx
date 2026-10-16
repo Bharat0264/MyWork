@@ -482,31 +482,6 @@ export function AboutCardStack() {
         aria-hidden="true"
       />
 
-      {/* 4 Corner Captions with subtle counter-parallax */}
-      <motion.span
-        style={prefersReducedMotion ? undefined : { x: captionX, y: captionY }}
-        className="pointer-events-none absolute top-6 left-7 sm:left-9 text-[13px] font-medium text-[#6F86A3] tracking-wide select-none z-20"
-      >
-        Skills
-      </motion.span>
-      <motion.span
-        style={prefersReducedMotion ? undefined : { x: captionX, y: captionY }}
-        className="pointer-events-none absolute top-6 right-7 sm:right-9 text-[13px] font-medium text-[#6F86A3] tracking-wide select-none z-20"
-      >
-        Stack
-      </motion.span>
-      <motion.span
-        style={prefersReducedMotion ? undefined : { x: captionX, y: captionY }}
-        className="pointer-events-none absolute bottom-6 left-7 sm:left-9 text-[13px] font-medium text-[#6F86A3] tracking-wide select-none hidden sm:block z-20"
-      >
-        Garuda
-      </motion.span>
-      <motion.p
-        style={prefersReducedMotion ? undefined : { x: captionX, y: captionY }}
-        className="pointer-events-none absolute bottom-6 right-7 sm:right-9 max-w-[220px] text-right text-[13px] font-medium text-[#6F86A3] leading-relaxed select-none hidden sm:block z-20"
-      >
-        These cards outline the tools I build with.
-      </motion.p>
 
       {/* Center Stage: Constant height reserved, tilting subtly towards pointer */}
       <div className="relative z-10 flex min-h-0 w-full flex-col items-center justify-center px-4 pb-5 pt-16 sm:min-h-[560px] sm:px-8 sm:py-20 md:min-h-[580px] md:py-24">

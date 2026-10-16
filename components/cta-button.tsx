@@ -14,7 +14,7 @@ export function StartProjectButton({
   variant,
   size,
   className = "",
-  label = "Start a project",
+  label = "Start your project",
   onClick,
 }: StartProjectButtonProps) {
   // Determine variant based on props

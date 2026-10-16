@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Clock3,
+  Smartphone,
+  RefreshCw,
+  HeartHandshake,
+} from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
 import { ViewProjectGlassButton } from "@/components/view-project-button";
@@ -10,28 +17,31 @@ import { CommitmentSlider } from "@/components/commitment-slider";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";
 import { projects } from "@/data/projects";
-import { services } from "@/data/services";
 
-const heroTrustLine = "Free first consultation · Reply within 24 hours";
+const heroTrustLine = "Free consultation · Reply within 24 hours";
 
 export const metadata: Metadata = {
-  title: "Garuda Web Designer and Developer | High-Performance Modern Websites",
+  title: {
+    absolute: "Garuda · Freelance Web Designer & Developer",
+  },
   description:
-    "Web design, development and digital growth for businesses, startups and growing brands. Websites built to look better, work smarter, and grow faster.",
+    "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
   alternates: {
     canonical: "https://my-work-umber.vercel.app",
   },
   openGraph: {
-    title: "Garuda Web Designer and Developer",
-    description: "Websites that look better, work smarter and grow faster.",
+    title: "Garuda · Freelance Web Designer & Developer",
+    description:
+      "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
     url: "https://my-work-umber.vercel.app",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Web Designer and Developer" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda · Freelance Web Designer & Developer" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Garuda Web Designer and Developer",
-    description: "Websites that look better, work smarter and grow faster.",
+    title: "Garuda · Freelance Web Designer & Developer",
+    description:
+      "I design and build fast, mobile-friendly websites for businesses and startups. Free consultation.",
     images: ["/og-image.png"],
   },
 };
@@ -41,31 +51,31 @@ export default function Home() {
   const spotlightProject = projects.find((p) => p.slug === "printbee") || projects[1];
   const spotlightChips = spotlightProject.technologies.slice(0, 3);
 
-  // Exact real data computations for "At a glance"
-  const totalProjects = projects.length;
-  const totalServices = services.length;
-  const uniqueTechnologies = Array.from(new Set(projects.flatMap((p) => p.technologies))).length;
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "Garuda Web Designer and Developer",
     url: "https://my-work-umber.vercel.app",
+    image: "https://my-work-umber.vercel.app/og-image.png",
     logo: "https://my-work-umber.vercel.app/logo-full.png",
-    description: "Web design, development and digital growth for businesses, startups and growing brands.",
+    description:
+      "I design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.",
     telephone: siteConfig.phone,
     email: siteConfig.email,
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Chennai",
+      addressRegion: "Tamil Nadu",
+      addressCountry: "IN",
+    },
+    areaServed: ["Chennai", "India", "Worldwide"],
     sameAs: [
       socialConfig.github,
       socialConfig.linkedin,
       socialConfig.instagram,
       socialConfig.x,
     ],
-    priceRange: "$$",
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: "IN",
-    },
   };
 
   return (
@@ -85,18 +95,16 @@ export default function Home() {
               <div className="home-hero__content flex min-w-0 flex-col justify-center">
                 <p className="eyebrow flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--steel-light)]" />
-                  {siteConfig.availability}
+                  Freelance web designer &amp; developer
                 </p>
                 <h1 className="hero-heading font-semibold text-white">
-                  Websites built to <br className="hidden lg:block" />
-                  <em className="font-normal italic text-[var(--mist)]">look better,</em>{" "}work <br className="hidden lg:block" />
-                  smarter, and grow faster.
+                  Websites that look premium and bring you customers.
                 </h1>
-                <p className="home-hero__description text-[#B8C9DE] md:text-[var(--text-muted)]">
-                  I create, redesign and develop modern websites and digital experiences for businesses, startups and growing brands.
+                <p className="home-hero__description text-[#B8C9DE]">
+                  I design and build fast, mobile-friendly websites for businesses and startups, so you look professional and get more enquiries.
                 </p>
                 <div className="home-hero__actions flex flex-col items-stretch sm:flex-row sm:flex-wrap sm:items-center">
-                  <StartProjectButton className="home-hero__primary w-full sm:w-auto sm:max-w-[320px]" />
+                  <StartProjectButton className="home-hero__primary w-full sm:w-auto sm:max-w-[320px]" label="Start your project" />
                   <Link className="home-hero__secondary button-secondary" href="/work" prefetch={true}>
                     View my work <ArrowUpRight size={16} />
                   </Link>
@@ -167,7 +175,7 @@ export default function Home() {
                     <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]/80" />
                     <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]/80" />
                     <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F]/80" />
-                    <span className="ml-3 truncate text-[11px] font-mono text-[#6F86A3]">
+                    <span className="ml-3 truncate text-[11px] font-mono text-[#A9C8EB]">
                       {spotlightProject.liveUrl?.replace(/^https?:\/\//, "") || "www.printbee.co.in"}
                     </span>
                   </div>
@@ -176,7 +184,7 @@ export default function Home() {
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0A0F1D]">
                     <Image
                       src={`/projects/${spotlightProject.slug}.webp`}
-                      alt={`Real homepage screenshot of ${spotlightProject.title}`}
+                      alt="PrintBee digital print ordering website homepage screenshot"
                       width={1440}
                       height={900}
                       sizes="(max-width: 640px) calc(100vw - 80px), (max-width: 1024px) 50vw, 600px"
@@ -192,7 +200,7 @@ export default function Home() {
                   <h3 className="card-heading mt-3 text-2xl sm:text-3xl font-semibold text-white tracking-tight">
                     {spotlightProject.title}
                   </h3>
-                  <p className="mt-4 text-[15px] sm:text-[16px] leading-[1.7] text-[#9FB3CC]">
+                  <p className="mt-4 text-[15px] sm:text-[16px] leading-[1.7] text-[#B8C9DE]">
                     {spotlightProject.shortDescription}
                   </p>
 
@@ -201,7 +209,7 @@ export default function Home() {
                     {spotlightChips.map((chip) => (
                       <span
                         key={chip}
-                        className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.05] px-3.5 py-1.5 text-[12px] font-medium text-[#E8EEF7]"
+                        className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.05] px-3.5 py-1.5 text-[13px] font-medium text-[#E8EEF7]"
                       >
                         {chip}
                       </span>
@@ -229,63 +237,67 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            4. AT A GLANCE (3 small stat tiles computed from real data)
+            4. OUTCOMES: Clear deliverable promises
             ======================================================== */}
         <section className="py-[calc(var(--section-gap)/2)] border-t border-[rgba(143,176,214,0.16)]">
           <Container>
             <div className="max-w-2xl mb-[var(--header-gap)]">
-              <p className="eyebrow text-[#8FB0D6]">At a glance</p>
+              <p className="eyebrow text-[#8FB0D6]">Outcomes</p>
               <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
-                Work and capability in numbers
+                Clear deliverables, zero surprises.
               </h2>
             </div>
 
-            <div className="stat-rail grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3 sm:gap-6">
-              {/* Tile 1: Projects */}
-              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
-                  <FolderGit2 size={22} strokeWidth={2} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {/* Item 1: Fast delivery */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Clock3 size={22} strokeWidth={2} />
                 </div>
-                <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
-                  {totalProjects}
-                </p>
-                <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
-                  Featured Projects
+                <h3 className="text-xl font-semibold text-white">
+                  Fast delivery
                 </h3>
-                <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
-                  Bespoke websites and full-stack applications in portfolio.
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Clear deadline before we start
                 </p>
               </div>
 
-              {/* Tile 2: Services */}
-              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
-                  <Sparkles size={22} strokeWidth={2} />
+              {/* Item 2: Mobile-first */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Smartphone size={22} strokeWidth={2} />
                 </div>
-                <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
-                  {totalServices}
-                </p>
-                <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
-                  Core Services
+                <h3 className="text-xl font-semibold text-white">
+                  Mobile-first
                 </h3>
-                <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
-                  Specialized digital offerings from creation to SEO and growth.
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Tested on real phones
                 </p>
               </div>
 
-              {/* Tile 3: Technologies */}
-              <div className="min-w-0 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-5 sm:p-8 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6] sm:mb-6 sm:h-11 sm:w-11">
-                  <Cpu size={22} strokeWidth={2} />
+              {/* Item 3: Free revisions */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <RefreshCw size={22} strokeWidth={2} />
                 </div>
-                <p className="text-[28px] leading-none sm:text-5xl font-bold tracking-tight text-white">
-                  {uniqueTechnologies}
-                </p>
-                <h3 className="mt-2 text-[13px] leading-tight font-semibold text-white sm:mt-3 sm:text-lg">
-                  Technologies & Tools
+                <h3 className="text-xl font-semibold text-white">
+                  Free revisions
                 </h3>
-                <p className="mt-2 hidden text-sm text-[#9FB3CC] leading-relaxed sm:block">
-                  Modern tools including React, Next.js, Node.js, and TypeScript.
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Until you are happy
+                </p>
+              </div>
+
+              {/* Item 4: After-launch support */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <HeartHandshake size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  After-launch support
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Included
                 </p>
               </div>
             </div>
@@ -293,30 +305,29 @@ export default function Home() {
         </section>
 
         {/* ========================================================
-            5. WHY GO DIGITAL: Your website is your hardest-working first impression
-            (Moved here from other pages - lives ONLY on Home)
+            5. WHY WORK WITH ME
             ======================================================== */}
         <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60 py-[calc(var(--section-gap)/2)]">
-          <Container className="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
+          <Container className="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-16 items-center">
             <div>
-              <p className="eyebrow text-[#8FB0D6]">Why go digital</p>
+              <p className="eyebrow text-[#8FB0D6]">Why work with me</p>
               <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
-                Your website is your hardest-working first impression.
+                Your website is your first impression.
               </h2>
-              <p className="mt-4 max-w-md text-base leading-7 text-[#9FB3CC]">
-                It is where people check whether you are credible, understand what you offer and decide whether to contact or buy from you—often before they speak to anyone.
+              <p className="mt-4 max-w-md text-base leading-7 text-[#B8C9DE]">
+                Customers check your website before they call you. I build sites that look credible, load fast and make it easy to contact you.
               </p>
             </div>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-8 gap-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {[
-                ["Always discoverable", "Give customers a clear place to find you, understand your services and make contact."],
-                ["Build trust faster", "A polished, current experience signals care, reliability and professionalism."],
-                ["Make decisions easier", "Clear information, proof and calls to action help visitors take the next step."],
-                ["Support growth", "A flexible digital foundation can grow into lead capture, commerce, automation or a client portal."],
+                ["Easy to find", "Clean structure and search-ready code so Google and customers find you."],
+                ["Builds trust", "A modern, credible design that reassures visitors before they even call."],
+                ["Easy to use", "Intuitive navigation and fast load speeds on phones and laptops."],
+                ["Built to grow", "Scalable foundation ready for new features, leads, and future growth."],
               ].map(([t, d]) => (
                 <article className="border-t border-[rgba(143,176,214,0.18)] pt-6" key={t}>
                   <h3 className="card-heading text-lg font-semibold text-white">{t}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[#9FB3CC]">{d}</p>
+                  <p className="mt-2 text-[15px] leading-6 text-[#9FB3CC]">{d}</p>
                 </article>
               ))}
             </div>

@@ -143,7 +143,10 @@ export function ServicesGlassShowcase() {
       <Container className={styles.scene}>
         <div className={styles.mobileShowcase}>
           <p className={styles.mobileEyebrow}>Services</p>
-          <h1 className={styles.mobileHeading}>A sharper digital presence starts here.</h1>
+          <h1 className={styles.mobileHeading}>Web design and development services.</h1>
+          <p className="mt-2 mb-4 text-[15px] leading-[1.55] text-[#B8C9DE]">
+            Everything you need to launch and grow online, from the first design to a live website.
+          </p>
           <div ref={mobileCarouselRef} className={styles.mobileCarousel} onScroll={handleMobileScroll} aria-label="Services carousel">
             {services.map(([number, title, description, why]) => (
               <article key={number} className={styles.mobileCard}>
@@ -191,8 +194,11 @@ export function ServicesGlassShowcase() {
             <div className={styles.navigationColumn}>
               <p className={styles.eyebrow}>Services</p>
               <h1 id="services-heading" className={styles.heading}>
-                A sharper digital presence starts here.
+                Web design and development services.
               </h1>
+              <p className="mt-2 mb-5 max-w-[34ch] text-[15px] leading-[1.6] text-[#B8C9DE]">
+                Everything you need to launch and grow online, from the first design to a live website.
+              </p>
 
               <div className={styles.serviceTabs} role="tablist" aria-label="Services">
                 {services.map(([number, title], index) => {

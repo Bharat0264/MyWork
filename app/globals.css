@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-display: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --color-bg-deep: #0B1322;
   --color-navy: #141E30;
   --color-navy-mid: #1B2B45;
@@ -11,8 +11,8 @@
   --color-steel-light: #5F86B0;
   --color-mist: #8FB0D6;
   --color-text: #E8EEF7;
-  --color-text-muted: #9FB3CC;
-  --color-text-faint: #6F86A3;
+  --color-text-muted: #B8C9DE;
+  --color-text-faint: #A9C8EB;
 }
 
 :root {
@@ -34,8 +34,8 @@
   --steel-light: #5F86B0;
   --mist: #8FB0D6;
   --text: #E8EEF7;
-  --text-muted: #9FB3CC;
-  --text-faint: #6F86A3;
+  --text-muted: #B8C9DE;
+  --text-faint: #A9C8EB;
   --border: rgba(143, 176, 214, 0.16);
   --border-strong: rgba(143, 176, 214, 0.32);
   --grad-main: linear-gradient(135deg, #141E30 0%, #35577D 100%);
@@ -208,8 +208,9 @@ body {
   background: linear-gradient(180deg, #0B1322 0%, #141E30 55%, #182740 100%);
   background-attachment: fixed;
   color: var(--text);
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.65;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   font-weight: 400;
   position: relative;
   min-height: 100dvh;
@@ -306,15 +307,18 @@ select:focus-visible {
 /* --- TYPOGRAPHY SCALE --- */
 h1, h2, h3, h4, h5, h6 {
   color: var(--text);
+  font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .hero-heading {
   max-width: 15ch;
-  font-size: clamp(2.8rem, 5vw, 5.6rem);
-  letter-spacing: -0.03em;
-  line-height: 1.04;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: 600;
 }
 
 /* Home hero: first-screen layout and a fully contained, proportional card deck. */
@@ -323,7 +327,7 @@ h1, h2, h3, h4, h5, h6 {
 .home-hero__container { display: flex; min-height: inherit; flex-direction: column; justify-content: center; padding-block: clamp(24px, 2.2vw, 32px); }
 .home-hero__grid { display: grid; width: 100%; min-width: 0; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; column-gap: clamp(48px, 4.5vw, 88px); }
 .home-hero__content { min-width: 0; }
-.home-hero__content .eyebrow { margin-bottom: 20px; font-size: 13px; }
+.home-hero__content .eyebrow { margin-bottom: 20px; font-size: 14px; }
 .home-hero__description { max-width: 46ch; margin-top: 24px; font-size: clamp(1.05rem, 1.35vw, 1.45rem); line-height: 1.6; }
 .home-hero__actions { gap: 16px; margin-top: 32px; }
 .home-hero__primary, .home-hero__secondary { min-height: 56px; }
@@ -484,7 +488,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .commitment-tag {
   color: #BDDAFA;
-  font-size: calc(10.4px * var(--deck-scale));
+  font-size: max(14px, calc(10.4px * var(--deck-scale)));
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -509,7 +513,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%;
   margin: 32px auto 0;
   color: #B8CFEA;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-align: center;
@@ -566,7 +570,7 @@ h1, h2, h3, h4, h5, h6 {
   .home-hero__primary, .home-hero__secondary { min-height: 48px; width: 100%; }
   .home-hero__primary .btn-chrome__face { height: 42px; }
   .commitment-slider { --deck-scale: 0.95; }
-  .commitment-frame-label { margin-top: 24px; font-size: 12px; letter-spacing: 0.08em; }
+  .commitment-frame-label { margin-top: 24px; font-size: 14px; letter-spacing: 0.08em; }
   .commitment-dots { margin-top: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -575,21 +579,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-heading {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .card-heading {
-  font-size: 1.375rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 1.25vw, 1.25rem);
+  font-weight: 600;
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .eyebrow {
-  font-size: 12px;
+  font-size: 14px;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   font-weight: 600;
   color: var(--mist);
 }
@@ -1525,7 +1533,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .contact-form__control input::placeholder,
 .contact-form__control textarea::placeholder {
-  color: #6F86A3;
+  color: #B8C9DE;
   opacity: 1;
 }
 
@@ -1547,7 +1555,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contact-form__select-control select[data-placeholder="true"] {
-  color: #6F86A3;
+  color: #B8C9DE;
 }
 
 .contact-form__select-control option {
@@ -1761,6 +1769,20 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Accessibility: no text below 14px, minimum 4.5:1 contrast */
+.text-xs,
+[class*="text-[9px]"],
+[class*="text-[10px]"],
+[class*="text-[11px]"],
+[class*="text-[12px]"],
+[class*="text-[13px]"] {
+  font-size: 14px !important;
+}
+
+[class*="text-[#6F86A3]"] {
+  color: #B8C9DE !important;
+}
+
 /* Phone layout: safe areas, readable type, and a clear path to the footer. */
 @media (max-width: 699px) {
   :root {
@@ -1777,13 +1799,13 @@ h1, h2, h3, h4, h5, h6 {
   body::before, body::after { display: none; }
   main { min-height: calc(100dvh - var(--nav-h)); }
   .section-heading { font-size: 28px; line-height: 1.16; }
-  .eyebrow { font-size: 13px; letter-spacing: .16em; color: #A9C8EB; }
+  .eyebrow { font-size: 14px; letter-spacing: .16em; color: #A9C8EB; }
   main > section.wrap:not(#work):not(:first-child) { padding-top: 48px; padding-bottom: 48px; }
   main p.text-sm { font-size: 16px; line-height: 1.5; }
   main .text-xs, footer .text-xs, main [class*="text-[9px]"], main [class*="text-[10px]"],
   main [class*="text-[11px]"], main [class*="text-[12px]"], footer [class*="text-[11px]"],
-  footer [class*="text-[12px]"], .contact-form__field > p { font-size: 13px; }
-  main [class*="text-[#6F86A3]"], footer [class*="text-[#6F86A3]"] { color: #B8C9DE; }
+  footer [class*="text-[12px]"], .contact-form__field > p { font-size: 14px; }
+  main [class*="text-[#6F86A3]"], footer [class*="text-[#6F86A3]"], [class*="text-[#6F86A3]"] { color: #B8C9DE !important; }
   .button, .button-white, .button-primary, .button-secondary,
   .btn-chrome:not(.btn-chrome--navbar-mobile), .btn-liquid:not(.btn-liquid--navbar-mobile), .contact-form__submit {
     width: 100%; min-height: 52px; border-radius: 999px;

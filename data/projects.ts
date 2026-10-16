@@ -32,8 +32,8 @@ export const projects: Project[] = [
     client: "Rainbow Digi School",
     category: "Education website",
     categories: ["Website Creation", "Business Websites", "Web Development"],
-    shortDescription: "A vibrant and engaging school website designed to showcase education, activities and admissions.",
-    fullDescription: "A modern, child-friendly website for Rainbow Digi School with engaging design, smooth animations and an easy enquiry system.",
+    shortDescription: "A friendly, easy-to-navigate school website that presents courses, activities and admissions clearly.",
+    fullDescription: "A friendly, easy-to-navigate school website that presents courses, activities and admissions clearly.",
     year: "2025",
     services: ["UI/UX Design", "Web Development", "Custom Animations"],
     technologies: ["React", "Next.js", "Tailwind CSS", "Motion"],
@@ -43,7 +43,7 @@ export const projects: Project[] = [
     accent: "#168BFF",
     challenge: "Create an inviting, joyful digital starting point for a preschool and primary learning community in Kandlakoya.",
     solution: "A bespoke, responsive website that helps families learn about the school, explore curriculum, and submit instant admission enquiries.",
-    overviewNarrative: "A modern, child-friendly website for Rainbow Digi School with engaging design, smooth animations and an easy enquiry system."
+    overviewNarrative: "A friendly, easy-to-navigate school website that presents courses, activities and admissions clearly."
   },
   {
     slug: "printbee",

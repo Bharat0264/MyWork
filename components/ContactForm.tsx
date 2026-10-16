@@ -234,7 +234,7 @@ export function ContactForm() {
         {status === "sending" && (
           <span aria-hidden="true" className="contact-form__spinner" />
         )}
-        <span>{status === "sending" ? "Sending…" : "Let’s build something"}</span>
+        <span>{status === "sending" ? "Sending…" : "Send enquiry"}</span>
       </button>
 
       {status === "success" && (

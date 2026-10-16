@@ -484,13 +484,16 @@ h1, h2, h3, h4, h5, h6 {
   flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   margin-top: auto;
 }
 .commitment-tag {
+  min-width: 0;
   color: #BDDAFA;
   font-size: max(14px, calc(10.4px * var(--deck-scale)));
   font-weight: 600;
   letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
 }
 .commitment-check {
   display: grid;
@@ -575,6 +578,46 @@ h1, h2, h3, h4, h5, h6 {
   .commitment-card[data-position="1"] { transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(.748); }
   .commitment-frame-label { margin-top: 24px; font-size: 14px; letter-spacing: 0.08em; }
   .commitment-dots { margin-top: 14px; }
+}
+@media (max-width: 768px) {
+  .commitment-stage {
+    --side-offset: 62%;
+    aspect-ratio: auto;
+    min-height: 390px;
+  }
+  .commitment-card {
+    width: min(78vw, 320px);
+    min-height: 340px;
+    height: auto;
+    padding: 22px 20px 24px;
+  }
+  .commitment-card[data-active="true"] {
+    z-index: 2;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .commitment-card[data-position="-1"] {
+    z-index: 1;
+    opacity: 0.7;
+    transform: translate(calc(-50% - var(--side-offset)), -50%) rotateY(7deg) scale(0.86);
+  }
+  .commitment-card[data-position="1"] {
+    z-index: 1;
+    opacity: 0.7;
+    transform: translate(calc(-50% + var(--side-offset)), -50%) rotateY(-7deg) scale(0.86);
+  }
+  .commitment-card-title {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    font-size: 24px;
+    line-height: 1.25;
+    padding-bottom: 0.12em;
+  }
+  .commitment-card-copy {
+    overflow: visible;
+    font-size: 15px;
+    line-height: 1.5;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .commitment-card, .commitment-dots span { transition: none !important; }
@@ -1595,11 +1638,11 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 9999px;
   background: linear-gradient(
     135deg,
-    rgba(20, 34, 60, 0.62) 0%,
+    rgba(20, 34, 60, 0.82) 0%,
     rgba(15, 25, 42, 0.78) 100%
   );
-  backdrop-filter: blur(18px) saturate(180%) brightness(1.1);
-  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.1);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
   border: 0;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
@@ -1658,8 +1701,8 @@ h1, h2, h3, h4, h5, h6 {
     rgba(255, 255, 255, 0.16),
     rgba(255, 255, 255, 0.05)
   );
-  backdrop-filter: blur(10px) saturate(160%) brightness(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(160%) brightness(1.1);
+  backdrop-filter: blur(8px) saturate(160%) brightness(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(160%) brightness(1.1);
   border: 0.5px solid rgba(255, 255, 255, 0.28);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),

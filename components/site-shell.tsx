@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mail, Phone, ArrowUp, Home, Briefcase, Sparkles, User } from "lucide-react";
+import { Mail, Phone, ArrowUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 import { socialConfig } from "@/config/social";
 import { StartProjectButton } from "@/components/cta-button";
 import { Container } from "@/components/container";
+import { LiquidGlassNav } from "@/components/liquid-glass-nav";
 
 export function SkipToContent() {
   return (
@@ -22,14 +23,6 @@ const navItems = [
   { label: "Services", href: "/services", id: "services" },
   { label: "About", href: "/about", id: "about" },
   { label: "Contact", href: "/contact", id: "contact" },
-] as const;
-
-const mobileTabItems = [
-  { label: "Home", href: "/", icon: Home },
-  { label: "Work", href: "/work", icon: Briefcase },
-  { label: "Services", href: "/services", icon: Sparkles },
-  { label: "About", href: "/about", icon: User },
-  { label: "Contact", href: "/contact", icon: Mail },
 ] as const;
 
 export function Navbar() {
@@ -252,45 +245,8 @@ export function Navbar() {
         </Container>
       </header>
 
-      {/* MOBILE BOTTOM TAB BAR (below 1024px, 5 items with House icon for Home) */}
-      <nav
-        aria-label="Mobile Navigation"
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-5 right-5 z-50 flex h-[68px] items-center justify-around rounded-full border border-white/20 bg-[#182942]/85 p-1 backdrop-blur-xl shadow-[0_12px_36px_rgba(3,9,20,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] min-[1024px]:hidden"
-      >
-        {mobileTabItems.map((item, idx) => {
-          const isActive = activeSection === idx;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              prefetch={true}
-              aria-current={isActive ? "page" : undefined}
-              onClick={(e) => handleLinkClick(e, item.href)}
-              className={`group flex min-h-11 min-w-0 flex-1 flex-col items-center justify-center rounded-full py-1 transition-transform duration-200 ease-out active:scale-[0.97] select-none ${
-                isActive ? "text-[#E8EEF7]" : "text-[#9FB3CC] hover:text-[#E8EEF7]"
-              }`}
-            >
-              <span
-                className={`flex h-7 w-11 items-center justify-center rounded-full transition-all duration-200 ${
-                  isActive
-                    ? "bg-[rgba(143,176,214,0.2)] text-[#8FB0D6] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
-                    : "text-[#9FB3CC] group-hover:text-white"
-                }`}
-              >
-                <Icon size={18} strokeWidth={isActive ? 2.3 : 1.8} />
-              </span>
-              <span
-                className={`mt-0.5 text-[13px] font-medium leading-none tracking-tight ${
-                  isActive ? "text-[#E8EEF7] font-semibold" : "text-[#9FB3CC]"
-                }`}
-              >
-                {item.label}
-              </span>
-            </Link>
-          );
-        })}
-      </nav>
+      {/* MOBILE BOTTOM TAB BAR — iOS 26 Liquid Glass */}
+      <LiquidGlassNav />
     </>
   );
 }

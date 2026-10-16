@@ -1567,6 +1567,257 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: 3px;
 }
 
+/* ==========================================================================
+   iOS 26 LIQUID GLASS MOBILE TAB BAR  (.liquid-mobile-*)
+   Floating pill bar with translucent glass material, draggable magnifying
+   lens indicator, spring-physics slide, scroll compress, and haptic snap.
+   Visible only below 1024px.
+   ========================================================================== */
+
+/* ── The bar itself ──────────────────────────────────────────────────── */
+.liquid-mobile-bar {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 72px;
+  padding: 6px 4px;
+  border-radius: 999px;
+  /* Glass material */
+  background: linear-gradient(
+    135deg,
+    rgba(20, 34, 60, 0.62) 0%,
+    rgba(15, 25, 42, 0.78) 100%
+  );
+  backdrop-filter: blur(18px) saturate(180%) brightness(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.1);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(3, 9, 20, 0.6),
+    0 2px 8px rgba(3, 9, 20, 0.4);
+  outline: none;
+  transform-origin: center bottom;
+  will-change: transform, backdrop-filter;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Gradient border overlay */
+.liquid-mobile-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.12) 40%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Glass lens indicator ────────────────────────────────────────────── */
+.liquid-mobile-lens {
+  position: absolute;
+  top: 6px;
+  height: calc(100% - 12px);
+  border-radius: 999px;
+  pointer-events: auto;
+  z-index: 1;
+  cursor: grab;
+  transform-origin: center center;
+  will-change: left, transform;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 30%,
+    rgba(143, 176, 214, 0.22) 0%,
+    rgba(143, 176, 214, 0.10) 50%,
+    rgba(100, 140, 190, 0.06) 100%
+  );
+  backdrop-filter: blur(12px) saturate(160%) brightness(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(160%) brightness(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-top-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(3, 9, 20, 0.35),
+    0 1px 4px rgba(3, 9, 20, 0.2);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.liquid-mobile-lens:active {
+  cursor: grabbing;
+}
+
+@supports (backdrop-filter: url(#liquid-glass)) {
+  .liquid-mobile-lens {
+    backdrop-filter: url(#liquid-glass) blur(8px) saturate(180%) brightness(1.15);
+    -webkit-backdrop-filter: url(#liquid-glass) blur(8px) saturate(180%) brightness(1.15);
+  }
+}
+
+/* Specular rim highlight */
+.liquid-mobile-lens__rim {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 25%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.6) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Chromatic aberration fringes */
+.liquid-mobile-lens::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  pointer-events: none;
+  box-shadow:
+    inset 1px 0 2px rgba(255, 80, 80, 0.12),
+    inset -1px 0 2px rgba(80, 130, 255, 0.12),
+    -1px 0 3px rgba(255, 80, 80, 0.06),
+    1px 0 3px rgba(80, 130, 255, 0.06);
+  z-index: 3;
+}
+
+/* Magnification clipped content layer */
+.liquid-mobile-lens__magnify {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse 60% 80% at 50% 20%,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 70%
+  );
+}
+
+.liquid-mobile-lens__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  transform-origin: 0 50%;
+  pointer-events: none;
+  color: #FFFFFF;
+}
+
+/* ── Tab styling ─────────────────────────────────────────────────────── */
+.liquid-mobile-tab {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  gap: 2px;
+  padding: 4px 2px;
+  text-decoration: none;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+
+.liquid-mobile-tab--active {
+  color: #E8EEF7;
+}
+
+.liquid-mobile-tab--inactive {
+  color: #7A96B4;
+}
+
+.liquid-mobile-tab--inactive:hover {
+  color: #B8C9DE;
+}
+
+.liquid-mobile-tab--mag {
+  color: #FFFFFF;
+  pointer-events: none;
+}
+
+.liquid-mobile-tab__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  will-change: transform;
+}
+
+.liquid-mobile-tab__label {
+  font-family: var(--font-sans), "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.liquid-mobile-tab--active .liquid-mobile-tab__label {
+  font-weight: 700;
+}
+
+.liquid-mobile-tab:focus-visible {
+  outline: 2px solid #8FB0D6;
+  outline-offset: 2px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-mobile-bar {
+    transition: none !important;
+  }
+  .liquid-mobile-lens {
+    transition: left 0.15s ease !important;
+  }
+  .liquid-mobile-lens::after {
+    display: none;
+  }
+  .liquid-mobile-tab__icon,
+  .liquid-mobile-tab__label {
+    transition: none !important;
+  }
+}
+
 /* --- GARUDA WORK SHOWCASE STYLES --- */
 @keyframes garudaEagleFloat {
   0%, 100% {

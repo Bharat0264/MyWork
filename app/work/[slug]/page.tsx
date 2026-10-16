@@ -5,6 +5,7 @@ import { projects } from "@/data/projects";
 import { Navbar, Footer } from "@/components/site-shell";
 import type { Metadata } from "next";
 import { LiveProjectPreview } from "@/components/live-project-preview";
+import { ViewProjectGlassButton } from "@/components/view-project-button";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -35,9 +36,7 @@ export default async function Case({
               </p>
             </div>
             {p.liveUrl && (
-              <a className="button" href={p.liveUrl} target="_blank" rel="noreferrer">
-                Visit live site <ArrowUpRight size={16} />
-              </a>
+              <ViewProjectGlassButton project={p} />
             )}
           </div>
           <div

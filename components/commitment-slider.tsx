@@ -17,7 +17,7 @@ const commitments = [
 const AUTOPLAY_MS = 3500;
 
 export function CommitmentSlider() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(3);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const touchX = useRef<number | null>(null);
@@ -69,7 +69,7 @@ export function CommitmentSlider() {
           {commitments.map((item, index) => {
             const raw = (index - active + commitments.length) % commitments.length;
             const offset = raw > Math.floor(commitments.length / 2) ? raw - commitments.length : raw;
-            const visible = Math.abs(offset) <= 2;
+            const visible = Math.abs(offset) <= 1;
             const Icon = item.icon;
             return (
               <button
@@ -83,8 +83,8 @@ export function CommitmentSlider() {
                 tabIndex={visible ? 0 : -1}
                 onClick={() => setActive(index)}
                 style={{
-                  transform: `translate3d(calc(-50% + ${offset * 63}%), -50%, ${offset === 0 ? 42 : -Math.abs(offset) * 55}px) rotateY(${-offset * 26}deg) scale(${offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.79 : 0.65})`,
-                  opacity: visible ? (offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.66 : 0.35) : 0,
+                  transform: `translate3d(calc(-50% + ${offset * 63}%), -50%, 0) rotateY(${-offset * 24}deg) scale(${offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.81 : 0.68})`,
+                  opacity: visible ? (offset === 0 ? 1 : Math.abs(offset) === 1 ? 0.82 : 0.12) : 0,
                   zIndex: 5 - Math.abs(offset),
                   pointerEvents: visible ? "auto" : "none",
                 }}

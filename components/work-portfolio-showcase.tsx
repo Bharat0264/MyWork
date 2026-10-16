@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { projects, Project } from "@/data/projects";
-import { ViewProjectLiquidButton } from "@/components/view-project-button";
+import { ViewProjectGlassButton } from "@/components/view-project-button";
 import { Container } from "@/components/container";
 
 // Short category labels as requested: All, Creation, Redesign, Full-stack, E-commerce, SEO, Marketing
@@ -422,7 +422,7 @@ export function WorkPortfolioShowcase() {
 
                 {/* Button: "View project" liquid glass pill */}
                 <div className="flex flex-wrap items-center gap-4 pt-3">
-                  <ViewProjectLiquidButton project={currentProject} />
+                  <ViewProjectGlassButton project={currentProject} />
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -654,7 +654,7 @@ export function WorkPortfolioShowcase() {
                 ))}
               </div>
               <div className="flex items-center gap-4 pt-2">
-                <ViewProjectLiquidButton project={currentProject} />
+                <ViewProjectGlassButton project={currentProject} />
               </div>
             </div>
           </div>
@@ -746,7 +746,7 @@ export function WorkPortfolioShowcase() {
               ))}
             </div>
             <div className="flex items-center gap-4 pt-2">
-              <ViewProjectLiquidButton project={currentProject} />
+              <ViewProjectGlassButton project={currentProject} />
             </div>
           </div>
 
@@ -840,7 +840,7 @@ export function WorkPortfolioShowcase() {
 
           {/* Button: View project */}
           <div className="flex items-center justify-center gap-3 pt-1">
-            <ViewProjectLiquidButton project={currentProject} />
+            <ViewProjectGlassButton project={currentProject} />
           </div>
 
           {/* Swipeable Thumbnails Row */}

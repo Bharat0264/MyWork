@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpRight, FolderGit2, Sparkles, Cpu } from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
+import { ViewProjectGlassButton } from "@/components/view-project-button";
 import { Container } from "@/components/container";
 import { CommitmentSlider } from "@/components/commitment-slider";
 import { siteConfig } from "@/config/site";
@@ -219,15 +220,7 @@ export default function Home() {
                       <ArrowUpRight size={16} />
                     </Link>
                     {spotlightProject.liveUrl && (
-                      <a
-                        href={spotlightProject.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="button-secondary inline-flex items-center gap-2"
-                      >
-                        <span>Visit live site</span>
-                        <ArrowUpRight size={16} />
-                      </a>
+                      <ViewProjectGlassButton project={spotlightProject} />
                     )}
                   </div>
                 </div>

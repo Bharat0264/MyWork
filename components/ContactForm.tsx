@@ -21,6 +21,10 @@ import {
   X,
 } from "lucide-react";
 import styles from "./contact-form.module.css";
+import {
+  LiquidGlassServicePicker,
+  LIQUID_GLASS_SERVICES,
+} from "./LiquidGlassServicePicker";
 
 type Field =
   | "name"
@@ -90,6 +94,13 @@ export function ContactForm() {
   const [isImproving, setIsImproving] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
+
+  // Liquid Glass Service Picker state
+  const [isServicePickerOpen, setIsServicePickerOpen] = useState(false);
+  const serviceTriggerRef = useRef<HTMLButtonElement>(null);
+  const selectedServiceObj = LIQUID_GLASS_SERVICES.find(
+    (s) => s.name === values.service
+  );
 
   // Textarea auto-grow ref
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -404,25 +415,77 @@ export function ContactForm() {
           </div>
         </div>
 
-        {/* Custom Accessible Dropdown: Service Needed (Required) */}
+        {/* Custom Liquid Glass Service Picker (Required) */}
         <div className={styles.fieldGroup}>
           <label className={styles.label} id="contact-service-label">
             What do you need?
             <span className={styles.requiredMarker} aria-hidden="true">*</span>
           </label>
-          <AccessibleSelect
-            id="contact-service"
-            labelledBy="contact-service-label"
-            value={values.service}
-            placeholder="Choose a service"
-            options={services}
-            required
-            hasError={Boolean(errors.service && touched.service)}
-            onSelect={(val) => {
+          <div className="relative w-full">
+            <button
+              ref={serviceTriggerRef}
+              type="button"
+              id="contact-service"
+              role="button"
+              aria-haspopup="dialog"
+              aria-expanded={isServicePickerOpen}
+              aria-labelledby="contact-service-label contact-service"
+              aria-required="true"
+              aria-invalid={Boolean(errors.service && touched.service)}
+              onClick={() => {
+                setIsServicePickerOpen(true);
+                setTouched((prev) => ({ ...prev, service: true }));
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setIsServicePickerOpen(true);
+                  setTouched((prev) => ({ ...prev, service: true }));
+                }
+              }}
+              className={`${styles.selectTrigger} ${
+                errors.service && touched.service ? styles.selectTriggerError : ""
+              }`}
+            >
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                {selectedServiceObj && (
+                  <div
+                    className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                    style={{
+                      background: selectedServiceObj.bgTint,
+                      color: selectedServiceObj.color,
+                      border: `1px solid ${selectedServiceObj.borderTint}`,
+                    }}
+                  >
+                    <selectedServiceObj.icon size={12} strokeWidth={2.4} />
+                  </div>
+                )}
+                <span className={values.service ? styles.valueText : styles.placeholderText}>
+                  {values.service || "Choose a service"}
+                </span>
+              </div>
+              <ChevronDown
+                aria-hidden="true"
+                className={`${styles.chevronIcon} ${
+                  isServicePickerOpen ? styles.chevronOpen : ""
+                }`}
+              />
+            </button>
+          </div>
+
+          <LiquidGlassServicePicker
+            isOpen={isServicePickerOpen}
+            onClose={() => {
+              setIsServicePickerOpen(false);
+              serviceTriggerRef.current?.focus();
+            }}
+            selectedService={values.service}
+            onSelectService={(val) => {
               update("service", val);
               setTouched((prev) => ({ ...prev, service: true }));
             }}
           />
+
           {errors.service && touched.service && (
             <p id="contact-service-error" role="alert" aria-live="polite" className={styles.errorMessage}>
               <AlertCircle size={14} className="shrink-0" />

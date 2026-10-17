@@ -154,16 +154,9 @@ export function ServicesGlassShowcase() {
             Everything you need to launch and grow online, from the first design to a live website.
           </p>
           <div ref={mobileCarouselRef} className={styles.mobileCarousel} onScroll={handleMobileScroll} aria-label="Services carousel">
-            {services.map(([number, title, description, why, chip]) => (
+            {services.map(([number, title, description, why]) => (
               <article key={number} className={styles.mobileCard}>
-                <div className="flex items-center justify-between gap-2">
-                  <p className={styles.mobileNumber}>{number} / 0{services.length}</p>
-                  {chip ? (
-                    <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.3)] bg-[rgba(143,176,214,0.14)] px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-[#B8C9DE]">
-                      {chip}
-                    </span>
-                  ) : null}
-                </div>
+                <p className={styles.mobileNumber}>{number} / 0{services.length}</p>
                 <h2>{title}</h2>
                 <p className={styles.mobileDescription}>{description}</p>
                 <div className={styles.mobileDivider} />
@@ -235,7 +228,7 @@ export function ServicesGlassShowcase() {
               </p>
 
               <div className={styles.serviceTabs} role="tablist" aria-label="Services">
-                {services.map(([number, title, , , chip], index) => {
+                {services.map(([number, title], index) => {
                   const isActive = activeIndex === index;
 
                   return (
@@ -257,11 +250,6 @@ export function ServicesGlassShowcase() {
                     >
                       <span className={styles.serviceNumber}>{number}</span>
                       <span className={styles.serviceTitle}>{title}</span>
-                      {chip ? (
-                        <span className="ml-auto inline-flex items-center rounded-full border border-[rgba(143,176,214,0.3)] bg-[rgba(143,176,214,0.14)] px-2 py-0.5 text-[10px] font-medium tracking-wide text-[#B8C9DE]">
-                          {chip}
-                        </span>
-                      ) : null}
                     </button>
                   );
                 })}
@@ -270,7 +258,7 @@ export function ServicesGlassShowcase() {
 
             <div className={styles.detailColumn}>
               <div className={styles.panelStack}>
-                {services.map(([number, title, description, why, chip], index) => {
+                {services.map(([number, title, description, why], index) => {
                   const isActive = activeIndex === index;
 
                   return (
@@ -284,14 +272,7 @@ export function ServicesGlassShowcase() {
                       data-active={isActive}
                       className={styles.detailPanel}
                     >
-                      <div className="flex items-center gap-3">
-                        <p className={styles.detailNumber}>{number}</p>
-                        {chip ? (
-                          <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.3)] bg-[rgba(143,176,214,0.14)] px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-[#B8C9DE]">
-                            {chip}
-                          </span>
-                        ) : null}
-                      </div>
+                      <p className={styles.detailNumber}>{number}</p>
                       <h2 className={styles.detailTitle}>{title}</h2>
                       <p className={styles.description}>{description}</p>
                       <div className={styles.divider} aria-hidden="true" />

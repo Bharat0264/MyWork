@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 type Field =
   | "name"
@@ -33,6 +33,7 @@ const services = [
   "Redesign",
   "Landing Page",
   "UI/UX Design",
+  "AI Integration",
   "Something else",
 ];
 
@@ -52,6 +53,20 @@ export function ContactForm() {
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const serviceParam = params.get("service");
+      if (serviceParam === "ai-integration") {
+        setValues((current) => ({ ...current, service: "AI Integration" }));
+        params.delete("service");
+        const remaining = params.toString();
+        const cleanUrl = window.location.pathname + (remaining ? `?${remaining}` : "") + window.location.hash;
+        window.history.replaceState({}, "", cleanUrl);
+      }
+    }
+  }, []);
 
   function update(field: Field, value: string) {
     setValues((current) => ({ ...current, [field]: value }));

@@ -56,7 +56,7 @@ export const skillGroups: SkillGroup[] = [
   {
     name: "Tools & Growth",
     icon: Cpu,
-    tools: ["Git / GitHub", "Vercel", "Render", "SEO", "Analytics", "Payment integration"],
+    tools: ["Git / GitHub", "Vercel", "Render", "SEO", "Analytics", "Payment integration", "AI integration"],
     initials: [
       { code: "Git", label: "Git" },
       { code: "Vc", label: "Vercel" },

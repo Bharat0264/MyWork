@@ -9,6 +9,7 @@ const validServices = new Set([
   "Redesign",
   "Landing Page",
   "UI/UX Design",
+  "AI Integration",
   "Something else",
 ]);
 

@@ -16,13 +16,24 @@ export const metadata: Metadata = {
     absolute: "Web Design & Development Services · Garuda Studio",
   },
   description:
-    "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
+    "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
+  keywords: [
+    "web design",
+    "web development",
+    "website redesign",
+    "e-commerce",
+    "SEO & performance",
+    "digital marketing",
+    "AI integration on request",
+    "Garuda Studio",
+  ],
   alternates: {
     canonical: "https://my-work-umber.vercel.app/services",
   },
   openGraph: {
     title: "Web Design & Development Services · Garuda Studio",
-    description: "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
+    description:
+      "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
     url: "https://my-work-umber.vercel.app/services",
     type: "website",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Studio Web Design & Development Services" }],
@@ -30,7 +41,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Web Design & Development Services · Garuda Studio",
-    description: "End-to-end web design, full-stack development, e-commerce, and SEO services tailored by our studio to help your business grow online.",
+    description:
+      "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
     images: ["/og-image.png"],
   },
 };

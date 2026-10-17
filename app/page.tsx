@@ -8,6 +8,10 @@ import {
   Smartphone,
   RefreshCw,
   HeartHandshake,
+  MessageSquare,
+  Inbox,
+  Search,
+  Workflow,
 } from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
@@ -366,6 +370,101 @@ export default function Home() {
                   <p className="mt-2 text-[15px] leading-6 text-[#9FB3CC]">{d}</p>
                 </article>
               ))}
+            </div>
+          </Container>
+        </section>
+
+        {/* ========================================================
+            6. OPTIONAL AI INTEGRATION (ON REQUEST)
+            ======================================================== */}
+        <section className="border-t border-[rgba(143,176,214,0.16)] py-[calc(var(--section-gap)/2)]">
+          <Container>
+            <div className="max-w-2xl mb-[var(--header-gap)]">
+              <p className="eyebrow text-[#8FB0D6]">On request</p>
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                Optional AI integration for your website
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-7 text-[#B8C9DE]">
+                Add practical AI when you need it. Kept strictly optional.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {/* Card 1: Customer chat assistant */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <MessageSquare size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Customer chat assistant
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Answers visitor questions 24/7 using your website&apos;s content.
+                </p>
+              </div>
+
+              {/* Card 2: Smart enquiry handling */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Inbox size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Smart enquiry handling
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Categorises and routes incoming leads to the right person.
+                </p>
+              </div>
+
+              {/* Card 3: Content & search help */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Search size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Content &amp; search help
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Helps visitors find products, articles or docs with natural search.
+                </p>
+              </div>
+
+              {/* Card 4: Internal workflows */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Workflow size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Internal workflows
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Connects simple AI tasks to your spreadsheets, email or CRM.
+                </p>
+              </div>
+            </div>
+
+            {/* Process line & glass button */}
+            <div className="mt-8 flex flex-col items-start justify-between gap-6 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/50 to-[#141E30]/60 p-6 sm:p-7 sm:flex-row sm:items-center">
+              <p className="text-[15px] leading-relaxed text-[#B8C9DE] sm:max-w-[58ch]">
+                <strong className="font-semibold text-white">How it works:</strong> we agree the goal and the running cost first, build it with safeguards, then test it before launch.
+              </p>
+              <Link href="/contact?service=ai-integration" className="btn-glass shrink-0">
+                <span className="btn-glass__sheen" aria-hidden="true" />
+                <span className="btn-glass__label">Ask about AI integration</span>
+                <svg
+                  className="btn-glass__arrow"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </Link>
             </div>
           </Container>
         </section>

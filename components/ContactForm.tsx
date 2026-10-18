@@ -2,29 +2,29 @@
 
 import {
   FormEvent,
-  KeyboardEvent as ReactKeyboardEvent,
   useCallback,
   useEffect,
-  useId,
   useRef,
   useState,
 } from "react";
 import {
   AlertCircle,
-  Check,
   CheckCircle2,
-  ChevronDown,
+  Code2,
+  Cpu,
+  IndianRupee,
+  Layout,
   Loader2,
+  Monitor,
+  MoreHorizontal,
+  PenTool,
+  RefreshCw,
   RotateCcw,
   Send,
   Sparkles,
-  X,
 } from "lucide-react";
 import styles from "./contact-form.module.css";
-import {
-  LiquidGlassServicePicker,
-  LIQUID_GLASS_SERVICES,
-} from "./LiquidGlassServicePicker";
+import { GlassSelect, GlassOption } from "./ui/GlassSelect";
 
 type Field =
   | "name"
@@ -51,30 +51,77 @@ const emptyValues: Values = {
   timeline: "",
 };
 
-const services = [
-  "Website Design",
-  "Website Development",
-  "Redesign",
-  "Landing Page",
-  "UI/UX Design",
-  "AI Integration",
-  "Something else",
+const SERVICE_OPTIONS: GlassOption[] = [
+  {
+    value: "Website Design",
+    label: "Website Design",
+    hint: "Look, feel and layouts",
+    icon: Monitor,
+  },
+  {
+    value: "Website Development",
+    label: "Website Development",
+    hint: "Build, features and speed",
+    icon: Code2,
+  },
+  {
+    value: "Redesign",
+    label: "Redesign",
+    hint: "Refresh an existing site",
+    icon: RefreshCw,
+  },
+  {
+    value: "Landing Page",
+    label: "Landing Page",
+    hint: "One page built to convert",
+    icon: Layout,
+  },
+  {
+    value: "UI/UX Design",
+    label: "UI/UX Design",
+    hint: "Screens, flows and prototypes",
+    icon: PenTool,
+  },
+  {
+    value: "AI Integration",
+    label: "AI Integration",
+    hint: "Smart assistants and workflows, on request",
+    icon: Cpu,
+  },
+  {
+    value: "Something else",
+    label: "Something else",
+    hint: "Tell us in your message",
+    icon: MoreHorizontal,
+  },
 ];
 
-const budgets = [
-  "Under ₹25,00,0",
-  "₹25,000 to ₹50,000",
-  "₹50,000 to ₹1,00,000",
-  "Above ₹1,00,000",
-  "Not sure yet",
-];
-// Normalize budget 1st item typo if any
-const budgetOptions = [
-  "Under ₹25,000",
-  "₹25,000 to ₹50,000",
-  "₹50,000 to ₹1,00,000",
-  "Above ₹1,00,000",
-  "Not sure yet",
+const BUDGET_OPTIONS: GlassOption[] = [
+  {
+    value: "Under ₹25,000",
+    label: "Under ₹25,000",
+    icon: IndianRupee,
+  },
+  {
+    value: "₹25,000 to ₹50,000",
+    label: "₹25,000 to ₹50,000",
+    icon: IndianRupee,
+  },
+  {
+    value: "₹50,000 to ₹1,00,000",
+    label: "₹50,000 to ₹1,00,000",
+    icon: IndianRupee,
+  },
+  {
+    value: "Above ₹1,00,000",
+    label: "Above ₹1,00,000",
+    icon: IndianRupee,
+  },
+  {
+    value: "Not sure yet",
+    label: "Not sure yet",
+    icon: IndianRupee,
+  },
 ];
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -94,13 +141,6 @@ export function ContactForm() {
   const [isImproving, setIsImproving] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
-
-  // Liquid Glass Service Picker state
-  const [isServicePickerOpen, setIsServicePickerOpen] = useState(false);
-  const serviceTriggerRef = useRef<HTMLButtonElement>(null);
-  const selectedServiceObj = LIQUID_GLASS_SERVICES.find(
-    (s) => s.name === values.service
-  );
 
   // Textarea auto-grow ref
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -421,71 +461,24 @@ export function ContactForm() {
             What do you need?
             <span className={styles.requiredMarker} aria-hidden="true">*</span>
           </label>
-          <div className="relative w-full">
-            <button
-              ref={serviceTriggerRef}
-              type="button"
-              id="contact-service"
-              role="button"
-              aria-haspopup="dialog"
-              aria-expanded={isServicePickerOpen}
-              aria-labelledby="contact-service-label contact-service"
-              aria-required="true"
-              aria-invalid={Boolean(errors.service && touched.service)}
-              onClick={() => {
-                setIsServicePickerOpen(true);
-                setTouched((prev) => ({ ...prev, service: true }));
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setIsServicePickerOpen(true);
-                  setTouched((prev) => ({ ...prev, service: true }));
-                }
-              }}
-              className={`${styles.selectTrigger} ${
-                errors.service && touched.service ? styles.selectTriggerError : ""
-              }`}
-            >
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                {selectedServiceObj && (
-                  <div
-                    className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-                    style={{
-                      background: selectedServiceObj.bgTint,
-                      color: selectedServiceObj.color,
-                      border: `1px solid ${selectedServiceObj.borderTint}`,
-                    }}
-                  >
-                    <selectedServiceObj.icon size={12} strokeWidth={2.4} />
-                  </div>
-                )}
-                <span className={values.service ? styles.valueText : styles.placeholderText}>
-                  {values.service || "Choose a service"}
-                </span>
-              </div>
-              <ChevronDown
-                aria-hidden="true"
-                className={`${styles.chevronIcon} ${
-                  isServicePickerOpen ? styles.chevronOpen : ""
-                }`}
-              />
-            </button>
-          </div>
-
-          <LiquidGlassServicePicker
-            isOpen={isServicePickerOpen}
-            onClose={() => {
-              setIsServicePickerOpen(false);
-              serviceTriggerRef.current?.focus();
-            }}
-            selectedService={values.service}
-            onSelectService={(val) => {
+          <GlassSelect
+            id="contact-service"
+            name="service"
+            label="What do you need?"
+            labelledBy="contact-service-label"
+            value={values.service}
+            placeholder="Choose a service"
+            sheetTitle="Choose a service"
+            sheetSubtitle="Select the service you're interested in"
+            options={SERVICE_OPTIONS}
+            required={true}
+            hasError={Boolean(errors.service && touched.service)}
+            onChange={(val) => {
               update("service", val);
               setTouched((prev) => ({ ...prev, service: true }));
             }}
+            onBlur={() => handleBlur("service")}
           />
-
           {errors.service && touched.service && (
             <p id="contact-service-error" role="alert" aria-live="polite" className={styles.errorMessage}>
               <AlertCircle size={14} className="shrink-0" />
@@ -494,23 +487,31 @@ export function ContactForm() {
           )}
         </div>
 
-        {/* Custom Accessible Dropdown: Budget (Optional) */}
+        {/* Custom Liquid Glass Budget Picker (Optional) */}
         <div className={styles.fieldGroup}>
           <label className={styles.label} id="contact-budget-label">
             Budget
             <span className={styles.optionalTag}>(optional)</span>
           </label>
-          <AccessibleSelect
+          <GlassSelect
             id="contact-budget"
+            name="budget"
+            label="Budget"
             labelledBy="contact-budget-label"
             value={values.budget}
             placeholder="Select a range"
-            options={budgetOptions}
+            sheetTitle="Budget"
+            sheetSubtitle="Select your budget range"
+            footnote="Just a guide. We confirm the final quote after we talk."
+            allowClear={true}
+            options={BUDGET_OPTIONS}
+            required={false}
             hasError={Boolean(errors.budget && touched.budget)}
-            onSelect={(val) => {
+            onChange={(val) => {
               update("budget", val);
               setTouched((prev) => ({ ...prev, budget: true }));
             }}
+            onBlur={() => handleBlur("budget")}
           />
         </div>
 
@@ -739,272 +740,4 @@ export function ContactForm() {
   );
 }
 
-/* ==========================================================================
-   CUSTOM ACCESSIBLE DROPDOWN COMPONENT
-   Desktop: 16px radius panel, 8px gap, soft shadow, checkmark & tint
-   Mobile: Bottom sheet modal with backdrop
-   ========================================================================== */
 
-interface AccessibleSelectProps {
-  id: string;
-  labelledBy: string;
-  value: string;
-  placeholder: string;
-  options: string[];
-  required?: boolean;
-  hasError?: boolean;
-  onSelect: (value: string) => void;
-}
-
-function AccessibleSelect({
-  id,
-  labelledBy,
-  value,
-  placeholder,
-  options,
-  required = false,
-  hasError = false,
-  onSelect,
-}: AccessibleSelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const listboxRef = useRef<HTMLDivElement>(null);
-  const listboxId = `${id}-listbox`;
-
-  // Detect mobile viewport (<= 640px)
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 640);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Sync highlightedIndex with selected value when opened
-  useEffect(() => {
-    if (isOpen) {
-      const idx = options.indexOf(value);
-      setHighlightedIndex(idx >= 0 ? idx : 0);
-    }
-  }, [isOpen, options, value]);
-
-  // Click outside to close (desktop)
-  useEffect(() => {
-    if (!isOpen || isMobile) return;
-
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, isMobile]);
-
-  // Close on Escape & handle type-ahead
-  const handleKeyDown = (e: ReactKeyboardEvent) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      setIsOpen(false);
-      triggerRef.current?.focus();
-      return;
-    }
-
-    if (!isOpen) {
-      if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        setIsOpen(true);
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case "ArrowDown": {
-        e.preventDefault();
-        setHighlightedIndex((prev) => (prev + 1) % options.length);
-        break;
-      }
-      case "ArrowUp": {
-        e.preventDefault();
-        setHighlightedIndex((prev) => (prev - 1 + options.length) % options.length);
-        break;
-      }
-      case "Home": {
-        e.preventDefault();
-        setHighlightedIndex(0);
-        break;
-      }
-      case "End": {
-        e.preventDefault();
-        setHighlightedIndex(options.length - 1);
-        break;
-      }
-      case "Enter":
-      case " ": {
-        e.preventDefault();
-        if (highlightedIndex >= 0 && highlightedIndex < options.length) {
-          onSelect(options[highlightedIndex]);
-          setIsOpen(false);
-          triggerRef.current?.focus();
-        }
-        break;
-      }
-      case "Tab": {
-        setIsOpen(false);
-        break;
-      }
-      default: {
-        // Single letter type-ahead search
-        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-          const char = e.key.toLowerCase();
-          const matchIndex = options.findIndex((opt) =>
-            opt.toLowerCase().startsWith(char)
-          );
-          if (matchIndex >= 0) {
-            setHighlightedIndex(matchIndex);
-          }
-        }
-        break;
-      }
-    }
-  };
-
-  const handleSelectOption = (opt: string) => {
-    onSelect(opt);
-    setIsOpen(false);
-    triggerRef.current?.focus();
-  };
-
-  return (
-    <div ref={containerRef} className="relative w-full">
-      {/* Trigger Button */}
-      <button
-        ref={triggerRef}
-        type="button"
-        id={id}
-        role="combobox"
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-labelledby={`${labelledBy} ${id}`}
-        aria-controls={listboxId}
-        aria-required={required}
-        aria-invalid={hasError}
-        data-state={isOpen ? "open" : "closed"}
-        onClick={() => setIsOpen((prev) => !prev)}
-        onKeyDown={handleKeyDown}
-        className={`${styles.selectTrigger} ${hasError ? styles.selectTriggerError : ""}`}
-      >
-        <span className={value ? styles.valueText : styles.placeholderText}>
-          {value || placeholder}
-        </span>
-        <ChevronDown
-          aria-hidden="true"
-          className={`${styles.chevronIcon} ${isOpen ? styles.chevronOpen : ""}`}
-        />
-      </button>
-
-      {/* DESKTOP DROPDOWN POPPER MENU */}
-      {!isMobile && isOpen && (
-        <div
-          ref={listboxRef}
-          id={listboxId}
-          role="listbox"
-          aria-labelledby={labelledBy}
-          tabIndex={-1}
-          className={styles.dropdownMenu}
-          onKeyDown={handleKeyDown}
-        >
-          {options.map((opt, idx) => {
-            const isSelected = opt === value;
-            const isHighlighted = idx === highlightedIndex;
-
-            return (
-              <div
-                key={opt}
-                id={`${id}-opt-${idx}`}
-                role="option"
-                aria-selected={isSelected}
-                tabIndex={-1}
-                onMouseEnter={() => setHighlightedIndex(idx)}
-                onClick={() => handleSelectOption(opt)}
-                className={`${styles.optionItem} ${
-                  isSelected ? styles.optionItemSelected : ""
-                } ${isHighlighted ? styles.optionItemActive : ""}`}
-              >
-                <span>{opt}</span>
-                {isSelected && (
-                  <Check className={styles.checkIcon} aria-hidden="true" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* MOBILE BOTTOM SHEET MODAL WITH BACKDROP */}
-      {isMobile && isOpen && (
-        <div
-          className={styles.bottomSheetBackdrop}
-          onClick={() => setIsOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={placeholder}
-        >
-          <div
-            className={styles.bottomSheetContent}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={handleKeyDown}
-          >
-            <div className={styles.dragHandle} aria-hidden="true" />
-            <div className={styles.sheetHeader}>
-              <span className={styles.sheetTitle}>{placeholder}</span>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close options"
-                className={styles.sheetCloseBtn}
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <div
-              id={listboxId}
-              role="listbox"
-              aria-labelledby={labelledBy}
-              className={styles.sheetOptionsList}
-            >
-              {options.map((opt, idx) => {
-                const isSelected = opt === value;
-                return (
-                  <div
-                    key={opt}
-                    role="option"
-                    aria-selected={isSelected}
-                    onClick={() => handleSelectOption(opt)}
-                    className={`${styles.sheetOptionItem} ${
-                      isSelected ? styles.sheetOptionItemSelected : ""
-                    }`}
-                  >
-                    <span>{opt}</span>
-                    {isSelected && (
-                      <Check className={styles.checkIcon} aria-hidden="true" />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}

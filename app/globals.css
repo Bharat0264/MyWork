@@ -1776,6 +1776,14 @@ h1, h2, h3, h4, h5, h6 {
   isolation: isolate;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
+}
+
+/* While liquid glass bottom sheet is open, slide tab bar down & fade out */
+body[data-glass-sheet-open="true"] .liquid-mobile-bar {
+  transform: translateY(140%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* 1. Mobile only: show nav only when viewport width <= 768px */

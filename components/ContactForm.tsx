@@ -126,7 +126,11 @@ const BUDGET_OPTIONS: GlassOption[] = [
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function ContactForm() {
+interface ContactFormProps {
+  hasAiKey?: boolean;
+}
+
+export function ContactForm({ hasAiKey = false }: ContactFormProps) {
   const [values, setValues] = useState<Values>(emptyValues);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
@@ -138,12 +142,31 @@ export function ContactForm() {
   const mountTimeRef = useRef<number>(Date.now());
 
   // AI assistant state
+  const [aiAvailable, setAiAvailable] = useState<boolean>(hasAiKey);
   const [isImproving, setIsImproving] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
 
   // Textarea auto-grow ref
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Check AI service availability on client
+  useEffect(() => {
+    let active = true;
+    fetch("/api/improve-message")
+      .then((res) => res.json() as Promise<{ available?: boolean }>)
+      .then((data) => {
+        if (active && typeof data?.available === "boolean") {
+          setAiAvailable(data.available);
+        }
+      })
+      .catch(() => {
+        // Keep initial SSR state
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Handle URL query ?service=ai-integration on mount
   useEffect(() => {
@@ -317,8 +340,11 @@ export function ContactForm() {
       } | null;
 
       if (!res.ok) {
+        if (res.status === 503) {
+          setAiAvailable(false);
+        }
         throw new Error(
-          data?.error || "Unable to improve message right now. Your draft was kept as is."
+          data?.error || "Improve my message isn't available right now. You can still send your enquiry as it is."
         );
       }
 
@@ -329,7 +355,7 @@ export function ContactForm() {
       const msg =
         err instanceof Error
           ? err.message
-          : "Could not improve message. Your draft has been kept as is.";
+          : "Improve my message isn't available right now. You can still send your enquiry as it is.";
       setAiError(msg);
     } finally {
       setIsImproving(false);
@@ -551,35 +577,37 @@ export function ContactForm() {
             </p>
           )}
 
-          {/* AI Helper Bar & Improve button */}
-          <div className={styles.aiRow}>
-            <span className={styles.aiHelperText}>
-              Your draft is sent to an AI service to help polish your project description.
-            </span>
-            <button
-              type="button"
-              onClick={handleImproveMessage}
-              disabled={values.details.trim().length < 5 || isImproving}
-              className={styles.aiButton}
-              title={
-                values.details.trim().length < 5
-                  ? "Write a few words first to improve"
-                  : "Polish and structure your project brief"
-              }
-            >
-              {isImproving ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" />
-                  <span>Polishing brief…</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles size={14} className="text-[#8FB0D6]" />
-                  <span>Improve my message</span>
-                </>
-              )}
-            </button>
-          </div>
+          {/* AI Helper Bar & Improve button - hidden if key is missing */}
+          {aiAvailable && (
+            <div className={styles.aiRow}>
+              <span className={styles.aiHelperText}>
+                Your draft is sent to an AI service to help polish your project description.
+              </span>
+              <button
+                type="button"
+                onClick={handleImproveMessage}
+                disabled={values.details.trim().length < 5 || isImproving}
+                className={styles.aiButton}
+                title={
+                  values.details.trim().length < 5
+                    ? "Write a few words first to improve"
+                    : "Polish and structure your project brief"
+                }
+              >
+                {isImproving ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Polishing brief…</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={14} className="text-[#8FB0D6]" />
+                    <span>Improve my message</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
           {/* AI Error notice if call fails */}
           {aiError && (

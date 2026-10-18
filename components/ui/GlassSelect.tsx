@@ -3,7 +3,6 @@
 import React, {
   useCallback,
   useEffect,
-  useId,
   useRef,
   useState,
   KeyboardEvent as ReactKeyboardEvent,
@@ -59,9 +58,20 @@ export function GlassSelect({
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [recentlySelected, setRecentlySelected] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  // Drag-to-dismiss states
+  // Trigger position for fixed portal positioning on desktop
+  const [triggerRect, setTriggerRect] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+    bottom: number;
+  } | null>(null);
+
+  // Drag-to-dismiss states on mobile
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartYRef = useRef(0);
@@ -69,6 +79,7 @@ export function GlassSelect({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const scrollPositionRef = useRef(0);
   const prefersReducedMotion = useReducedMotion();
@@ -77,8 +88,9 @@ export function GlassSelect({
   const subtitleText =
     sheetSubtitle || (allowClear ? "Select your budget range" : "Choose the option that fits best");
 
-  // Selected option item
-  const selectedOption = options.find((opt) => opt.value === value || opt.label === value);
+  // Selected option item & index
+  const selectedIndex = options.findIndex((opt) => opt.value === value || opt.label === value);
+  const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined;
 
   // Hydration & viewport detection (< 900px is mobile bottom sheet)
   useEffect(() => {
@@ -90,13 +102,50 @@ export function GlassSelect({
     return () => mediaQuery.removeEventListener("change", updateMobile);
   }, []);
 
+  // Compute trigger coordinates on desktop and determine if flipped
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    setTriggerRect({
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+      bottom: rect.bottom,
+    });
+
+    const GAP = 8;
+    const PADDING = 16;
+    // Estimated or measured height
+    const panelHeight = popoverRef.current ? popoverRef.current.offsetHeight : options.length * 47 + 24;
+    const spaceBelow = window.innerHeight - rect.bottom - GAP - PADDING;
+    const spaceAbove = rect.top - GAP - PADDING;
+
+    if (spaceBelow < panelHeight && spaceAbove > spaceBelow) {
+      setIsFlipped(true);
+    } else {
+      setIsFlipped(false);
+    }
+  }, [options.length]);
+
+  useEffect(() => {
+    if (!isOpen || isMobile) return;
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [isOpen, isMobile, updatePosition]);
+
   // Sync highlighted index when opened
   useEffect(() => {
     if (isOpen) {
-      const idx = options.findIndex((opt) => opt.value === value || opt.label === value);
-      setHighlightedIndex(idx >= 0 ? idx : 0);
+      setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0);
+      setHoveredIndex(null);
     }
-  }, [isOpen, options, value]);
+  }, [isOpen, selectedIndex]);
 
   // Handle scroll lock & tab bar hide on mobile
   useEffect(() => {
@@ -117,26 +166,12 @@ export function GlassSelect({
     };
   }, [isOpen, isMobile]);
 
-  // Click outside to close (desktop)
-  useEffect(() => {
-    if (!isOpen || isMobile) return;
-
-    function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-        onBlur?.();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, isMobile, onBlur]);
-
   // Close helper returning focus to trigger
   const handleClose = useCallback(() => {
     setIsOpen(false);
     setDragY(0);
     setIsDragging(false);
+    setHoveredIndex(null);
     onBlur?.();
     triggerRef.current?.focus();
   }, [onBlur]);
@@ -156,9 +191,8 @@ export function GlassSelect({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, handleClose]);
 
-  // Option selection handler
+  // Option selection handler with 160ms timing
   const handleSelect = (option: GlassOption) => {
-    // Light tactile haptic vibration where supported
     if (!prefersReducedMotion && typeof navigator !== "undefined" && "vibrate" in navigator) {
       try {
         navigator.vibrate(8);
@@ -173,16 +207,10 @@ export function GlassSelect({
     setRecentlySelected(true);
     setTimeout(() => setRecentlySelected(false), 350);
 
-    // 220ms delay on mobile so user sees the shared lozenge glide and radio check pop in
-    if (isMobile) {
-      setTimeout(() => {
-        handleClose();
-      }, 220);
-    } else {
-      setTimeout(() => {
-        handleClose();
-      }, 160);
-    }
+    // 160ms delay as specified: checkmark pops, panel closes after 160ms
+    setTimeout(() => {
+      handleClose();
+    }, 160);
   };
 
   // Clear handler for optional field
@@ -199,7 +227,7 @@ export function GlassSelect({
     setTimeout(() => setRecentlySelected(false), 350);
     setTimeout(() => {
       handleClose();
-    }, 180);
+    }, 160);
   };
 
   // Keyboard navigation & type-ahead
@@ -216,28 +244,33 @@ export function GlassSelect({
       case "ArrowDown": {
         e.preventDefault();
         setHighlightedIndex((prev) => (prev + 1) % options.length);
+        setHoveredIndex(null);
         break;
       }
       case "ArrowUp": {
         e.preventDefault();
         setHighlightedIndex((prev) => (prev - 1 + options.length) % options.length);
+        setHoveredIndex(null);
         break;
       }
       case "Home": {
         e.preventDefault();
         setHighlightedIndex(0);
+        setHoveredIndex(null);
         break;
       }
       case "End": {
         e.preventDefault();
         setHighlightedIndex(options.length - 1);
+        setHoveredIndex(null);
         break;
       }
       case "Enter":
       case " ": {
         e.preventDefault();
-        if (highlightedIndex >= 0 && highlightedIndex < options.length) {
-          handleSelect(options[highlightedIndex]);
+        const activeIdx = hoveredIndex !== null ? hoveredIndex : highlightedIndex;
+        if (activeIdx >= 0 && activeIdx < options.length) {
+          handleSelect(options[activeIdx]);
         }
         break;
       }
@@ -246,7 +279,7 @@ export function GlassSelect({
         break;
       }
       default: {
-        // Type-ahead by single key character
+        // Type-ahead by single character
         if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
           const char = e.key.toLowerCase();
           const matchIdx = options.findIndex((opt) =>
@@ -254,6 +287,7 @@ export function GlassSelect({
           );
           if (matchIdx >= 0) {
             setHighlightedIndex(matchIdx);
+            setHoveredIndex(null);
           }
         }
         break;
@@ -261,7 +295,7 @@ export function GlassSelect({
     }
   };
 
-  // Touch drag-to-dismiss gesture handling
+  // Mobile drag-to-dismiss gesture handling
   const handleTouchStart = (e: React.TouchEvent) => {
     if (listRef.current && listRef.current.scrollTop > 5) return;
     dragStartYRef.current = e.touches[0].clientY;
@@ -274,7 +308,6 @@ export function GlassSelect({
     const currentY = e.touches[0].clientY;
     const delta = currentY - dragStartYRef.current;
     if (delta > 0) {
-      // Damped rubber-band downward drag
       setDragY(delta);
     } else {
       setDragY(0);
@@ -287,12 +320,44 @@ export function GlassSelect({
     const duration = Date.now() - dragStartTimeRef.current;
     const velocity = dragY / Math.max(duration, 1);
 
-    // Velocity flick or distance threshold (> 70px or velocity > 0.5)
     if (dragY > 70 || velocity > 0.5) {
       handleClose();
     }
     setDragY(0);
   };
+
+  // Compute active highlight index for shared lozenge
+  const activeHighlightIndex =
+    hoveredIndex !== null
+      ? hoveredIndex
+      : highlightedIndex >= 0
+      ? highlightedIndex
+      : selectedIndex >= 0
+      ? selectedIndex
+      : -1;
+
+  // Compute desktop popover fixed coordinates
+  const PADDING = 16;
+  const GAP = 8;
+  const panelWidth = triggerRect ? Math.max(triggerRect.width, 280) : 280;
+
+  let computedLeft = triggerRect ? triggerRect.left : 0;
+  if (typeof window !== "undefined") {
+    if (computedLeft + panelWidth > window.innerWidth - PADDING) {
+      computedLeft = window.innerWidth - PADDING - panelWidth;
+    }
+    if (computedLeft < PADDING) {
+      computedLeft = PADDING;
+    }
+  }
+
+  let computedTop = 0;
+  if (triggerRect) {
+    const panelHeight = popoverRef.current ? popoverRef.current.offsetHeight : options.length * 47 + 24;
+    computedTop = isFlipped
+      ? Math.max(PADDING, triggerRect.top - GAP - panelHeight)
+      : triggerRect.bottom + GAP;
+  }
 
   const TriggerIcon = selectedOption?.icon;
 
@@ -341,21 +406,24 @@ export function GlassSelect({
         aria-labelledby={labelledBy ? `${labelledBy} ${id}` : id}
         aria-required={required}
         aria-invalid={hasError}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          updatePosition();
+          setIsOpen((prev) => !prev);
+        }}
         onKeyDown={handleKeyDown}
         whileTap={prefersReducedMotion ? undefined : { scale: 0.985 }}
         animate={
           recentlySelected && !prefersReducedMotion
-            ? { scale: [1, 1.015, 1], transition: { duration: 0.3 } }
+            ? { scale: [1, 1.015, 1], transition: { duration: 0.25 } }
             : {}
         }
         className={`${styles.trigger} ${hasError ? styles.triggerError : ""}`}
       >
         <div className={styles.triggerContent}>
           {TriggerIcon && (
-            <div className={styles.triggerIconTile} aria-hidden="true">
-              <TriggerIcon size={16} strokeWidth={2.2} />
-            </div>
+            <span className={styles.triggerPlainIcon} aria-hidden="true">
+              <TriggerIcon size={19} strokeWidth={1.8} />
+            </span>
           )}
           <span className={value ? styles.triggerText : styles.triggerPlaceholder}>
             {selectedOption ? selectedOption.label : placeholder}
@@ -387,8 +455,8 @@ export function GlassSelect({
                 exit={{ opacity: 0 }}
                 transition={
                   prefersReducedMotion
-                    ? { duration: 0.2 }
-                    : { duration: 0.3, ease: "easeOut" }
+                    ? { duration: 0.15 }
+                    : { duration: 0.25, ease: "easeOut" }
                 }
                 style={{
                   position: "absolute",
@@ -409,13 +477,13 @@ export function GlassSelect({
                         y: dragY > 0 ? dragY : 0,
                         transition: isDragging
                           ? { duration: 0 }
-                          : { duration: 0.5, ease: [0.32, 0.72, 0, 1] },
+                          : { duration: 0.45, ease: [0.32, 0.72, 0, 1] },
                       }
                 }
                 exit={
                   prefersReducedMotion
-                    ? { opacity: 0, transition: { duration: 0.2 } }
-                    : { y: "100%", transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] } }
+                    ? { opacity: 0, transition: { duration: 0.18 } }
+                    : { y: "100%", transition: { duration: 0.25, ease: [0.32, 0.72, 0, 1] } }
                 }
               >
                 {/* Grabber Area for Drag-to-dismiss */}
@@ -463,92 +531,97 @@ export function GlassSelect({
                   </div>
                 </div>
 
-                {/* Staggered Options List */}
+                {/* Mobile Flat Rows List */}
                 <div
                   ref={listRef}
-                  className={styles.optionsList}
+                  className={styles.sheetOptionsList}
                   role="radiogroup"
                   aria-labelledby={`${id}-sheet-title`}
                   onKeyDown={handleKeyDown}
+                  onMouseLeave={() => setHoveredIndex(null)}
                 >
                   {options.map((opt, idx) => {
                     const isSelected = opt.value === value || opt.label === value;
+                    const isHighlighted = activeHighlightIndex === idx;
                     const Icon = opt.icon;
 
                     return (
-                      <motion.button
-                        key={opt.value}
-                        type="button"
-                        role="radio"
-                        aria-checked={isSelected}
-                        tabIndex={isSelected ? 0 : -1}
-                        onClick={() => handleSelect(opt)}
-                        whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
-                        initial={
-                          prefersReducedMotion
-                            ? { opacity: 0 }
-                            : { opacity: 0, y: 8 }
-                        }
-                        animate={
-                          prefersReducedMotion
-                            ? { opacity: 1 }
-                            : {
-                                opacity: 1,
-                                y: 0,
-                                transition: {
-                                  delay: Math.min(idx * 0.03, 0.24),
-                                  duration: 0.35,
-                                  ease: [0.22, 1, 0.36, 1],
-                                },
+                      <div key={opt.value} className={styles.rowItemWrapper}>
+                        <motion.button
+                          type="button"
+                          role="radio"
+                          aria-checked={isSelected}
+                          tabIndex={isSelected ? 0 : -1}
+                          onClick={() => handleSelect(opt)}
+                          onMouseEnter={() => setHoveredIndex(idx)}
+                          whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                          className={styles.mobileRowButton}
+                        >
+                          {/* Shared glass lozenge highlight */}
+                          {isHighlighted && (
+                            <motion.div
+                              layoutId={`glass-row-mobile-highlight-${id}`}
+                              className={styles.rowHighlight}
+                              transition={
+                                prefersReducedMotion
+                                  ? { duration: 0 }
+                                  : { type: "spring", stiffness: 420, damping: 30, mass: 0.8 }
                               }
-                        }
-                        className={styles.optionCard}
-                      >
-                        {/* Shared lozenge selection indicator glides between options */}
-                        {isSelected && (
-                          <motion.div
-                            layoutId={`glass-select-highlight-${id}`}
-                            className={styles.selectedLozenge}
-                            transition={
-                              prefersReducedMotion
-                                ? { duration: 0 }
-                                : { type: "spring", stiffness: 380, damping: 30 }
-                            }
+                            />
+                          )}
+
+                          <div className={styles.rowLeft}>
+                            {Icon && (
+                              <span className={styles.rowIcon} aria-hidden="true">
+                                <Icon size={20} strokeWidth={1.8} />
+                              </span>
+                            )}
+                            <div className={styles.mobileRowText}>
+                              <span
+                                className={`${styles.mobileRowTitle} ${
+                                  isSelected ? styles.mobileRowTitleSelected : ""
+                                }`}
+                              >
+                                {opt.label}
+                              </span>
+                              {opt.hint && (
+                                <span className={styles.mobileRowHint}>{opt.hint}</span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className={styles.rowRight}>
+                            {isSelected && (
+                              <motion.span
+                                className={styles.checkIcon}
+                                initial={prefersReducedMotion ? false : { scale: 0.4, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                              >
+                                <Check size={17} strokeWidth={2.4} />
+                              </motion.span>
+                            )}
+                          </div>
+                        </motion.button>
+
+                        {/* Hairline separator between rows, hidden adjacent to highlighted row */}
+                        {idx < options.length - 1 && (
+                          <div
+                            className={styles.hairlineSeparator}
+                            style={{
+                              opacity:
+                                activeHighlightIndex === idx || activeHighlightIndex === idx + 1
+                                  ? 0
+                                  : 1,
+                            }}
                           />
                         )}
-
-                        <div className={styles.optionLeft}>
-                          {Icon && (
-                            <div className={styles.iconTile} aria-hidden="true">
-                              <Icon size={20} strokeWidth={2.2} />
-                            </div>
-                          )}
-                          <div className={styles.optionText}>
-                            <span className={styles.optionTitle}>{opt.label}</span>
-                            {opt.hint && <span className={styles.optionHint}>{opt.hint}</span>}
-                          </div>
-                        </div>
-
-                        <div className={styles.optionRight}>
-                          {isSelected ? (
-                            <motion.div
-                              className={styles.checkCircle}
-                              initial={prefersReducedMotion ? false : { scale: 0.4, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{ type: "spring", stiffness: 420, damping: 24 }}
-                            >
-                              <Check size={14} strokeWidth={3} />
-                            </motion.div>
-                          ) : (
-                            <div className={styles.ringIndicator} />
-                          )}
-                        </div>
-                      </motion.button>
+                      </div>
                     );
                   })}
 
                   {/* Footnote for Budget or details */}
-                  {footnote && <p className={styles.footnote}>{footnote}</p>}
+                  {footnote && <p className={styles.sheetFootnote}>{footnote}</p>}
                 </div>
               </motion.div>
             </div>
@@ -558,103 +631,189 @@ export function GlassSelect({
       )}
 
       {/* ====================================================================
-          DESKTOP POPOVER (>= 900px)
+          DESKTOP POPOVER (>= 900px) - Rendered via Portal into document.body
           ==================================================================== */}
-      {!isMobile && (
+      {!isMobile && mounted && createPortal(
         <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              className={styles.popover}
-              role="dialog"
-              aria-modal="false"
-              aria-label={titleText}
-              initial={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, scale: 0.96, y: -6 }
-              }
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
-              }}
-              exit={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, scale: 0.97, y: -4, transition: { duration: 0.18 } }
-              }
-            >
+          {isOpen && triggerRect && (
+            <>
+              {/* 1. Fixed overlay (blur 6px) that fades in 0.25s like iOS */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className={styles.desktopOverlay}
+                onClick={handleClose}
+              />
+
+              {/* 2. Raised trigger above overlay (z-index: 95) so it stays sharp */}
               <div
-                className={styles.popoverList}
-                role="radiogroup"
-                aria-label={titleText}
-                onKeyDown={handleKeyDown}
+                className={`${styles.trigger} ${styles.raisedTrigger} ${hasError ? styles.triggerError : ""}`}
+                style={{
+                  top: triggerRect.top,
+                  left: triggerRect.left,
+                  width: triggerRect.width,
+                  height: triggerRect.height,
+                }}
+                onClick={handleClose}
+                aria-hidden="true"
               >
-                {options.map((opt, idx) => {
-                  const isSelected = opt.value === value || opt.label === value;
-                  const Icon = opt.icon;
-
-                  return (
-                    <motion.button
-                      key={opt.value}
-                      type="button"
-                      role="radio"
-                      aria-checked={isSelected}
-                      tabIndex={isSelected ? 0 : -1}
-                      onClick={() => handleSelect(opt)}
-                      whileTap={prefersReducedMotion ? undefined : { scale: 0.985 }}
-                      className={`${styles.optionCard} ${styles.desktopCard}`}
-                    >
-                      {/* Shared lozenge selection indicator glides between options */}
-                      {isSelected && (
-                        <motion.div
-                          layoutId={`glass-select-highlight-${id}`}
-                          className={styles.selectedLozenge}
-                          transition={
-                            prefersReducedMotion
-                              ? { duration: 0 }
-                              : { type: "spring", stiffness: 380, damping: 30 }
-                          }
-                        />
-                      )}
-
-                      <div className={styles.optionLeft}>
-                        {Icon && (
-                          <div className={styles.iconTile} aria-hidden="true">
-                            <Icon size={16} strokeWidth={2.2} />
-                          </div>
-                        )}
-                        <div className={styles.optionText}>
-                          <span className={styles.optionTitle}>{opt.label}</span>
-                          {opt.hint && <span className={styles.optionHint}>{opt.hint}</span>}
-                        </div>
-                      </div>
-
-                      <div className={styles.optionRight}>
-                        {isSelected ? (
-                          <motion.div
-                            className={styles.checkCircle}
-                            initial={prefersReducedMotion ? false : { scale: 0.4, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 420, damping: 24 }}
-                          >
-                            <Check size={12} strokeWidth={3} />
-                          </motion.div>
-                        ) : (
-                          <div className={styles.ringIndicator} />
-                        )}
-                      </div>
-                    </motion.button>
-                  );
-                })}
-
-                {/* Footnote for Budget or details */}
-                {footnote && <p className={styles.desktopFootnote}>{footnote}</p>}
+                <div className={styles.triggerContent}>
+                  {TriggerIcon && (
+                    <span className={styles.triggerPlainIcon}>
+                      <TriggerIcon size={19} strokeWidth={1.8} />
+                    </span>
+                  )}
+                  <span className={value ? styles.triggerText : styles.triggerPlaceholder}>
+                    {selectedOption ? selectedOption.label : placeholder}
+                  </span>
+                </div>
+                <ChevronDown
+                  aria-hidden="true"
+                  className={`${styles.chevron} ${styles.chevronOpen}`}
+                />
               </div>
-            </motion.div>
+
+              {/* 3. The Glass Popover Panel (z-index: 100) */}
+              <motion.div
+                ref={popoverRef}
+                className={styles.popover}
+                role="dialog"
+                aria-modal="true"
+                aria-label={titleText}
+                style={{
+                  top: computedTop,
+                  left: computedLeft,
+                  width: panelWidth,
+                  minWidth: panelWidth,
+                  transformOrigin: isFlipped ? "bottom right" : "top right",
+                }}
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : {
+                        opacity: 0,
+                        scale: 0.85,
+                        y: isFlipped ? 6 : -6,
+                      }
+                }
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  transition: prefersReducedMotion
+                    ? { duration: 0.15 }
+                    : { duration: 0.38, ease: [0.2, 0.9, 0.25, 1.12] },
+                }}
+                exit={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : {
+                        opacity: 0,
+                        scale: 0.96,
+                        transition: { duration: 0.18, ease: "easeIn" },
+                      }
+                }
+              >
+                <div
+                  className={styles.popoverList}
+                  role="radiogroup"
+                  aria-label={titleText}
+                  onKeyDown={handleKeyDown}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  {options.map((opt, idx) => {
+                    const isSelected = opt.value === value || opt.label === value;
+                    const isHighlighted = activeHighlightIndex === idx;
+                    const Icon = opt.icon;
+
+                    return (
+                      <div key={opt.value} className={styles.rowItemWrapper}>
+                        <motion.button
+                          key={opt.value}
+                          type="button"
+                          role="radio"
+                          aria-checked={isSelected}
+                          tabIndex={isSelected ? 0 : -1}
+                          onClick={() => handleSelect(opt)}
+                          onMouseEnter={() => setHoveredIndex(idx)}
+                          whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                          className={styles.rowButton}
+                        >
+                          {/* Shared glass lozenge highlight */}
+                          {isHighlighted && (
+                            <motion.div
+                              layoutId={`glass-row-desktop-highlight-${id}`}
+                              className={styles.rowHighlight}
+                              transition={
+                                prefersReducedMotion
+                                  ? { duration: 0 }
+                                  : { type: "spring", stiffness: 420, damping: 30, mass: 0.8 }
+                              }
+                            />
+                          )}
+
+                          <div className={styles.rowLeft}>
+                            {Icon && (
+                              <span className={styles.rowIcon} aria-hidden="true">
+                                <Icon size={20} strokeWidth={1.8} />
+                              </span>
+                            )}
+                            <span
+                              className={`${styles.rowLabel} ${
+                                isSelected ? styles.rowLabelSelected : ""
+                              }`}
+                            >
+                              {opt.label}
+                            </span>
+                          </div>
+
+                          <div className={styles.rowRight}>
+                            {isSelected && (
+                              <motion.span
+                                className={styles.checkIcon}
+                                initial={
+                                  prefersReducedMotion ? false : { scale: 0.4, opacity: 0 }
+                                }
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                              >
+                                <Check size={17} strokeWidth={2.4} />
+                              </motion.span>
+                            )}
+                          </div>
+                        </motion.button>
+
+                        {/* Hairline separator between rows, hidden adjacent to highlighted row */}
+                        {idx < options.length - 1 && (
+                          <div
+                            className={styles.hairlineSeparator}
+                            style={{
+                              opacity:
+                                activeHighlightIndex === idx || activeHighlightIndex === idx + 1
+                                  ? 0
+                                  : 1,
+                            }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Footnote for Budget or details */}
+                  {footnote && (
+                    <>
+                      <div className={styles.hairlineSeparator} />
+                      <div className={styles.popoverFootnote}>{footnote}</div>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </>
           )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
       )}
     </div>
   );

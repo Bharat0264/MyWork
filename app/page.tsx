@@ -236,7 +236,9 @@ export default function Home() {
 
                 {/* Right Column: Project Details */}
                 <div className="flex flex-col justify-center">
-                  <p className="eyebrow text-[#8FB0D6]">{spotlightProject.category}</p>
+                  <p className="eyebrow text-[#8FB0D6]">
+                    {spotlightProject.category} · {spotlightProject.year}
+                  </p>
                   <h3 className="card-heading mt-3 text-2xl sm:text-3xl font-semibold text-white tracking-tight">
                     {spotlightProject.title}
                   </h3>

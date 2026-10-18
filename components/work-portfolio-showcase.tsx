@@ -572,7 +572,7 @@ export function WorkPortfolioShowcase() {
             <div className="flex flex-col items-center w-full max-w-[500px]">
               <div className="flex items-center justify-between w-full mb-2 px-1 select-none">
                 <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
-                  {currentProject.category}
+                  {currentProject.category} · {currentProject.year}
                 </span>
                 {currentProject.liveUrl && (
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#E8EEF7]">
@@ -648,7 +648,7 @@ export function WorkPortfolioShowcase() {
           <div className="flex flex-col items-center w-full max-w-[500px]">
             <div className="flex items-center justify-between w-full mb-2 px-1 select-none">
               <span className="inline-flex items-center rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#8FB0D6]">
-                {currentProject.category}
+                {currentProject.category} · {currentProject.year}
               </span>
               {currentProject.liveUrl && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(143,176,214,0.35)] bg-[#141E30]/80 px-2.5 py-0.5 text-[11px] font-medium text-[#E8EEF7]">
@@ -742,7 +742,7 @@ export function WorkPortfolioShowcase() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-[12px] font-bold text-white truncate">{p.title}</p>
-                      <p className="text-[10px] text-[#9FB3CC] truncate">{p.category}</p>
+                      <p className="text-[10px] text-[#9FB3CC] truncate">{p.category} · {p.year}</p>
                     </div>
                   </button>
                 );
@@ -760,7 +760,7 @@ export function WorkPortfolioShowcase() {
         <div className="flex md:hidden flex-col text-left items-start relative z-10 w-full">
           {/* 1. Category label */}
           <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#8FB0D6]">
-            {currentProject.category}
+            {currentProject.category} · {currentProject.year}
           </div>
 
           {/* 16px gap */}
@@ -855,11 +855,14 @@ export function WorkPortfolioShowcase() {
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[14px] font-semibold text-white leading-snug line-clamp-2 [word-break:break-word]">
+                      <p className="text-[14px] font-semibold text-white leading-snug truncate">
                         {p.title}
                       </p>
                       <p className="text-[12px] text-[#8FB0D6] truncate mt-0.5">
                         {p.category}
+                      </p>
+                      <p className="text-[11px] text-[#6F86A3] font-mono mt-0.5">
+                        {p.year}
                       </p>
                     </div>
                   </button>

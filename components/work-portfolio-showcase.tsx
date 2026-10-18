@@ -11,9 +11,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { projects, Project } from "@/data/projects";
+import { projects, Project, getDisplayDomain } from "@/data/projects";
 import { ViewProjectGlassButton } from "@/components/view-project-button";
 import { Container } from "@/components/container";
+import { BrowserBar } from "@/components/browser-bar";
 
 // Short category labels as requested: All, Creation, Redesign, Full-stack, E-commerce, SEO, Marketing
 const categoryItems = [
@@ -453,27 +454,17 @@ export function WorkPortfolioShowcase() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={isReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
                 transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                className="relative w-[90%] max-w-[700px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_24px_50px_rgba(0,0,0,0.6)] flex flex-col"
+                className="relative w-[90%] max-w-[700px] aspect-[4/3] rounded-[24px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_24px_50px_rgba(0,0,0,0.6)] flex flex-col [container-type:inline-size]"
                 style={{
                   transform: isReducedMotion ? "none" : "rotate(-3deg)",
                 }}
               >
                 {/* Display Screen */}
                 <div className="relative flex-1 w-full overflow-hidden rounded-[16px] bg-[#0A0F1D] flex flex-col">
-                  {/* Clean 28px Browser Bar on top (Dots + Domain Pill only, NO overlapping chips) */}
-                  <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center justify-between z-20">
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
-                      <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
-                      <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
-                      {/* Rounded Address Pill showing real domain */}
-                      <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[240px]">
-                        {currentProject.liveUrl
-                          ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
-                          : `${currentProject.slug}.com`}
-                      </div>
-                    </div>
-                  </div>
+                  {/* Browser Bar with dots, lock icon, and responsive domain pill */}
+                  <BrowserBar
+                    domain={currentProject.displayDomain || getDisplayDomain(currentProject.liveUrl, undefined, currentProject.title)}
+                  />
 
                   {/* Real Home Page Full Screenshot with Slow Scroll on Hover */}
                   <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
@@ -582,20 +573,13 @@ export function WorkPortfolioShowcase() {
                 )}
               </div>
               <div
-                className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col"
+                className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col [container-type:inline-size]"
                 style={{ transform: isReducedMotion ? "none" : "rotate(-3deg)" }}
               >
                 <div className="relative flex-1 w-full overflow-hidden rounded-[14px] bg-[#0A0F1D] flex flex-col">
-                  <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center gap-1.5 z-20">
-                    <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
-                    <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
-                    <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
-                    <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[200px]">
-                      {currentProject.liveUrl
-                        ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
-                        : `${currentProject.slug}.com`}
-                    </div>
-                  </div>
+                  <BrowserBar
+                    domain={currentProject.displayDomain || getDisplayDomain(currentProject.liveUrl, undefined, currentProject.title)}
+                  />
                   <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
                 </div>
               </div>
@@ -658,20 +642,13 @@ export function WorkPortfolioShowcase() {
               )}
             </div>
             <div
-              className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col"
+              className="relative w-full aspect-[4/3] rounded-[22px] border border-white/20 bg-[#0B1322] p-2.5 shadow-[0_20px_48px_rgba(0,0,0,0.6)] flex flex-col [container-type:inline-size]"
               style={{ transform: isReducedMotion ? "none" : "rotate(-2deg)" }}
             >
               <div className="relative flex-1 w-full overflow-hidden rounded-[14px] bg-[#0A0F1D] flex flex-col">
-                <div className="h-[28px] shrink-0 border-b border-white/10 bg-[#0B1322]/90 backdrop-blur-md px-3 flex items-center gap-1.5 z-20">
-                  <span className="h-2 w-2 rounded-full bg-[#FF5F56]/80" />
-                  <span className="h-2 w-2 rounded-full bg-[#FFBD2E]/80" />
-                  <span className="h-2 w-2 rounded-full bg-[#27C93F]/80" />
-                  <div className="ml-2 rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] font-mono text-white/60 truncate max-w-[200px]">
-                    {currentProject.liveUrl
-                      ? currentProject.liveUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
-                      : `${currentProject.slug}.com`}
-                  </div>
-                </div>
+                <BrowserBar
+                  domain={currentProject.displayDomain || getDisplayDomain(currentProject.liveUrl, undefined, currentProject.title)}
+                />
                 <DeviceScreen project={currentProject} isReducedMotion={isReducedMotion} />
               </div>
             </div>
@@ -1009,7 +986,7 @@ function DeviceScreen({
         measureOverflow();
         setHoveredSlug((prev) => prev === project.slug ? null : project.slug);
       }}
-      className="relative flex-1 w-full h-[calc(100%-28px)] overflow-hidden cursor-pointer bg-[#0A0F1D]"
+      className="relative flex-1 w-full min-h-0 overflow-hidden cursor-pointer bg-[#0A0F1D]"
     >
       <Image
         ref={imgRef}

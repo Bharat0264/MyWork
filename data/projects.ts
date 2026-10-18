@@ -12,6 +12,7 @@ export type Project = {
   services: string[];
   technologies: string[];
   liveUrl?: string;
+  displayDomain?: string;
   previewImage?: string;
   githubUrl?: string;
   featured?: boolean;
@@ -22,6 +23,21 @@ export type Project = {
   results?: string[];
   placeholder?: boolean;
 };
+
+export function getDisplayDomain(liveUrl?: string, customDomain?: string, title?: string): string {
+  if (customDomain) {
+    return customDomain.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/+$/, "");
+  }
+  if (liveUrl) {
+    try {
+      const url = new URL(liveUrl);
+      return url.hostname.replace(/^www\./i, "");
+    } catch {
+      return liveUrl.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/+$/, "");
+    }
+  }
+  return title || "Project Showcase";
+}
 
 export const projects: Project[] = [
   {
@@ -38,6 +54,7 @@ export const projects: Project[] = [
     services: ["UI/UX Design", "Web Development", "Custom Animations"],
     technologies: ["React", "Next.js", "Tailwind CSS", "Motion"],
     liveUrl: "https://rainbow-digi-school.vercel.app",
+    displayDomain: "rainbow-digi-school.vercel.app",
     previewImage: "/projects/rainbow-digi-school.webp",
     featured: true,
     accent: "#168BFF",
@@ -59,6 +76,7 @@ export const projects: Project[] = [
     services: ["Product design", "Full-stack development", "Payments"],
     technologies: ["React", "Node.js", "REST APIs", "Authentication"],
     liveUrl: "https://www.printbee.co.in",
+    displayDomain: "printbee.co.in",
     previewImage: "/projects/printbee.webp",
     featured: true,
     accent: "#7c6cff",
@@ -80,6 +98,7 @@ export const projects: Project[] = [
     services: ["UX strategy", "Interface design", "Platform development"],
     technologies: ["React", "Node.js", "AI APIs", "Interactive Charts"],
     liveUrl: "https://ai-bi-platform-gud0.onrender.com/",
+    displayDomain: "ai-bi-platform-gud0.onrender.com",
     previewImage: "/projects/aura-bi.webp",
     githubUrl: "https://github.com/Bharat0264/AI-BI-Platform",
     featured: true,
@@ -102,6 +121,7 @@ export const projects: Project[] = [
     services: ["Website strategy", "UX design", "Development"],
     technologies: ["React", "Responsive UI", "Workflow Forms"],
     liveUrl: "https://royal-mechanics-one.vercel.app/",
+    displayDomain: "royal-mechanics-one.vercel.app",
     previewImage: "/projects/royal-mechanics.webp",
     featured: true,
     accent: "#e0a75d",
@@ -123,6 +143,7 @@ export const projects: Project[] = [
     services: ["Product architecture", "Full-stack development", "Payment integration"],
     technologies: ["React", "Express", "MongoDB", "Razorpay", "JWT"],
     liveUrl: "https://www.earnova.in/",
+    displayDomain: "earnova.in",
     previewImage: "/projects/earnova.webp",
     featured: true,
     accent: "#4cdaa6",
@@ -144,6 +165,7 @@ export const projects: Project[] = [
     services: ["Website development", "Digital presence", "UI/UX Design"],
     technologies: ["Web development", "Responsive design", "SEO Optimization"],
     liveUrl: "https://anutek.vercel.app",
+    displayDomain: "anutek.vercel.app",
     previewImage: "/projects/anutek.webp",
     featured: true,
     accent: "#e079ff",
@@ -164,6 +186,7 @@ export const projects: Project[] = [
     year: "2026",
     services: ["Design audit", "UI/UX redesign", "Performance optimization"],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+    displayDomain: "Website Redesign",
     previewImage: "/projects/redesign-concept.webp",
     accent: "#ff718d",
     challenge: "Overhaul outdated design paradigms without losing brand equity or existing search rankings.",

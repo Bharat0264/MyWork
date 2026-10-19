@@ -7,8 +7,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ArrowUpRight,
-  ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { projects, Project, getDisplayDomain } from "@/data/projects";
@@ -408,21 +406,9 @@ export function WorkPortfolioShowcase() {
                   ))}
                 </div>
 
-                {/* Button: "View project" liquid glass pill AND Live site link */}
-                <div className="flex flex-wrap items-center gap-4 pt-3">
+                {/* Button: "View project" liquid glass pill */}
+                <div className="pt-3">
                   <ViewProjectGlassButton project={currentProject} />
-                  {currentProject.liveUrl && (
-                    <a
-                      href={currentProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Open live website for ${currentProject.title} (opens in new tab)`}
-                      className="inline-flex items-center gap-1.5 text-[15px] font-medium text-[#8FB0D6] hover:text-white transition-colors"
-                    >
-                      <span>Live site</span>
-                      <ArrowUpRight size={16} aria-hidden="true" />
-                    </a>
-                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -604,20 +590,8 @@ export function WorkPortfolioShowcase() {
                   </span>
                 ))}
               </div>
-              <div className="flex items-center gap-4 pt-2">
+              <div className="pt-2">
                 <ViewProjectGlassButton project={currentProject} />
-                {currentProject.liveUrl && (
-                  <a
-                    href={currentProject.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open live website for ${currentProject.title} (opens in new tab)`}
-                    className="inline-flex items-center gap-1.5 text-[15px] font-medium text-[#8FB0D6] hover:text-white transition-colors"
-                  >
-                    <span>Live site</span>
-                    <ArrowUpRight size={16} aria-hidden="true" />
-                  </a>
-                )}
               </div>
             </div>
           </div>
@@ -673,20 +647,8 @@ export function WorkPortfolioShowcase() {
                 </span>
               ))}
             </div>
-            <div className="flex items-center gap-4 pt-2">
+            <div className="pt-2">
               <ViewProjectGlassButton project={currentProject} />
-              {currentProject.liveUrl && (
-                <a
-                  href={currentProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open live website for ${currentProject.title} (opens in new tab)`}
-                  className="inline-flex items-center gap-1.5 text-[15px] font-medium text-[#8FB0D6] hover:text-white transition-colors"
-                >
-                  <span>Live site</span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
-              )}
             </div>
           </div>
 
@@ -777,21 +739,9 @@ export function WorkPortfolioShowcase() {
           {/* 24px gap */}
           <div className="h-6" aria-hidden="true" />
 
-          {/* 5. Buttons row: View project button (Live site link hidden on mobile <= 768px) */}
-          <div className="flex items-center justify-start gap-4">
+          {/* 5. Buttons row: View project button */}
+          <div className="flex items-center justify-start">
             <ViewProjectGlassButton project={currentProject} className="!h-[48px] !px-6" />
-            {currentProject.liveUrl && (
-              <a
-                href={currentProject.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open live website for ${currentProject.title} (opens in new tab)`}
-                className="hidden md:inline-flex items-center gap-1.5 text-[15px] font-medium text-[#8FB0D6] hover:text-white transition-colors"
-              >
-                <span>Live site</span>
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
-            )}
           </div>
 
           {/* 28px gap */}
@@ -851,7 +801,7 @@ export function WorkPortfolioShowcase() {
           {/* 12px gap */}
           <div className="h-3" aria-hidden="true" />
 
-          {/* 7. Carousel controls: Prev/next arrows (round external-link button hidden on mobile <= 768px) */}
+          {/* 7. Carousel controls: Prev/next arrows left-aligned with 12px gap */}
           <div className="flex items-center justify-start gap-3">
             <button
               onClick={handlePrev}
@@ -869,28 +819,16 @@ export function WorkPortfolioShowcase() {
             >
               <ChevronRight size={18} strokeWidth={2.2} />
             </button>
-            {currentProject.liveUrl && (
-              <a
-                href={currentProject.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`Open live website for ${currentProject.title}`}
-                aria-label={`Open live website for ${currentProject.title}`}
-                className="hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 hover:bg-white/[0.16] active:scale-95 transition-all"
-              >
-                <ExternalLink size={16} strokeWidth={2.2} />
-              </a>
-            )}
           </div>
         </div>
 
         {/* ========================================================
             BOTTOM BAR INSIDE THE STAGE (DESKTOP & TABLET >= 768px)
             Below grid, full width, 1px top divider rgba(143,176,214,0.14), 20px padding above
-            Right: 3 round buttons (40px, glass style)
+            Right: 2 round buttons (Previous, Next)
             ======================================================== */}
         <div className="hidden md:flex items-center justify-end w-full mt-6 pt-5 border-t border-[rgba(143,176,214,0.14)] relative z-20">
-          {/* Three Round Buttons (Previous, Next, Open live site) */}
+          {/* Round Navigation Buttons (Previous, Next) */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={handlePrev}
@@ -909,18 +847,6 @@ export function WorkPortfolioShowcase() {
             >
               <ChevronRight size={18} strokeWidth={2.2} />
             </button>
-
-            {currentProject.liveUrl && (
-              <a
-                href={currentProject.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open live website for ${currentProject.title}`}
-                className="flex h-[40px] w-[40px] items-center justify-center rounded-full border border-white/[0.18] bg-white/[0.08] text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8FB0D6]"
-              >
-                <ExternalLink size={16} strokeWidth={2.2} />
-              </a>
-            )}
           </div>
         </div>
       </motion.div>

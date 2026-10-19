@@ -50,11 +50,6 @@ const projects = [
     title: "Anutek",
     liveUrl: "https://anutek.vercel.app",
   },
-  {
-    slug: "redesign-concept",
-    title: "Website Redesign",
-    liveUrl: null,
-  },
 ];
 
 const OUTPUT_DIR = path.resolve(process.cwd(), "public", "projects");

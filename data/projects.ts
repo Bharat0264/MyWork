@@ -172,26 +172,5 @@ export const projects: Project[] = [
     challenge: "Create a clear, high-credibility online presence for an engineering enterprise.",
     solution: "A focused website experience that helps visitors explore capabilities, evaluate solutions, and contact engineering leadership.",
     overviewNarrative: "A clean, modern corporate presence highlighting advanced automation, cloud architecture, and industrial digital systems."
-  },
-  {
-    slug: "redesign-concept",
-    title: "Website Redesign",
-    titlePrefix: "WEBSITE",
-    titleSuffix: "REDESIGN",
-    client: "Garuda Case Study",
-    category: "Redesign concept",
-    categories: ["Website Redesign"],
-    shortDescription: "Before-and-after digital transformations delivering measurable speed and conversion lifts.",
-    fullDescription: "A comprehensive website overhaul transforming legacy cluttered templates into bespoke, accessible, Apple-level experiences.",
-    year: "2026",
-    services: ["Design audit", "UI/UX redesign", "Performance optimization"],
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-    displayDomain: "Website Redesign",
-    previewImage: "/projects/redesign-concept.webp",
-    accent: "#ff718d",
-    challenge: "Overhaul outdated design paradigms without losing brand equity or existing search rankings.",
-    solution: "A complete visual and architectural transformation focusing on typographic hierarchy, dark-mode elegance, and sub-second load times.",
-    overviewNarrative: "A comprehensive website overhaul transforming legacy cluttered templates into bespoke, accessible, Apple-level experiences.",
-    placeholder: false
   }
 ];

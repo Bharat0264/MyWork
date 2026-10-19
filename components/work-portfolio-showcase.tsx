@@ -27,6 +27,12 @@ const categoryItems = [
 
 function matchesCategory(project: Project, category: string): boolean {
   if (category === "All") return true;
+  if (category === "Website Redesign") {
+    return (
+      project.categories.includes("Website Redesign") ||
+      project.services.some((s) => s.toLowerCase().includes("redesign"))
+    );
+  }
   if (category === "Full-stack Development") {
     return (
       project.categories.includes("Web Development") ||

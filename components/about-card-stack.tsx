@@ -294,8 +294,6 @@ export function AboutCardStack() {
   const springConfig = { damping: 28, stiffness: 140 };
   const rotateX = useSpring(useTransform(mouseY, [-1, 1], [2, -2]), springConfig);
   const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-2, 2]), springConfig);
-  const captionX = useSpring(useTransform(mouseX, [-1, 1], [4, -4]), springConfig);
-  const captionY = useSpring(useTransform(mouseY, [-1, 1], [4, -4]), springConfig);
 
   const total = skillGroups.length;
   const currentGroup = skillGroups[activeIndex];

@@ -148,15 +148,8 @@ export function WorkPortfolioShowcase() {
     }
   };
 
-  const formattedIndex = String(safeIndex + 1).padStart(2, "0");
-  const formattedTotal = String(totalCount).padStart(2, "0");
 
-  const ghostWord =
-    currentProject.titleSuffix ||
-    currentProject.titlePrefix ||
-    currentProject.title.toUpperCase();
-
-  // Rail visible window (3 items on desktop)
+// Rail visible window (3 items on desktop)
   const visibleRailProjects = filteredProjects.slice(visibleRailOffset, visibleRailOffset + 3);
   if (visibleRailProjects.length < 3 && filteredProjects.length >= 3) {
     const needed = 3 - visibleRailProjects.length;

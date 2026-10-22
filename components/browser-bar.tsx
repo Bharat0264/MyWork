@@ -43,13 +43,15 @@ export function formatDomainWithMiddleEllipsis(domain: string, targetLength: num
 
 export function BrowserBar({ domain, className = "" }: BrowserBarProps) {
   const pillRef = useRef<HTMLDivElement>(null);
+  const [prevDomain, setPrevDomain] = useState<string>(domain);
   const [displayText, setDisplayText] = useState<string>(domain);
   const [fontSize, setFontSize] = useState<number | null>(null);
 
-  useEffect(() => {
+  if (prevDomain !== domain) {
+    setPrevDomain(domain);
     setDisplayText(domain);
     setFontSize(null);
-  }, [domain]);
+  }
 
   useEffect(() => {
     const pill = pillRef.current;

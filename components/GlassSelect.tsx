@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
@@ -56,11 +57,16 @@ export function GlassSelect({
 }: GlassSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [recentlySelected, setRecentlySelected] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [panelHeight, setPanelHeight] = useState<number>(options.length * 47 + 24);
 
   // Trigger position for fixed portal positioning on desktop
   const [triggerRect, setTriggerRect] = useState<{
@@ -94,7 +100,6 @@ export function GlassSelect({
 
   // Hydration & viewport detection (< 900px is mobile bottom sheet)
   useEffect(() => {
-    setMounted(true);
     const mediaQuery = window.matchMedia("(max-width: 899px)");
     const updateMobile = () => setIsMobile(mediaQuery.matches);
     updateMobile();
@@ -121,6 +126,7 @@ export function GlassSelect({
     const spaceBelow = window.innerHeight - rect.bottom - GAP - PADDING;
     const spaceAbove = rect.top - GAP - PADDING;
 
+    setPanelHeight(panelHeight);
     if (spaceBelow < panelHeight && spaceAbove > spaceBelow) {
       setIsFlipped(true);
     } else {
@@ -236,6 +242,8 @@ export function GlassSelect({
       if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         setIsOpen(true);
+        setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        setHoveredIndex(null);
       }
       return;
     }
@@ -353,7 +361,6 @@ export function GlassSelect({
 
   let computedTop = 0;
   if (triggerRect) {
-    const panelHeight = popoverRef.current ? popoverRef.current.offsetHeight : options.length * 47 + 24;
     computedTop = isFlipped
       ? Math.max(PADDING, triggerRect.top - GAP - panelHeight)
       : triggerRect.bottom + GAP;
@@ -408,7 +415,14 @@ export function GlassSelect({
         aria-invalid={hasError}
         onClick={() => {
           updatePosition();
-          setIsOpen((prev) => !prev);
+          setIsOpen((prev) => {
+            const next = !prev;
+            if (next) {
+              setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0);
+              setHoveredIndex(null);
+            }
+            return next;
+          });
         }}
         onKeyDown={handleKeyDown}
         whileTap={prefersReducedMotion ? undefined : { scale: 0.985 }}

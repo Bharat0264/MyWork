@@ -133,7 +133,7 @@ async function capture() {
               el.style.display = "none";
               el.style.opacity = "0";
               el.style.pointerEvents = "none";
-            } catch (_) {}
+            } catch {}
           });
         });
       });
@@ -170,7 +170,7 @@ async function capture() {
   // Cleanup temp dir
   try {
     fs.rmSync(TEMP_DIR, { recursive: true, force: true });
-  } catch (_) {}
+  } catch {}
 
   console.log(`\n=========================================`);
   console.log(`All project screenshots processed!`);

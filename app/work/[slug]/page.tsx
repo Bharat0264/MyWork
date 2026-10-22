@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { Navbar, Footer } from "@/components/site-shell";
 import type { Metadata } from "next";

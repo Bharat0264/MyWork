@@ -25,7 +25,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import styles from "./contact-form.module.css";
-import { GlassSelect, GlassOption } from "./ui/GlassSelect";
+import { GlassSelect, GlassOption } from "./GlassSelect";
 
 type Field =
   | "name"
@@ -138,8 +138,48 @@ interface ContactFormProps {
   hasAiKey?: boolean;
 }
 
+function getInitialContactValues(): Values {
+  if (typeof window === "undefined") return emptyValues;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const serviceParam = params.get("service");
+    if (serviceParam === "ai-integration") {
+      return { ...emptyValues, service: "AI Integration" };
+    }
+    if (serviceParam === "social-media") {
+      const pkgParam = params.get("package")?.toLowerCase();
+      let pkgLabel = "Social Media Management";
+      let detailsText = "I'm interested in Social Media Management for my brand.";
+      if (pkgParam === "starter") {
+        pkgLabel = "Starter (2 posts + 1 video / week, 1 platform)";
+        detailsText = "I'm interested in the Starter social media plan: 2 posts + 1 video per week, 1 platform.";
+      } else if (pkgParam === "growth") {
+        pkgLabel = "Growth (3 posts + 2 videos / week, 2 platforms)";
+        detailsText = "I'm interested in the Growth social media plan: 3 posts + 2 videos per week, 2 platforms.";
+      } else if (pkgParam === "pro") {
+        pkgLabel = "Pro (5 posts + 3 videos / week, up to 3 platforms)";
+        detailsText = "I'm interested in the Pro social media plan: 5 posts + 3 videos per week, up to 3 platforms.";
+      } else if (pkgParam === "custom") {
+        const posts = params.get("posts") || "3";
+        const videos = params.get("videos") || "2";
+        const platforms = params.get("platforms") || "2";
+        const platStr = `${platforms} platform${Number(platforms) > 1 ? "s" : ""}`;
+        pkgLabel = `Custom (${posts} posts + ${videos} videos / week, ${platStr})`;
+        detailsText = `I'm interested in a custom social media plan: ${posts} posts + ${videos} videos per week, ${platStr}.`;
+      }
+      return {
+        ...emptyValues,
+        service: "Social Media Management",
+        package: pkgLabel,
+        details: detailsText,
+      };
+    }
+  } catch {}
+  return emptyValues;
+}
+
 export function ContactForm({ hasAiKey = false }: ContactFormProps) {
-  const [values, setValues] = useState<Values>(emptyValues);
+  const [values, setValues] = useState<Values>(getInitialContactValues);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
   const [honeypot, setHoneypot] = useState("");
@@ -147,7 +187,7 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Time-on-page spam protection
-  const mountTimeRef = useRef<number>(Date.now());
+  const mountTimeRef = useRef<number>(0);
 
   // AI assistant state
   const [aiAvailable, setAiAvailable] = useState<boolean>(hasAiKey);
@@ -176,13 +216,17 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
     };
   }, []);
 
-  // Handle URL queries on mount (?service=ai-integration, ?service=social-media&package=...)
+
+
+    // Handle URL queries on mount (?service=ai-integration, ?service=social-media&package=...)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const serviceParam = params.get("service");
       if (serviceParam === "ai-integration") {
-        setValues((current) => ({ ...current, service: "AI Integration" }));
+        queueMicrotask(() => {
+          setValues((current) => ({ ...current, service: "AI Integration" }));
+        });
         params.delete("service");
         const remaining = params.toString();
         const cleanUrl =
@@ -551,7 +595,7 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
             options={SERVICE_OPTIONS}
             required={true}
             hasError={Boolean(errors.service && touched.service)}
-            onChange={(val) => {
+            onChange={(val: string) => {
               update("service", val);
               setTouched((prev) => ({ ...prev, service: true }));
             }}
@@ -585,7 +629,7 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
             options={BUDGET_OPTIONS}
             required={false}
             hasError={Boolean(errors.budget && touched.budget)}
-            onChange={(val) => {
+            onChange={(val: string) => {
               update("budget", val);
               setTouched((prev) => ({ ...prev, budget: true }));
             }}

@@ -12,6 +12,10 @@ import {
   Inbox,
   Search,
   Workflow,
+  Calendar,
+  Video,
+  Share2,
+  BarChart3,
 } from "lucide-react";
 import { Navbar, Footer } from "@/components/site-shell";
 import { StartProjectButton } from "@/components/cta-button";
@@ -453,6 +457,101 @@ export default function Home() {
               <Link href="/contact?service=ai-integration" className="btn-glass shrink-0">
                 <span className="btn-glass__sheen" aria-hidden="true" />
                 <span className="btn-glass__label">Ask about AI integration</span>
+                <svg
+                  className="btn-glass__arrow"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </Link>
+            </div>
+          </Container>
+        </section>
+
+        {/* ========================================================
+            7. SOCIAL MEDIA MANAGEMENT (MONTHLY PACKAGES)
+            ======================================================== */}
+        <section className="border-t border-[rgba(143,176,214,0.16)] bg-[#141E30]/60 py-[calc(var(--section-gap)/2)]">
+          <Container>
+            <div className="max-w-2xl mb-[var(--header-gap)]">
+              <p className="eyebrow text-[#8FB0D6]">Social media</p>
+              <h2 className="section-heading mt-3 font-semibold text-white text-3xl sm:text-4xl lg:text-5xl tracking-tight">
+                Social media management for your brand
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-7 text-[#B8C9DE]">
+                Consistent, on-brand posts and short videos, planned, designed, scheduled and reported every month.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {/* Card 1: Content calendar */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Calendar size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Content calendar
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Monthly planning mapped to your business goals, with captions and hashtag research.
+                </p>
+              </div>
+
+              {/* Card 2: Posts & short videos */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Video size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Posts &amp; short videos
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Clean graphic designs, carousel decks, and vertical video reels tailored to your brand.
+                </p>
+              </div>
+
+              {/* Card 3: Scheduling & publishing */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <Share2 size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Scheduling &amp; publishing
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Hands-free posting and active feed management across your target platforms.
+                </p>
+              </div>
+
+              {/* Card 4: Monthly reports */}
+              <div className="rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/80 to-[#141E30]/90 p-6 sm:p-7 shadow-[0_12px_32px_rgba(4,9,18,0.35)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[#8FB0D6]">
+                  <BarChart3 size={22} strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Monthly reports
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[#B8C9DE]">
+                  Clear reach and engagement metrics every month so you see exactly what works.
+                </p>
+              </div>
+            </div>
+
+            {/* Process line & glass button */}
+            <div className="mt-8 flex flex-col items-start justify-between gap-6 rounded-[24px] border border-[rgba(143,176,214,0.18)] bg-gradient-to-br from-[#1B2B45]/50 to-[#141E30]/60 p-6 sm:p-7 sm:flex-row sm:items-center">
+              <p className="text-[15px] leading-relaxed text-[#B8C9DE] sm:max-w-[58ch]">
+                <strong className="font-semibold text-white">Monthly packages:</strong> Starter, Growth, and Pro plans with weekly deliverables, plus custom schedules to fit your brand.
+              </p>
+              <Link href="/services/social-media" className="btn-glass shrink-0">
+                <span className="btn-glass__sheen" aria-hidden="true" />
+                <span className="btn-glass__label">View monthly plans</span>
                 <svg
                   className="btn-glass__arrow"
                   aria-hidden="true"

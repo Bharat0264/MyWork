@@ -1,7 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Poppins } from "next/font/google";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { SkipToContent } from "@/components/site-shell";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://my-work-umber.vercel.app"),
@@ -45,7 +60,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body className="antialiased">
+      <body className={`${inter.variable} ${poppins.variable} antialiased`}>
         <SkipToContent />
         <ScrollToTop />
         {children}

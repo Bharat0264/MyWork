@@ -20,6 +20,8 @@ export function CommitmentSlider() {
   const [active, setActive] = useState(3);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [inView, setInView] = useState(true);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const touchX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -31,7 +33,20 @@ export function CommitmentSlider() {
   }, []);
 
   useEffect(() => {
-    if (paused || reducedMotion) return;
+    const el = sliderRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (paused || reducedMotion || !inView) return;
     const timer = window.setInterval(() => {
       if (!document.hidden) setActive((index) => (index + 1) % commitments.length);
     }, AUTOPLAY_MS);
@@ -51,6 +66,7 @@ export function CommitmentSlider() {
 
   return (
     <div
+      ref={sliderRef}
       className="commitment-slider"
       aria-label="Our commitments"
       onMouseEnter={() => { if (window.matchMedia("(hover: hover)").matches) setPaused(true); }}

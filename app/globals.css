@@ -1,9 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-poppins), "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --color-bg-deep: #0B1322;
   --color-navy: #141E30;
   --color-navy-mid: #1B2B45;
@@ -1699,7 +1698,7 @@ h1, h2, h3, h4, h5, h6 {
               width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
               transform 0.2s ease,
               opacity 0.2s ease;
-  will-change: left, width, transform;
+  will-change: transform;
 }
 
 @supports (backdrop-filter: url(#lens-distortion)) {
@@ -1877,7 +1876,6 @@ body[data-glass-sheet-open="true"] .liquid-mobile-bar {
   justify-content: center;
   width: 22px;
   height: 22px;
-  will-change: transform;
 }
 
 .liquid-mobile-tab__label {
@@ -1887,7 +1885,6 @@ body[data-glass-sheet-open="true"] .liquid-mobile-bar {
   line-height: 1;
   letter-spacing: -0.03em;
   white-space: nowrap;
-  will-change: transform;
 }
 
 .liquid-mobile-tab[data-active="true"] .liquid-mobile-tab__label {

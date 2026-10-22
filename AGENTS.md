@@ -8,4 +8,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-Always commit and push to origin = https://github.com/RangaMokshagna/MyWork (my account). Never push to old-origin.
+# Multi-Agent Collaboration Rules (Codex & Antigravity)
+
+1. **Pull and Rebase First**: Always run `git fetch origin` and `git pull --rebase origin main` before starting work. Never overwrite another agent's commits.
+2. **Commit and Push Incrementally**: Commit after completing each task and push to origin immediately.
+3. **Never Force Push**: Never use `git push --force` or `--force-with-lease`. Never use `git reset --hard` on shared branches. Never rewrite history.
+4. **Structured Commit Messages**: Use small, focused commits with conventional prefixes (`chore`, `fix`, `perf`, `refactor`, `docs`) and tag the agent in the commit message, e.g.:
+   `fix: [agent-antigravity] resolve hydration mismatch in navigation bar`
+5. **Live Production is the Specification**: Keep exactly what production does and shows. No unauthorized redesigns, copy changes, or route renames.
+6. **Remote Repository**: Always push to `origin` (GitHub: `https://github.com/Bharat0264/MyWork.git`). Never push to `old-origin`.

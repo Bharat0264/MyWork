@@ -265,6 +265,7 @@ const serviceLinks = [
   ["Landing Pages", "/services"],
   ["UI/UX Design", "/services"],
   ["AI Integration", "/services"],
+  ["Social Media Management", "/services/social-media"],
 ] as const;
 
 export function Footer() {

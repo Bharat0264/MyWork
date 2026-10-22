@@ -6,4 +6,5 @@ export const services = [
   ["05", "SEO & Performance", "Faster pages and clean structure so Google and customers find you.", "Better search ranking and quick load times directly increase customer enquiries."],
   ["06", "Digital Marketing", "Landing pages and campaigns that bring in enquiries.", "Targeted landing pages guide high-intent prospects straight to contact you."],
   ["07", "AI Integration", "Add practical AI to your website or business tools, such as a customer chat assistant, smart enquiry handling or content help, only where it genuinely helps your business.", "Customers get instant answers and your team saves time, with AI that works from your own information and within limits you control."],
+  ["08", "Social Media Management", "Consistent, on-brand posts and short videos, planned, designed, scheduled and reported every month.", "Regular, quality content keeps your brand visible and gives customers a reason to follow, message and buy.", "Monthly plans"],
 ] as const;

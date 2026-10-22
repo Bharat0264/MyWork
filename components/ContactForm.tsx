@@ -21,6 +21,7 @@ import {
   RefreshCw,
   RotateCcw,
   Send,
+  Share2,
   Sparkles,
 } from "lucide-react";
 import styles from "./contact-form.module.css";
@@ -36,7 +37,7 @@ type Field =
   | "details"
   | "timeline";
 
-type Values = Record<Field, string>;
+type Values = Record<Field, string> & { package?: string };
 type Errors = Partial<Record<Field, string>>;
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -49,6 +50,7 @@ const emptyValues: Values = {
   budget: "",
   details: "",
   timeline: "",
+  package: "",
 };
 
 const SERVICE_OPTIONS: GlassOption[] = [
@@ -87,6 +89,12 @@ const SERVICE_OPTIONS: GlassOption[] = [
     label: "AI Integration",
     hint: "Smart assistants and workflows, on request",
     icon: Cpu,
+  },
+  {
+    value: "Social Media Management",
+    label: "Social Media Management",
+    hint: "Consistent monthly posts, videos and reporting",
+    icon: Share2,
   },
   {
     value: "Something else",
@@ -168,7 +176,7 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
     };
   }, []);
 
-  // Handle URL query ?service=ai-integration on mount
+  // Handle URL queries on mount (?service=ai-integration, ?service=social-media&package=...)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -176,6 +184,50 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
       if (serviceParam === "ai-integration") {
         setValues((current) => ({ ...current, service: "AI Integration" }));
         params.delete("service");
+        const remaining = params.toString();
+        const cleanUrl =
+          window.location.pathname +
+          (remaining ? `?${remaining}` : "") +
+          window.location.hash;
+        window.history.replaceState({}, "", cleanUrl);
+      } else if (serviceParam === "social-media") {
+        const pkgParam = params.get("package")?.toLowerCase();
+        let pkgLabel = "";
+        let detailsText = "";
+
+        if (pkgParam === "starter") {
+          pkgLabel = "Starter (2 posts + 1 video / week, 1 platform)";
+          detailsText = "I'm interested in the Starter social media plan: 2 posts + 1 video per week, 1 platform.";
+        } else if (pkgParam === "growth") {
+          pkgLabel = "Growth (3 posts + 2 videos / week, 2 platforms)";
+          detailsText = "I'm interested in the Growth social media plan: 3 posts + 2 videos per week, 2 platforms.";
+        } else if (pkgParam === "pro") {
+          pkgLabel = "Pro (5 posts + 3 videos / week, up to 3 platforms)";
+          detailsText = "I'm interested in the Pro social media plan: 5 posts + 3 videos per week, up to 3 platforms.";
+        } else if (pkgParam === "custom") {
+          const posts = params.get("posts") || "3";
+          const videos = params.get("videos") || "2";
+          const platforms = params.get("platforms") || "2";
+          const platStr = `${platforms} platform${Number(platforms) > 1 ? "s" : ""}`;
+          pkgLabel = `Custom (${posts} posts + ${videos} videos / week, ${platStr})`;
+          detailsText = `I'm interested in a custom social media plan: ${posts} posts + ${videos} videos per week, ${platStr}.`;
+        } else {
+          pkgLabel = "Social Media Management";
+          detailsText = "I'm interested in Social Media Management for my brand.";
+        }
+
+        setValues((current) => ({
+          ...current,
+          service: "Social Media Management",
+          package: pkgLabel,
+          details: current.details ? current.details : detailsText,
+        }));
+
+        params.delete("service");
+        params.delete("package");
+        params.delete("posts");
+        params.delete("videos");
+        params.delete("platforms");
         const remaining = params.toString();
         const cleanUrl =
           window.location.pathname +
@@ -663,6 +715,9 @@ export function ContactForm({ hasAiKey = false }: ContactFormProps) {
           </div>
         </div>
       </div>
+
+      {/* Hidden package field */}
+      <input type="hidden" name="package" value={values.package || ""} />
 
       {/* Hidden honeypot for spam bots */}
       <div

@@ -3,7 +3,7 @@ import { projects } from "@/data/projects";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://my-work-umber.vercel.app";
-  const routes = ["", "/work", "/services", "/about", "/contact"].map((path) => ({
+  const routes = ["", "/work", "/services", "/services/social-media", "/about", "/contact"].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,

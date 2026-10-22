@@ -10,6 +10,7 @@ const validServices = new Set([
   "Landing Page",
   "UI/UX Design",
   "AI Integration",
+  "Social Media Management",
   "Something else",
 ]);
 
@@ -104,6 +105,7 @@ export async function POST(request: Request) {
   const budget = value("budget");
   const details = value("details");
   const timeline = value("timeline");
+  const pkg = value("package");
 
   // Server-side field validation
   const validationErrors: string[] = [];
@@ -144,6 +146,7 @@ export async function POST(request: Request) {
     `Phone:    ${phone || "Not provided"}`,
     `Company:  ${company || "Not provided"}`,
     `Service:  ${service}`,
+    ...(pkg ? [`Package:  ${pkg}`] : []),
     `Budget:   ${budget || "Not provided"}`,
     `Timeline: ${timeline || "Not provided"}`,
     `Submitted from IP: ${ip}`,
@@ -220,6 +223,8 @@ export async function POST(request: Request) {
               ${phone ? `<div style="margin-bottom: 16px;"><div style="color: #8FB0D6; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-weight: 600;">Phone</div><div style="color: #FFFFFF; font-size: 15px; font-weight: 500;"><a href="tel:${escapeHtml(phone.replace(/\s/g, ""))}" style="color: #60A5FA; text-decoration: none;">${escapeHtml(phone)}</a></div></div>` : ""}
 
               ${company ? `<div style="margin-bottom: 16px;"><div style="color: #8FB0D6; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-weight: 600;">Company</div><div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">${escapeHtml(company)}</div></div>` : ""}
+
+              ${pkg ? `<div style="margin-bottom: 16px;"><div style="color: #8FB0D6; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-weight: 600;">Package</div><div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">${escapeHtml(pkg)}</div></div>` : ""}
 
               <!-- Service Needed -->
               <div style="margin-bottom: 16px;">

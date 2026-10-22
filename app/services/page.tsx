@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Footer, Navbar } from "@/components/site-shell";
 import { Container } from "@/components/container";
+import { services } from "@/data/services";
 
 const ServicesGlassShowcase = dynamic(
   () => import("@/components/services-glass-showcase").then((mod) => mod.ServicesGlassShowcase),
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     absolute: "Web Design & Development Services · Garuda Studio",
   },
   description:
-    "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
+    "End-to-end web design, full-stack development, e-commerce, SEO, social media management, and AI integration on request tailored by our studio to help your business grow online.",
   keywords: [
     "web design",
     "web development",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     "e-commerce",
     "SEO & performance",
     "digital marketing",
+    "social media management",
     "AI integration on request",
     "Garuda Studio",
   ],
@@ -33,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Web Design & Development Services · Garuda Studio",
     description:
-      "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
+      "End-to-end web design, full-stack development, e-commerce, SEO, social media management, and AI integration on request tailored by our studio to help your business grow online.",
     url: "https://my-work-umber.vercel.app/services",
     type: "website",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Garuda Studio Web Design & Development Services" }],
@@ -42,14 +44,43 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Web Design & Development Services · Garuda Studio",
     description:
-      "End-to-end web design, full-stack development, e-commerce, SEO, and AI integration on request tailored by our studio to help your business grow online.",
+      "End-to-end web design, full-stack development, e-commerce, SEO, social media management, and AI integration on request tailored by our studio to help your business grow online.",
     images: ["/og-image.png"],
   },
 };
 
 export default function Services() {
+  const servicesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: "Web Design, Development & Digital Marketing Services",
+    provider: {
+      "@type": "ProfessionalService",
+      name: "Garuda Web Design & Development Studio",
+      url: "https://my-work-umber.vercel.app",
+      image: "https://my-work-umber.vercel.app/og-image.png",
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Garuda Studio Services",
+      itemListElement: services.map(([number, title, description]) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: title,
+          description: description,
+          identifier: number,
+        },
+      })),
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
+      />
       <Navbar />
       <main id="content" className="page-transition bg-transparent">
         {/* HERO SHOWCASE: Glass slab & interactive spheres */}

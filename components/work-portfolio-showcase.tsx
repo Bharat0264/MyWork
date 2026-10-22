@@ -56,7 +56,8 @@ function matchesCategory(project: Project, category: string): boolean {
   if (category === "Digital Marketing") {
     return (
       project.categories.includes("Web Applications") ||
-      project.services.some((s) => s.toLowerCase().includes("marketing"))
+      project.categories.includes("Social Media Management") ||
+      project.services.some((s) => s.toLowerCase().includes("marketing") || s.toLowerCase().includes("social media"))
     );
   }
   return project.categories.includes(category);
